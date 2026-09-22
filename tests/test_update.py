@@ -12,6 +12,27 @@ import update
 
 
 class UpdateTests(unittest.TestCase):
+    def test_metadata_path_is_materialised_before_reading(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'source'
+
+            def command(*args):
+                if 'metadata' in args:
+                    return json.dumps({'locked': {'rev': 'a' * 40}, 'path': str(source)})
+                if 'prefetch' in args:
+                    source.mkdir()
+                    (source / 'flake.nix').write_text('officialRelease = true;')
+                    return json.dumps({'storePath': str(source)})
+                if 'build' in args:
+                    return '/example/nix'
+                if '--version' in args:
+                    return 'nix (Nix) 2.35.2'
+                self.fail(f'Unexpected command: {args}')
+
+            with patch.object(update, 'run', side_effect=command):
+                self.assertEqual(update.pinned_tools('a' * 40, '2.35.2'),
+                                 (source, Path('/example/nix/bin/nix')))
+
     def test_section_and_code_preservation(self):
         source = '# Page\nintro\n## Chosen\n```nix\n## example comment\n```\nbody\n## Other\nno\n'
         excerpt = update.section(source, 'Chosen')

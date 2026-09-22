@@ -68,7 +68,11 @@ def pinned_tools(revision, release):
                               "flake", "metadata", "--json", ref))
     if metadata["locked"]["rev"] != revision:
         raise ValueError("Resolved source revision mismatch")
-    source = Path(metadata["path"])
+    fetched = json.loads(run("nix", "--extra-experimental-features", "nix-command flakes",
+                             "flake", "prefetch", "--json", ref))
+    if fetched["storePath"] != metadata["path"]:
+        raise ValueError("Prefetched source does not match resolved source")
+    source = Path(fetched["storePath"])
     if not re.search(r"officialRelease\s*=\s*true;", (source / "flake.nix").read_text()):
         raise ValueError("Upstream does not mark this source as an official release")
     output = run("nix", "--extra-experimental-features", "nix-command flakes", "build",

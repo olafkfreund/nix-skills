@@ -116,6 +116,7 @@ Record actual observations; do not claim testing on other agents merely because 
 - Restoration on ordinary replacement failures is tested. Multi-file updates do not promise atomic recovery from power loss or filesystem failure; consumers use complete commit-pinned packages.
 - The optional skill-creator validator requires PyYAML; run it in a temporary Nix shell rather than adding a Python dependency to the project.
 - Repository workflow PR creation is disabled. Document the setting as a prerequisite, preserve the configured permission, and report failures without adding credentials.
+- Clean-runner CI showed that `nix flake metadata` can report a source path before it exists in the store. Explicitly run `nix flake prefetch`, verify its path matches the resolved metadata, and only then read source files; a regression test reproduces the initially absent path.
 
 ## Rollback
 
