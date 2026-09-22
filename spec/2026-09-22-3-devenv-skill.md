@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 3
 intent: intent/2026-09-22-3-devenv-skill.md
 ---
