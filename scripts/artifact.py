@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import tarfile
 
-from check import boundary
+from check import boundary, immutable_policy
 from update import ROOT, encoded, generated_files, run
 
 
@@ -54,8 +54,7 @@ def accept(skill, directory):
         for name, content in files.items():
             (staged / name.removeprefix(prefix)).write_bytes(content)
         new = validate(staged, skill=skill)
-        if old['selection'] != new['selection'] or old['upstream'] != new['upstream']:
-            raise ValueError('Artifact changed curated selection/upstream')
+        immutable_policy(old, new, skill)
     differs = any((ROOT / name).read_bytes() != content for name, content in files.items())
     if differs != metadata['changed']:
         raise ValueError('Artifact change flag disagrees with contents')
@@ -69,7 +68,7 @@ def accept(skill, directory):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('mode', choices=['pack', 'accept'])
-    parser.add_argument('--skill', choices=['nix-language', 'devenv-project'], required=True)
+    parser.add_argument('--skill', choices=['nix-language', 'devenv-project', 'nixpkgs-development'], required=True)
     parser.add_argument('directory', type=Path)
     args = parser.parse_args()
     if args.mode == 'pack':

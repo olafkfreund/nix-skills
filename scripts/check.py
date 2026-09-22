@@ -31,7 +31,8 @@ def links(text):
 
 def validate(package=PACKAGE, skill="nix-language"):
     generated = generated_files(skill)
-    upstream = UPSTREAM if skill == "nix-language" else "https://github.com/cachix/devenv"
+    upstream = {"nix-language": UPSTREAM, "devenv-project": "https://github.com/cachix/devenv",
+                "nixpkgs-development": "https://github.com/NixOS/nixpkgs"}[skill]
     package = package.resolve()
     manifest = json.loads((package / "sources.json").read_text())
     if manifest["upstream"] != upstream or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
@@ -42,6 +43,10 @@ def validate(package=PACKAGE, skill="nix-language"):
         if not manifest["selection"]["sections"] or not manifest["selection"]["builtins"]:
             raise ValueError("Empty reference selection")
         coverage = manifest["language_inputs"]
+    elif skill == "nixpkgs-development":
+        from nixpkgs import validate_manifest
+        validate_manifest(manifest)
+        coverage = manifest["coverage_inputs"]
     else:
         from devenv import version
         if manifest["devenv_version"] != version(manifest["release"]):
@@ -94,6 +99,14 @@ def validate(package=PACKAGE, skill="nix-language"):
     return manifest
 
 
+def immutable_policy(old, new, skill):
+    fields = ["selection", "upstream"]
+    if skill == "nixpkgs-development":
+        fields += ["branch", "toolchain"]
+    if any(old[field] != new[field] for field in fields):
+        raise ValueError("Automatic update changed immutable skill policy")
+
+
 def boundary(base, package=PACKAGE, skill="nix-language"):
     """Compare both git files and curated JSON fields against a trusted base commit."""
     prefix = f"skills/{skill}/"
@@ -102,14 +115,13 @@ def boundary(base, package=PACKAGE, skill="nix-language"):
         raise ValueError("Automatic update changed non-generated files")
     old = json.loads(run("git", "show", base + ":" + prefix + "sources.json"))
     new = validate(package) if skill == "nix-language" else validate(package, skill=skill)
-    if old["selection"] != new["selection"] or old["upstream"] != new["upstream"]:
-        raise ValueError("Automatic update changed curated selection/upstream")
+    immutable_policy(old, new, skill)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", help="Trusted base commit for automated-update boundary checks")
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development"], default="nix-language")
     args = parser.parse_args()
     package = ROOT / "skills" / args.skill
     validate(package, skill=args.skill)

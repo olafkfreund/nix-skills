@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        skill: [nix-language, devenv-project]
+        skill: [nix-language, devenv-project, nixpkgs-development]
     concurrency:
       group: generate-${{ matrix.skill }}-references
       cancel-in-progress: false
@@ -47,6 +47,8 @@ jobs:
             branch: automation/nix-reference-update
           - skill: devenv-project
             branch: automation/devenv-reference-update
+          - skill: nixpkgs-development
+            branch: automation/nixpkgs-reference-update
     concurrency:
       group: publish-${{ matrix.skill }}-references
       cancel-in-progress: false

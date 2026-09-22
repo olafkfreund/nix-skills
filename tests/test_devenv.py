@@ -117,6 +117,14 @@ class DevenvTests(unittest.TestCase):
 
 class ArtifactTests(unittest.TestCase):
     def test_artifact_roundtrip_and_rejections(self):
+        import nixpkgs
+        for skill, provider, reference, license_name in [
+                ("devenv-project", devenv, "configuration", "LICENSE"),
+                ("nixpkgs-development", nixpkgs, "packaging", "COPYING")]:
+            with self.subTest(skill=skill):
+                self.artifact_roundtrip(skill, provider, reference, license_name)
+
+    def artifact_roundtrip(self, skill, provider, reference, license_name):
         import artifact
         import io
         import os
@@ -127,8 +135,8 @@ class ArtifactTests(unittest.TestCase):
         previous = Path.cwd()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            package = root / 'skills/devenv-project'
-            shutil.copytree(devenv.PACKAGE, package)
+            package = root / 'skills' / skill
+            shutil.copytree(provider.PACKAGE, package)
             shutil.copytree(update.PACKAGE, root / 'skills/nix-language')
             os.chdir(root)
             try:
@@ -137,23 +145,23 @@ class ArtifactTests(unittest.TestCase):
                 git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'baseline')
                 artifacts = root / 'artifact'
                 with patch.object(artifact, 'ROOT', root):
-                    artifact.pack('devenv-project', artifacts)
-                    self.assertFalse(artifact.accept('devenv-project', artifacts))
+                    artifact.pack(skill, artifacts)
+                    self.assertFalse(artifact.accept(skill, artifacts))
                     manifest = json.loads((package / 'sources.json').read_text())
-                    target = package / 'references/configuration.md'
+                    target = package / ('references/' + reference + '.md')
                     target.write_text(target.read_text() + '\nChanged upstream excerpt.\n')
-                    manifest['outputs']['references/configuration.md'] = update.digest(target.read_bytes())
+                    manifest['outputs'][('references/' + reference + '.md')] = update.digest(target.read_bytes())
                     (package / 'sources.json').write_bytes(update.encoded(manifest))
                     (root / '.update-report.md').write_text('Changed selected source.\n')
-                    artifact.pack('devenv-project', artifacts)
+                    artifact.pack(skill, artifacts)
                     git('restore', 'skills')
-                    self.assertTrue(artifact.accept('devenv-project', artifacts))
+                    self.assertTrue(artifact.accept(skill, artifacts))
                     self.assertEqual(git('diff', '--name-only', '--', 'skills/nix-language'), '')
                     git('restore', 'skills')
                     metadata = json.loads((artifacts / 'metadata.json').read_text())
                     (artifacts / 'metadata.json').write_bytes(update.encoded(metadata | {'base': '0' * 40}))
                     with self.assertRaises(ValueError):
-                        artifact.accept('devenv-project', artifacts)
+                        artifact.accept(skill, artifacts)
                     (artifacts / 'metadata.json').write_bytes(update.encoded(metadata))
                     valid_tar = (artifacts / 'references.tar').read_bytes()
                     for malicious in ['../escape', 'skills/nix-language/COPYING']:
@@ -162,11 +170,23 @@ class ArtifactTests(unittest.TestCase):
                             item.size = 1
                             tar.addfile(item, io.BytesIO(b'x'))
                         with self.assertRaises(ValueError):
-                            artifact.accept('devenv-project', artifacts)
+                            artifact.accept(skill, artifacts)
+                    if skill == 'nixpkgs-development':
+                        with tarfile.open(fileobj=io.BytesIO(valid_tar)) as original, tarfile.open(artifacts / 'references.tar', 'w') as tar:
+                            for member in original.getmembers():
+                                data = original.extractfile(member).read()
+                                if member.name.endswith('/sources.json'):
+                                    changed = json.loads(data)
+                                    changed['toolchain']['release'] = '2.35.3'
+                                    data = update.encoded(changed)
+                                    member.size = len(data)
+                                tar.addfile(member, io.BytesIO(data))
+                        with self.assertRaisesRegex(ValueError, 'immutable'):
+                            artifact.accept(skill, artifacts)
                     (artifacts / 'references.tar').write_bytes(valid_tar)
                     with tarfile.open(fileobj=io.BytesIO(valid_tar)) as original, tarfile.open(artifacts / 'references.tar', 'w') as tar:
                         for member in original.getmembers():
-                            if member.name.endswith('/LICENSE'):
+                            if member.name.endswith('/' + license_name):
                                 member.type = tarfile.SYMTYPE
                                 member.linkname = '/etc/passwd'
                                 member.size = 0
@@ -174,7 +194,7 @@ class ArtifactTests(unittest.TestCase):
                             else:
                                 tar.addfile(member, original.extractfile(member))
                     with self.assertRaises(ValueError):
-                        artifact.accept('devenv-project', artifacts)
+                        artifact.accept(skill, artifacts)
                     self.assertEqual(git('diff', '--name-only'), '')
             finally:
                 os.chdir(previous)
