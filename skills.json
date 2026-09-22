@@ -1,5 +1,7 @@
 [
   "devenv-project",
+  "home-manager",
+  "microvm-nix",
   "nix-language",
   "nixos-wiki",
   "nixpkgs-development"

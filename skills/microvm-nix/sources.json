@@ -1,0 +1,83 @@
+{
+  "branch": "main",
+  "inputs": {
+    "LICENSE": "bd26a011e61210fa79f5bd5632758773c9dae8a1c26bbfaedcbb88d6300d5609",
+    "doc/src/declarative.md": "c3d92f0ea5868bae4dca9aa19a0d5c0550010fbe1ad75c822788ba9159fccaa3",
+    "doc/src/declaring.md": "a96dabf4948341e11fc7b4daa433a10c6f325e83f83a73d1de17bf1955e8cdfe",
+    "doc/src/host-systemd.md": "4add0e99ac5eebd66acd10d78cd29ef3578fde95e93a8067c3582914f4abb9a0",
+    "doc/src/host.md": "8c072f4a3cb14b596e9198b24b8c5d300bb75e925f2c4c2c32011867b13103d8",
+    "doc/src/interfaces.md": "bb3c8da19737b8293477a2600f96fa28f119f56ef017a9fb0d614e1352577c0f",
+    "doc/src/intro.md": "522fba7ddf30d6fe7ed1f17040589eb91692c44ae525b6cd8b7b64ab3bdfe602",
+    "doc/src/options.md": "c510966c3b1aaa5ee2e23344313bee26419d42a0fab1923422925d1f1add9c7b",
+    "doc/src/routed-network.md": "8882852f36fb9c15bc4bfddb2cd1dcc2907498b364a2f8bd0cdfb79b4a0cbf4f",
+    "doc/src/shares.md": "c33b7b6fd17c3e6a8f537eedf36ce64d92709e8f1f230b9ba06d9208f02a5346",
+    "doc/src/simple-network.md": "6f25224a7818b77e0df74f8e1e5c4bd613d1a8072bd6673aa1059d186c10099a"
+  },
+  "outputs": {
+    "LICENSE": "bd26a011e61210fa79f5bd5632758773c9dae8a1c26bbfaedcbb88d6300d5609",
+    "references/declarative.md": "1f98347efe0a39d2e695c7354dfa2d2b3e7562d6213225aff0272e3aa6015585",
+    "references/declaring.md": "0a4b8d34ba9ab9866a689019c7b6cd1eefb7e8305620561cb5c5915f7eea8261",
+    "references/host-systemd.md": "60a30ef392444e6bbcfab8c2cf3fdecb41746b37af307e27ff5df657700f42d7",
+    "references/host.md": "2e8be304ccf6ff9f0256478c4d8bee86cc643b44b8474a489fda235d5c435969",
+    "references/interfaces.md": "82ad767530b94d84bc3ab85c1092f0b54a320823f12b0e80f768fd600a891d84",
+    "references/intro.md": "b76e703e60071b81cb45a81a856f7ad231779b0102918e2142920706d16b2f5e",
+    "references/options.md": "0347a5acdafdcd4245e3b61e1a1baa51c8e1aed8b73d021660efdd4bbaa0aa77",
+    "references/routed-network.md": "6e40d5139484a003068cbac2bfde98e268f8786bffd56e6e28db25c955e434ff",
+    "references/shares.md": "659151088f6b4477815cf0eb9ced2abece4ed8bee0682020411c3a61c169db8d",
+    "references/simple-network.md": "1de3ae93db9639fbbdc2958af3c108b3b821bca78b737fa16af9c26dae650535"
+  },
+  "revision": "187b0a390ee054028106a674e7b01b1cb940cbba",
+  "selection": [
+    {
+      "output": "references/intro.md",
+      "source": "doc/src/intro.md",
+      "title": "Introduction"
+    },
+    {
+      "output": "references/declaring.md",
+      "source": "doc/src/declaring.md",
+      "title": "Declaring VMs"
+    },
+    {
+      "output": "references/declarative.md",
+      "source": "doc/src/declarative.md",
+      "title": "Declarative deployment"
+    },
+    {
+      "output": "references/host.md",
+      "source": "doc/src/host.md",
+      "title": "Host integration"
+    },
+    {
+      "output": "references/host-systemd.md",
+      "source": "doc/src/host-systemd.md",
+      "title": "Host systemd"
+    },
+    {
+      "output": "references/options.md",
+      "source": "doc/src/options.md",
+      "title": "Options"
+    },
+    {
+      "output": "references/simple-network.md",
+      "source": "doc/src/simple-network.md",
+      "title": "Simple networking"
+    },
+    {
+      "output": "references/routed-network.md",
+      "source": "doc/src/routed-network.md",
+      "title": "Routed networking"
+    },
+    {
+      "output": "references/interfaces.md",
+      "source": "doc/src/interfaces.md",
+      "title": "Network interfaces"
+    },
+    {
+      "output": "references/shares.md",
+      "source": "doc/src/shares.md",
+      "title": "Shares"
+    }
+  ],
+  "upstream": "https://github.com/microvm-nix/microvm.nix"
+}

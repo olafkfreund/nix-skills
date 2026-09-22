@@ -38,7 +38,9 @@ def validate(package=PACKAGE, skill="nix-language"):
         coverage = manifest["inputs"]
     else:
         upstream = {"nix-language": UPSTREAM, "devenv-project": "https://github.com/cachix/devenv",
-                    "nixpkgs-development": "https://github.com/NixOS/nixpkgs"}[skill]
+                    "nixpkgs-development": "https://github.com/NixOS/nixpkgs",
+                    "home-manager": "https://github.com/nix-community/home-manager",
+                    "microvm-nix": "https://github.com/microvm-nix/microvm.nix"}[skill]
         manifest = json.loads((package / "sources.json").read_text())
         if manifest["upstream"] != upstream or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
             raise ValueError("Invalid upstream provenance")
@@ -52,7 +54,7 @@ def validate(package=PACKAGE, skill="nix-language"):
             from nixpkgs import validate_manifest
             validate_manifest(manifest)
             coverage = manifest["coverage_inputs"]
-        else:
+        elif skill == "devenv-project":
             from devenv import version
             if manifest["devenv_version"] != version(manifest["release"]):
                 raise ValueError("Invalid release/version")
@@ -69,6 +71,11 @@ def validate(package=PACKAGE, skill="nix-language"):
                                     "docs/public/.well-known/agent-skills/devenv-setup/SKILL.md"})
             if set(manifest["inputs"]) != expected_inputs:
                 raise ValueError("Missing/unexpected selected source hashes")
+        else:
+            provider_name = {"home-manager": "home_manager", "microvm-nix": "microvm"}[skill]
+            provider = __import__(provider_name)
+            provider.validate_manifest(package)
+            coverage = manifest["inputs"]
     for hashes in [manifest["inputs"], manifest["outputs"], coverage]:
         if not hashes or any(not re.fullmatch(r"[0-9a-f]{64}", h) for h in hashes.values()):
             raise ValueError("Missing/invalid source hashes")
@@ -113,6 +120,8 @@ def immutable_policy(old, new, skill):
         transition(old["records"], new["records"])
         return
     fields = ["selection", "upstream"]
+    if skill in {"home-manager", "microvm-nix"}:
+        fields.append("branch")
     if skill == "nixpkgs-development":
         fields += ["branch", "toolchain"]
     if any(old[field] != new[field] for field in fields):
@@ -133,7 +142,7 @@ def boundary(base, package=PACKAGE, skill="nix-language"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", help="Trusted base commit for automated-update boundary checks")
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix"], default="nix-language")
     args = parser.parse_args()
     package = ROOT / "skills" / args.skill
     validate(package, skill=args.skill)
