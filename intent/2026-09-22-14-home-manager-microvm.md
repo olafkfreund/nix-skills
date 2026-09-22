@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 14
 author: olafkfreund
 ---
@@ -62,4 +62,3 @@ links, licensing, or selected coverage require review.
   Home Manager use a stable release/tag policy where upstream supports it?
 - Does the existing provider architecture need a shared Markdown/source helper,
   or are two small provider modules safer and clearer?
-
