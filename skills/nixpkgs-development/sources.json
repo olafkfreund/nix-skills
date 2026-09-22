@@ -525,12 +525,12 @@
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
-    "references/customization.md": "e7c24352f9dc71ddc1356285ed82b0bdda03911785d7466d960ea0eade623e09",
-    "references/helpers.md": "426cb62c2f4c7f40032157b8996f4e85391145733fc2ee1fd3551952794282a1",
-    "references/library.md": "038e2fdfc4d52c2df857efbe17e9988290de476679fcc9acf7970706868e2402",
-    "references/packaging.md": "deb27c3922e4653d072303bc0fe70843f0fd3636d445cb0c7ae0544ed33f99f4"
+    "references/customization.md": "3e96dc877a7ecbf4b25d923378b4eeb072cd36cb249ed5082f71ae0b2573dea7",
+    "references/helpers.md": "544448fb52dd576cfbdf6e181d69277ca1a90884e239449cfc16c577a2575531",
+    "references/library.md": "6ef0a36e07cee9918110572041f10a499fc504cd960ef4e19e307490ecfa15c7",
+    "references/packaging.md": "0532b1fd4d30ed1de9fc3769ce8773c4a9f40e8c4c71c7173a199f2f94d838f0"
   },
-  "revision": "7561e7e3e12a06677b1525a12bcccb0b4e4c601d",
+  "revision": "d4bff64ad63ff84484ef2204c1328924725c1c82",
   "selection": {
     "apis": [
       "lib.attrsets.attrByPath",
