@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
 
-from update import GENERATED, PACKAGE, UPSTREAM, digest, prose, run
+from update import PACKAGE, UPSTREAM, ROOT, digest, generated_files, prose, run
 
 
 def anchors(text):
@@ -29,31 +29,52 @@ def links(text):
     return result
 
 
-def validate(package=PACKAGE):
+def validate(package=PACKAGE, skill="nix-language"):
+    generated = generated_files(skill)
+    upstream = UPSTREAM if skill == "nix-language" else "https://github.com/cachix/devenv"
     package = package.resolve()
     manifest = json.loads((package / "sources.json").read_text())
-    if manifest["upstream"] != UPSTREAM or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
+    if manifest["upstream"] != upstream or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
         raise ValueError("Invalid upstream provenance")
-    if not re.fullmatch(r"\d+\.\d+\.\d+", manifest["release"]) or manifest["nix_version"] != manifest["release"]:
-        raise ValueError("Invalid release/version")
-    if not manifest["selection"]["sections"] or not manifest["selection"]["builtins"]:
-        raise ValueError("Empty reference selection")
-    for hashes in [manifest["inputs"], manifest["outputs"], manifest["language_inputs"]]:
+    if skill == "nix-language":
+        if not re.fullmatch(r"\d+\.\d+\.\d+", manifest["release"]) or manifest["nix_version"] != manifest["release"]:
+            raise ValueError("Invalid release/version")
+        if not manifest["selection"]["sections"] or not manifest["selection"]["builtins"]:
+            raise ValueError("Empty reference selection")
+        coverage = manifest["language_inputs"]
+    else:
+        from devenv import version
+        if manifest["devenv_version"] != version(manifest["release"]):
+            raise ValueError("Invalid release/version")
+        if not manifest["selection"]["sections"] or not manifest["selection"]["options"]:
+            raise ValueError("Empty reference selection")
+        coverage = manifest["documentation_inputs"]
+        option_hashes = manifest["option_inputs"]
+        if set(option_hashes) != set(manifest["selection"]["options"]) or any(
+                not re.fullmatch(r"[0-9a-f]{64}", h) for h in option_hashes.values()):
+            raise ValueError("Invalid selected option hashes")
+        expected_inputs = {"docs/src/content/docs/" + s["path"] for s in manifest["selection"]["sections"]}
+        expected_inputs.update(manifest["selection"]["provenance"])
+        expected_inputs.update({"LICENSE", "docs/src/data/options.json",
+                                "docs/public/.well-known/agent-skills/devenv-setup/SKILL.md"})
+        if set(manifest["inputs"]) != expected_inputs:
+            raise ValueError("Missing/unexpected selected source hashes")
+    for hashes in [manifest["inputs"], manifest["outputs"], coverage]:
         if not hashes or any(not re.fullmatch(r"[0-9a-f]{64}", h) for h in hashes.values()):
             raise ValueError("Missing/invalid source hashes")
-    if set(manifest["outputs"]) != GENERATED - {"sources.json"}:
+    if set(manifest["outputs"]) != generated - {"sources.json"}:
         raise ValueError("Unexpected generated outputs")
     actual = {str(p.relative_to(package)) for p in package.rglob("*") if p.is_file()}
-    if actual != GENERATED | {"SKILL.md"} or any(p.is_symlink() for p in package.rglob("*")):
+    if actual != generated | {"SKILL.md"} or any(p.is_symlink() for p in package.rglob("*")):
         raise ValueError("Unexpected package files or symlinks")
     for name, expected in manifest["outputs"].items():
         if digest((package / name).read_bytes()) != expected:
             raise ValueError(f"Content hash mismatch: {name}")
-    skill = (package / "SKILL.md").read_text()
-    if not skill.startswith("---\n") or "\n---\n" not in skill[4:]:
+    skill_text = (package / "SKILL.md").read_text()
+    if not skill_text.startswith("---\n") or "\n---\n" not in skill_text[4:]:
         raise ValueError("Missing skill frontmatter")
-    frontmatter = skill.split("---", 2)[1]
-    if not re.search(r"^name: nix-language$", frontmatter, re.M) or not re.search(r"^description: .+", frontmatter, re.M):
+    frontmatter = skill_text.split("---", 2)[1]
+    if not re.search(rf"^name: {re.escape(skill)}$", frontmatter, re.M) or not re.search(r"^description: .+", frontmatter, re.M):
         raise ValueError("Missing skill name/description")
     for path in package.rglob("*.md"):
         text = path.read_text()
@@ -73,14 +94,14 @@ def validate(package=PACKAGE):
     return manifest
 
 
-def boundary(base, package=PACKAGE):
+def boundary(base, package=PACKAGE, skill="nix-language"):
     """Compare both git files and curated JSON fields against a trusted base commit."""
-    prefix = "skills/nix-language/"
+    prefix = f"skills/{skill}/"
     changes = run("git", "diff", "--name-only", base, "--").splitlines()
-    if set(changes) - {prefix + name for name in GENERATED}:
+    if set(changes) - {prefix + name for name in generated_files(skill)}:
         raise ValueError("Automatic update changed non-generated files")
     old = json.loads(run("git", "show", base + ":" + prefix + "sources.json"))
-    new = validate(package)
+    new = validate(package) if skill == "nix-language" else validate(package, skill=skill)
     if old["selection"] != new["selection"] or old["upstream"] != new["upstream"]:
         raise ValueError("Automatic update changed curated selection/upstream")
 
@@ -88,8 +109,10 @@ def boundary(base, package=PACKAGE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", help="Trusted base commit for automated-update boundary checks")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project"], default="nix-language")
     args = parser.parse_args()
-    validate()
+    package = ROOT / "skills" / args.skill
+    validate(package, skill=args.skill)
     if args.base:
-        boundary(args.base)
+        boundary(args.base, package, skill=args.skill)
     print("Skill metadata, links, provenance, hashes, and file boundaries passed")
