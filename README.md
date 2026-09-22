@@ -96,6 +96,23 @@ installation effects. Unknown or duplicate names and absolute/traversing
 destinations are rejected. The module builds data with your existing `pkgs`;
 it does not replace your host's Nixpkgs input or install an agent.
 
+To install the complete collection for all supported agents, select their
+native user skill directories:
+
+```nix
+programs.nix-skills = {
+  enable = true;
+  agents = [ "claude" "codex" "opencode" "antigravity" ];
+};
+```
+
+The agent destinations are `.claude/skills`, `.agents/skills`,
+`.config/opencode/skills`, and `.gemini/config/skills`, respectively. Set
+`skills` alongside `agents` to install only a subset. The existing `directory`
+option remains the compatibility path for one shared or custom destination;
+do not combine a custom `directory` with `agents`. This installs skill bundles,
+not the agents themselves or their plugin configuration.
+
 Validate and rebuild through your existing **NixOS** workflow. Do not run
 `home-manager switch` when Home Manager is a NixOS module. The default path and
 symlink support follow [Codex's documented discovery locations](https://learn.chatgpt.com/docs/build-skills).
