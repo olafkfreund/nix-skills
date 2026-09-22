@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 14
 intent: intent/2026-09-22-14-home-manager-microvm.md
 ---
@@ -140,4 +140,3 @@ the selected references and required license.
 - `actionlint` validates the expanded scheduled update and PR-check matrices.
 - A manual review confirms the generated reports, source citations, license
   files, and that authored `SKILL.md` files are never replaced by updates.
-
