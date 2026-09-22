@@ -5,52 +5,51 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-concurrency:
-  group: update-nix-references
-  cancel-in-progress: false
 jobs:
   generate:
     runs-on: ubuntu-24.04
-    outputs:
-      changed: ${{ steps.diff.outputs.changed }}
-      base: ${{ steps.diff.outputs.base }}
+    strategy:
+      fail-fast: false
+      matrix:
+        skill: [nix-language, devenv-project]
+    concurrency:
+      group: generate-${{ matrix.skill }}-references
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
       - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
-      - run: python3 scripts/update.py --latest
-      - run: python3 scripts/check.py --base HEAD
-      - run: python3 -m unittest discover -s tests -p 'test_*.py'
-      - id: diff
-        shell: bash
-        run: |
-          echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          if git diff --quiet; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-            tar -cf "$RUNNER_TEMP/references.tar" \
-              skills/nix-language/references/language.md \
-              skills/nix-language/references/builtins.md \
-              skills/nix-language/sources.json \
-              skills/nix-language/COPYING
-            cp .update-report.md "$RUNNER_TEMP/update-report.md"
-          fi
-      - if: steps.diff.outputs.changed == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: references
-          path: |
-            ${{ runner.temp }}/references.tar
-            ${{ runner.temp }}/update-report.md
+          extra_nix_config: |
+            extra-substituters = https://devenv.cachix.org https://cachix.cachix.org
+            extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
+      - run: python3 scripts/update.py --skill "${{ matrix.skill }}" --latest
+      - run: python3 scripts/check.py --skill "${{ matrix.skill }}" --base HEAD
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - run: python3 scripts/artifact.py pack --skill "${{ matrix.skill }}" "$RUNNER_TEMP/references"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: references-${{ matrix.skill }}
+          path: ${{ runner.temp }}/references/
           retention-days: 7
           if-no-files-found: error
   publish:
     needs: generate
-    if: needs.generate.outputs.changed == 'true'
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - skill: nix-language
+            branch: automation/nix-reference-update
+          - skill: devenv-project
+            branch: automation/devenv-reference-update
+    concurrency:
+      group: publish-${{ matrix.skill }}-references
+      cancel-in-progress: false
     permissions:
       contents: write
       pull-requests: write
@@ -61,56 +60,36 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: references
-          path: ${{ runner.temp }}/nix-update
+          name: references-${{ matrix.skill }}
+          path: ${{ runner.temp }}/references
       - name: Verify base and accept only generated files
-        env:
-          EXPECTED_BASE: ${{ needs.generate.outputs.base }}
-        shell: bash
+        id: artifact
         run: |
-          test "$(git rev-parse HEAD)" = "$EXPECTED_BASE"
-          python3 - <<'PY'
-          import os
-          from pathlib import Path
-          import sys
-          import tarfile
-          sys.path.insert(0, 'scripts')
-          from update import GENERATED
-          expected = {'skills/nix-language/' + name for name in GENERATED}
-          archive = Path(os.environ['RUNNER_TEMP']) / 'nix-update/references.tar'
-          with tarfile.open(archive) as tar:
-              members = tar.getmembers()
-              if len(members) != len(expected) or {m.name for m in members} != expected:
-                  raise ValueError('Unexpected artifact file list')
-              if any(not m.isfile() or m.size > 2_000_000 for m in members):
-                  raise ValueError('Unsupported artifact entry')
-              for member in members:
-                  Path(member.name).write_bytes(tar.extractfile(member).read())
-          PY
-          python3 scripts/check.py --base "$EXPECTED_BASE"
+          python3 scripts/artifact.py accept --skill "${{ matrix.skill }}" "$RUNNER_TEMP/references" >> "$GITHUB_OUTPUT"
           git diff --check
       - name: Update one branch and PR
+        if: steps.artifact.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          SKILL: ${{ matrix.skill }}
+          UPDATE_BRANCH: ${{ matrix.branch }}
         shell: bash
         run: |
-          branch=automation/nix-reference-update
-          if git diff --quiet; then exit 0; fi
-          git switch -C "$branch"
+          git switch -C "$UPDATE_BRANCH"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add skills/nix-language
-          git commit -m 'docs(nix-language): refresh upstream references'
-          git push --force-with-lease origin "$branch"
-          pr=$(gh pr list --head "$branch" --base "$DEFAULT_BRANCH" --state open --json number --jq '.[0].number // empty')
-          body="$RUNNER_TEMP/nix-update/update-report.md"
+          git add "skills/$SKILL"
+          git commit -m "docs($SKILL): refresh upstream references"
+          git push --force-with-lease origin "$UPDATE_BRANCH"
+          pr=$(gh pr list --head "$UPDATE_BRANCH" --base "$DEFAULT_BRANCH" --state open --json number --jq '.[0].number // empty')
+          body="$RUNNER_TEMP/references/report.md"
           if [ -n "$pr" ]; then
-            gh pr edit "$pr" --title 'docs(nix-language): refresh upstream references' --body-file "$body"
+            gh pr edit "$pr" --title "docs($SKILL): refresh upstream references" --body-file "$body"
           else
-            gh pr create --head "$branch" --base "$DEFAULT_BRANCH" \
-              --title 'docs(nix-language): refresh upstream references' --body-file "$body" || {
-              echo '::error::Cannot open update PR. Check Actions workflow permissions: Allow GitHub Actions to create and approve pull requests. No personal token is required or added.'
+            gh pr create --head "$UPDATE_BRANCH" --base "$DEFAULT_BRANCH" \
+              --title "docs($SKILL): refresh upstream references" --body-file "$body" || {
+              echo '::error::Cannot open update PR. Check Actions permissions: Allow GitHub Actions to create and approve pull requests. No personal token is required.'
               exit 1
             }
           fi
