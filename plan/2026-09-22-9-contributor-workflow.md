@@ -217,3 +217,33 @@ maintenance. Consumers restore their previous flake lock or disable the opt-in
 module through their own configuration workflow. No host activation, user trust,
 repository settings or remote service needs restoration because none is changed
 by this development task.
+
+## Implementation evidence and refinements
+
+- Integration base: `01fd8917891f54586c42291b54ab5b860eec4034`, the tested wiki
+  PR #10, merged after the user's separate authorization. The first live update
+  run `35743725638` passed; wiki generation/publication was a verified no-op.
+- Reserve `default` and `nix-skills` in the registry to prevent collisions with
+  the approved collection package outputs. This is an additional input constraint
+  discovered during packaging review, not an expansion of updater authority.
+- Metadata uses the documented plain single-line convention, without adding a
+  YAML dependency. TODO/FIXME/TBD rejection applies to authored entrypoint prose;
+  upstream reference comments are retained. Existing source-directive checks and
+  provider validation remain unchanged.
+- Local x86_64 flake checks and collection build passed, including exact contents,
+  all individual packages and a built (unactivated) Home Manager test generation.
+  Invalid module names, duplicates and destination paths are rejected. aarch64
+  package evaluation passed; no aarch64 build or native-agent discovery is claimed.
+- A disposable fifth generic skill passed registration, packaging and module
+  link checks. It never entered this repository and the updater workflow stayed
+  byte-identical. All four existing skill trees match the integration base.
+- Devenv 2.3.1 generated the root lock; info and shell check-fast passed in a
+  disposable Git project with isolated XDG directories. Skill files and lock
+  remained unchanged; no trust grant or home/host activation occurred.
+- The machine's configured nixarchy binary cache timed out. Local builds passed
+  using command-local official/upstream cache overrides, without changing any
+  project pin or machine setting. The first disposable shell check needed Git
+  metadata for actionlint discovery; initializing only that temporary copy fixed
+  the test setup.
+- PR CI and its stable aggregate status must pass before a separately authorized
+  merge. Branch-protection and code-owner enforcement settings remain manual.
