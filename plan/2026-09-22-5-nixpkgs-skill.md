@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 5
 spec: spec/2026-09-22-5-nixpkgs-skill.md
 ---
