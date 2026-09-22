@@ -316,18 +316,30 @@ def generated_files(skill):
     if skill == "nixpkgs-development":
         from nixpkgs import GENERATED as nixpkgs_files
         return nixpkgs_files
+    if skill == "nixos-wiki":
+        from wiki import GENERATED as wiki_files
+        return wiki_files
     raise ValueError("Unknown skill")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
     mode.add_argument("--revision")
+    mode.add_argument("--dump", type=Path)
+    parser.add_argument("--sha256")
     mode.add_argument("--latest", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
+    if args.skill == "nixos-wiki":
+        if args.release or args.revision or bool(args.dump) != bool(args.sha256):
+            parser.error("Wiki ingestion requires paired --dump/--sha256; release/revision flags are unsupported")
+        from wiki import main as wiki_main
+        return wiki_main(args)
+    if args.dump or args.sha256:
+        parser.error("--dump/--sha256 are only supported for nixos-wiki")
     if args.skill == "nixpkgs-development":
         if args.release:
             parser.error("Nixpkgs uses --revision, not --release")

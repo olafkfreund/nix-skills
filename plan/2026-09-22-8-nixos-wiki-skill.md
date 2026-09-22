@@ -279,3 +279,45 @@ commits remain self-contained because they retain consumed text and template
 revisions. Consumers restore the whole skill from a known-good repository commit.
 No host configuration, user trust, installed skills, remote snapshot assets or
 services need restoration because this task does not change them.
+
+## Implementation evidence — 2026-09-22
+
+Baseline: `c1dcd90b3cd5648801cfe4fe417f6b2dd122cee2`. Sibling trees were
+`0ce935cb61c50fbd4b067641791e16e13c7fb58e` (Nix),
+`ca6b74d7fecbfc0350e04009e15535834136f5ef` (Devenv), and
+`1f611b10aabf68cf0fcb67f2edd6df94d9aa8722` (Nixpkgs). Their package diff is empty.
+
+Used standard-library Expat callbacks to enforce XML text/count/depth limits as
+data arrives, rather than retaining complete historical page trees. The lookup
+helper adds a character offset within a starting line so a line exceeding the
+16 KiB window cannot prevent pagination progress. These implement the approved
+bounded parsing/pagination behavior without rendering wikitext.
+
+The pinned dump hash matched. Two complete extractions were identical and
+reproduced the packaged retained records and derived files exactly. Retained
+content is 18 page records (17 topics plus copyright) and 183 templates. The
+portable helper and the repository maintenance provider are separate files.
+
+Thirty-five Python tests passed, covering wiki parsing/limits/schema, historical
+ordering, exact code retention, Unicode pagination, redirects, offline checks,
+update/no-op/regression cases, artifact handling and partial-write restoration.
+A network-blocked test exercises offline regeneration and helper behavior. Actual
+explicit-dump and live-latest invocations in a disposable copy were no-ops and
+left every package unchanged; repeated offline checks passed.
+
+Skill metadata validation and actionlint passed. Full Nix and Nixpkgs sibling
+regeneration/runtime checks passed on x86_64-linux; Devenv and clean-runner CI
+results are recorded in the implementation PR as they complete. The GitHub wiki
+ingestion job provisions zstd from fixed Nixpkgs commit
+`d4bff64ad63ff84484ef2204c1328924725c1c82`; offline wiki CI does not install Nix.
+
+Manual walkthroughs used module/rebuild lookup, the Garbage Collection redirect
+with its section fragment, Template:Warning lookup and the Home Manager page.
+Raw notices and standalone Home Manager examples remain visible; the authored
+skill directs consumers to their actual module-managed or standalone workflow.
+No wiki commands were executed and no native-agent discovery claim is made.
+
+The subsequently requested Devenv/flake/contributor changes are tracked separately
+as #9, with their own approved artifacts and worktree. They are not folded into
+this skill's generated-output permissions. After authorized merge, observe the
+live updater; the disposable no-op is not changed-source publication evidence.
