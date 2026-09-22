@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 9
 intent: intent/2026-09-22-9-contributor-workflow.md
 ---
