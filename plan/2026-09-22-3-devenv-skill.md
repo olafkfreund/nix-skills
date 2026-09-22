@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 3
 spec: spec/2026-09-22-3-devenv-skill.md
 ---
