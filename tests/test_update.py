@@ -74,8 +74,12 @@ class UpdateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 update.publish(files, package)
             self.assertEqual(original, {name: (package / name).read_bytes() for name in files})
+            # COPYING is replaced first: ensure the simulated second-write failure
+            # must actually undo a changed file, not merely restore identical bytes.
+            files['COPYING'] += b'\n'
             manifest = json.loads(files['sources.json'])
             manifest['outputs']['references/language.md'] = update.digest(files['references/language.md'])
+            manifest['outputs']['COPYING'] = update.digest(files['COPYING'])
             files['sources.json'] = update.encoded(manifest)
             replace = update.os.replace
             calls = 0
