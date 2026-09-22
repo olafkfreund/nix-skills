@@ -192,3 +192,29 @@ if needed while preserving the Nix schedule. Restore consumers by reinstalling
 the last known-good commit-pinned package. No host configuration, installed skill,
 trust settings, or secrets should require restoration because this change does
 not modify them.
+
+## Implementation notes and validation record
+
+- Baseline: `73d4b9490c2a7b4b4e7396607585c379d54f55d4`; existing Nix
+  structural checks, eight tests, and byte regeneration passed before editing.
+- Upstream uses both `v2.3` and `v2.3.1` tag forms. Normalize the former to
+  CLI version `2.3.0` and check `Cargo.toml` as well as the built executable.
+- The fixture pins the module flake through `?dir=src/modules`; a plain source
+  input does not expose the modules expected by the CLI. Candidate checks use
+  `devenv update devenv` only in the disposable copy and compare auxiliary pins.
+- `scripts/artifact.py` moves the previous inline archive validation into a
+  shared, testable pack/accept boundary. Each matrix artifact includes its base
+  and no-op flag, avoiding ambiguous shared matrix-job outputs.
+- Local checks: 17 stdlib tests; both package validators; `actionlint`; pinned
+  Nix regeneration and unchanged original package; skill-creator validator;
+  devenv regeneration, external links, and isolated runtime assertions.
+- Setup walkthrough: the controlled project evaluates the expected environment
+  and language/service values; its shell, script, task, and `enterTest` pass.
+- Activation walkthrough: references retain Bash/Zsh/Fish/Nushell labels and
+  distinguish directory trust from `.envrc` approval. Reviewed as guidance;
+  interactive auto-activation and native agent discovery were not executed.
+- Version-mismatch walkthrough: the pinned CLI rejects `require_version: ">=999.0"`
+  with its actual version and the unmet constraint before project evaluation.
+- The live latest-release query returns v2.3.1 and correctly performs no update.
+  Changed-source publication is tested locally; the first live workflow run for
+  this skill remains a post-merge check, not a claim of completed publication.

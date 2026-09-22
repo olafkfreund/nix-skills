@@ -1,11 +1,19 @@
 # nix-skills
 
-A portable [Nix language skill](skills/nix-language/SKILL.md) for AI coding agents, grounded in selected upstream manual sections and generated built-in documentation.
-It helps write, explain, debug, and review expressions; it does not supply NixOS service options or replace Nixpkgs API documentation.
+Portable skills for AI coding agents, maintained from pinned upstream sources.
 
-The package records its exact Nix release and source revision in [sources.json](skills/nix-language/sources.json).
-The initial reference is Nix **2.35.2**.
-The skill asks agents to check the project's actual evaluator version and evaluation mode before applying version-sensitive guidance.
+| Skill | Purpose | Initial reference |
+| --- | --- | --- |
+| [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
+| [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv v2.3.1 |
+
+Each package records its release, exact source revision, curated selection, and
+input/output hashes in its own `sources.json`. References cover selected topics,
+not every upstream feature. Agents must check the project's actual versions.
+The Nix skill does not supply NixOS options or replace Nixpkgs API documentation.
+The portable `devenv-project` skill is distinct from a machine-specific `devenv`
+policy skill and upstream's `devenv-setup`; their behavior is not interchangeable.
+Neither skill requires the other.
 
 ## Use
 
@@ -17,8 +25,8 @@ cd nix-skills
 git checkout --detach <reviewed-commit-sha>
 ```
 
-Copy or link the **whole** `skills/nix-language` directory into your agent's supported skill directory.
-Keep `references/`, `sources.json`, and `COPYING` together with `SKILL.md`.
+Copy or link the **whole** desired skill directory into your agent's supported skill directory.
+Keep `references/`, `sources.json`, and its license (`COPYING` for Nix, `LICENSE` for devenv) with `SKILL.md`.
 
 For Codex, current documented locations include a project's `.agents/skills/` and the user's `~/.agents/skills/`; symlinked skill directories are supported.
 See [official skill discovery documentation](https://learn.chatgpt.com/docs/build-skills).
@@ -27,14 +35,15 @@ For example, from the clone, on a machine where this destination is not already 
 ```sh
 mkdir -p ~/.agents/skills
 ln -s "$PWD/skills/nix-language" ~/.agents/skills/nix-language
+ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
 ```
 
 If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
 No installation is performed by this repository's checks or update workflow.
 
-Invoke `$nix-language` in Codex or let the agent select it from its description.
+Invoke `$nix-language` or `$devenv-project` in Codex or let the agent select it from its description.
 Other agents can install the same folder using their own skill mechanism.
-For an agent without native skill discovery, explicitly ask it to read `skills/nix-language/SKILL.md` and the relevant linked references before the task.
+For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
 
 To update, select a newly reviewed repository commit, check it out, and replace the complete copied directory (or retain the link to that pinned checkout).
@@ -79,16 +88,53 @@ Upstream source sections retain their wording; reference links, anchors, and inc
 Only the selected subset is bundled; linked manual pages follow the upstream major/minor documentation series, which may receive later patch-level updates.
 Exact copied-source provenance remains pinned to a full commit SHA.
 
+### devenv maintenance
+
+The same commands accept `--skill devenv-project`; omitting `--skill` retains
+all existing Nix behavior:
+
+```sh
+python3 scripts/check.py --skill devenv-project
+python3 scripts/update.py --skill devenv-project --check
+python3 scripts/update.py --skill devenv-project --release v2.3.1
+python3 scripts/update.py --skill devenv-project --latest
+```
+
+Devenv updates use stable GitHub Releases, not unreleased `main`. The updater
+converts selected Markdown/MDX sections, preserving tab labels, version notices,
+warning meaning, and fenced executable text. Unsupported forms or renamed paths
+fail for review. It reads the committed options JSON at the same revision and
+records generator/template provenance; it does not rebuild the full website or
+option catalogue. Declaration links into devenv are checked and pinned; foreign
+links retain their distinct origin. Public devenv.sh links are checked but follow
+the moving site, while exact source citations and hashes remain revision-pinned.
+
+`--check` obtains the matching CLI from the pinned upstream flake and evaluates
+matching modules in a disposable project using the reviewed auxiliary pins in
+`tests/devenv/devenv.lock`. It compares representative defaults against upstream
+option data and runs harmless shell/script/task/`enterTest` assertions. Language
+and service enablement is evaluated without starting services. The test does not
+run `devenv allow` or modify user trust. A candidate update changes only the
+module pin in its temporary fixture; unrelated input changes fail for review.
+Local builds can use configured substitutes; CI explicitly uses upstream's
+published devenv/Cachix cache keys. There is no fallback to the host CLI.
+
 ## Automatic updates
 
 After the workflows reach the default branch, **Update references** runs each Monday at 06:17 UTC and on manual dispatch.
-It generates and validates with read-only permissions, then passes only the four allowed generated files to a separate publication job.
-That job rechecks the base commit, hashes, and curated selection before updating `automation/nix-reference-update` and creating or updating one PR.
+Each skill generates and validates with read-only permissions, then passes an
+allowlisted artifact to a separate publication job. That job rejects stale bases,
+symlinks, traversal, invalid hashes, instruction/selection changes, and changes to
+the sibling skill. It updates `automation/nix-reference-update` or
+`automation/devenv-reference-update`, with at most one open PR per skill.
+Artifacts, branches, and job concurrency are separate for each skill. No-op
+artifacts are verified but produce no branch or PR.
 It never merges or installs the result.
-Reports identify changed selected sources, other language-source changes needing coverage review, and built-in metadata changes.
+Reports identify changed selected inputs, coverage changes, and option/built-in metadata changes.
+Changes to upstream's devenv setup skill are review signals; authored instructions are never automatically replaced.
 
 The repository must allow GitHub Actions to create PRs under **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
-This setting was disabled when the repository was created; maintainers must enable it before expecting automatic PR creation.
+This setting is enabled for this repository; forks must configure it separately.
 Keep the default token permission read-only: only the publication job requests `contents: write` and `pull-requests: write`.
 No personal access token is required or configured.
 See [GitHub's repository workflow permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository).
@@ -103,7 +149,7 @@ gh workflow run check.yml --ref main -f ref=automation/nix-reference-update
 Inspect that run's checked-out SHA before merging; a manually dispatched run should not be assumed to satisfy branch-protection status requirements for the PR head.
 If required checks remain pending, use the repository's normal human-triggered PR workflow or keep the PR unmerged until the required checks pass.
 Failed generation publishes no package. Failed PR creation leaves a validated update branch and an actionable workflow error.
-The scheduled publication path needs its first live validation after merge; it cannot be proven by local structural tests alone.
+The initial Nix live updater passed as a no-op. After merging the devenv addition, validate the first live run too; a no-op does not prove changed-source PR publication.
 
 ## Sources and licensing
 
@@ -113,3 +159,14 @@ The repository does not relicense that material under MIT or another permissive 
 The manifest tracks source files, generator helpers, the full language dump, and generated hashes for reproduction.
 
 Design history: [intent](intent/2026-09-22-1-nix-language-skill.md), [spec](spec/2026-09-22-1-nix-language-skill.md), [implementation plan](plan/2026-09-22-1-nix-language-skill.md).
+
+Devenv references originate in [cachix/devenv](https://github.com/cachix/devenv),
+under its accompanying [Apache-2.0 LICENSE](skills/devenv-project/LICENSE).
+The manifest hashes selected narrative pages, committed generated data,
+generators/templates, the upstream setup skill, and the documentation coverage.
+Modified excerpts retain source attribution. The repository does not relicense
+Nix material under devenv's license.
+
+Devenv design history: [intent](intent/2026-09-22-3-devenv-skill.md),
+[spec](spec/2026-09-22-3-devenv-skill.md),
+[implementation plan](plan/2026-09-22-3-devenv-skill.md).

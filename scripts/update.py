@@ -265,10 +265,11 @@ def generate(old, release, revision, source, nix):
     return files, manifest
 
 
-def publish(files, package=PACKAGE):
+def publish(files, package=PACKAGE, skill="nix-language"):
     """Validate a complete staging copy, then restore old bytes if replacement fails."""
+    generated = generated_files(skill)
     from check import validate
-    if set(files) != GENERATED:
+    if set(files) != generated:
         raise ValueError("Unexpected generated file set")
     with tempfile.TemporaryDirectory(dir=package.parent) as directory:
         staged = Path(directory) / "skill"
@@ -277,7 +278,7 @@ def publish(files, package=PACKAGE):
             target = staged / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(data)
-        validate(staged)
+        validate(staged, skill=skill)
         original = {name: (package / name).read_bytes() if (package / name).exists() else None for name in files}
         try:
             for name in sorted(files):
@@ -306,13 +307,26 @@ def report(old, new):
     return "\n".join(rows)
 
 
+def generated_files(skill):
+    if skill == "nix-language":
+        return GENERATED
+    if skill == "devenv-project":
+        from devenv import GENERATED as devenv_files
+        return devenv_files
+    raise ValueError("Unknown skill")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
     mode.add_argument("--latest", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
+    if args.skill == "devenv-project":
+        from devenv import main as devenv_main
+        return devenv_main(args)
     old = json.loads((PACKAGE / "sources.json").read_text())
     available = tags()
     release = (max(available, key=lambda value: tuple(map(int, value.split(".")))) if args.latest
