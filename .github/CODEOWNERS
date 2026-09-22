@@ -1,0 +1,10 @@
+/.github/ @olafkfreund
+/scripts/ @olafkfreund
+/tests/ @olafkfreund
+/skills.json @olafkfreund
+/flake.nix @olafkfreund
+/flake.lock @olafkfreund
+/nix/ @olafkfreund
+/devenv.* @olafkfreund
+/AGENTS.md @olafkfreund
+/CONTRIBUTING.md @olafkfreund

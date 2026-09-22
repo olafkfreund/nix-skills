@@ -55,6 +55,90 @@ To roll back, repeat with the previous commit.
 
 ## Maintain
 
+For a new skill, bug fix or development setup, start with
+[CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
+`skills.json` registers portable packages; it does not enroll source updaters.
+Read-only PR checks validate the collection, package/module builds and explicit
+maintained providers. A reviewed merge makes a contribution available to users
+who choose to update their pin.
+
+### Declarative installation on NixOS
+
+Add the input to your existing system flake, then commit its lock file:
+
+```nix
+inputs.nix-skills.url = "github:olafkfreund/nix-skills";
+```
+
+Within your existing Home Manager-as-NixOS module configuration, import the
+module for the chosen user (replace `alice`; `inputs` must be in scope):
+
+```nix
+home-manager.users.alice = {
+  imports = [ inputs.nix-skills.homeManagerModules.default ];
+  programs.nix-skills = {
+    enable = true;
+    skills = [ "nix-language" "devenv-project" "nixpkgs-development" "nixos-wiki" ];
+    # Omitting skills selects the complete registered collection.
+    directory = ".agents/skills";
+  };
+};
+```
+
+This links complete immutable skill directories, including resources and
+licenses, under the user's home. Existing files retain Home Manager's normal
+collision protection; links are never forced. Disabling the module adds no
+installation effects. Unknown or duplicate names and absolute/traversing
+destinations are rejected. The module builds data with your existing `pkgs`;
+it does not replace your host's Nixpkgs input or install an agent.
+
+Validate and rebuild through your existing **NixOS** workflow. Do not run
+`home-manager switch` when Home Manager is a NixOS module. The default path and
+symlink support follow [Codex's documented discovery locations](https://learn.chatgpt.com/docs/build-skills).
+For another agent, select its documented relative directory; native discovery
+in other agents is not claimed by package/module checks.
+
+Without Home Manager, the collection is also a data package:
+
+```nix
+environment.systemPackages = [
+  inputs.nix-skills.packages.${pkgs.stdenv.hostPlatform.system}.nix-skills
+];
+```
+
+This exposes `share/nix-skills/<name>` in the package; it does not create user
+discovery links. Declare those separately in your own configuration. Individual
+outputs, for example `packages.x86_64-linux.nix-language`, contain the same
+complete directory. `default` contains all registered skills. Packages are
+exported for x86_64-linux and aarch64-linux; our validation distinguishes native
+x86_64 builds from aarch64 evaluation.
+
+Review updates to the consumer's locked `nix-skills` input before rebuilding.
+Roll back by restoring the previous lock and rebuilding, or using your system's
+previous generation. Repository builds and checks never activate a home or host.
+
+### Development environment
+
+The root Devenv environment supplies Python, Git, GitHub CLI, Zstandard,
+actionlint and Nix, plus two commands:
+
+```sh
+devenv info
+devenv shell check-fast
+devenv shell check-providers
+nix flake check
+```
+
+`check-fast` runs offline collection validation, unit tests and workflow lint;
+`check-providers` also runs all four explicit maintained-source checks, including
+network-dependent regeneration. Entering the environment does not run either
+command, regenerate sources, install skills or start services. The environment
+was validated with Devenv 2.3.1 and the committed module/input pins.
+
+`devenv.lock` owns project tooling; `flake.lock` owns distribution/test inputs.
+Update them deliberately and separately. The provider fixture under
+`tests/devenv/` has its own lock and remains independent.
+
 Reading the skill needs only a Markdown-capable agent.
 Offline validation needs Python 3.10 or newer; regeneration additionally needs Git, Nix with `nix-command` and `flakes`, and network access to upstream Git tags, source/build caches, and the versioned manual.
 Nix may build the pinned executable if a substitute is unavailable; no global package installation is required.

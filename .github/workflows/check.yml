@@ -32,6 +32,38 @@ jobs:
             extra-substituters = https://devenv.cachix.org https://cachix.cachix.org
             extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw= cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=
       - run: python3 scripts/check.py --skill "${{ matrix.skill }}"
-      - run: python3 -m unittest discover -s tests -p 'test_*.py'
       - run: python3 scripts/update.py --skill "${{ matrix.skill }}" --check
       - run: git diff --exit-code
+  collection:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - run: python3 scripts/check_collection.py
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+  distribution:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - run: nix flake check --no-update-lock-file
+      - run: nix build .#nix-skills --no-link --no-update-lock-file
+      - run: nix eval .#packages.aarch64-linux.nix-skills.drvPath --raw --no-update-lock-file
+      - run: git diff --exit-code
+  collection-check:
+    if: ${{ always() }}
+    needs: [check, collection, distribution]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - run: python3 scripts/check_jobs.py
+        env:
+          CHECK_RESULTS: ${{ toJSON(needs) }}
