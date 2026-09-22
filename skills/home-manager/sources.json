@@ -1,0 +1,48 @@
+{
+  "branch": "master",
+  "inputs": {
+    "LICENSE": "8998a19a31199a5ae2c268b71f99b7e2abaaf78e3cf8b72e8a596374279c261a",
+    "docs/manual/nix-flakes/nixos.md": "04b9f06cf0829faaad174ca97e2a5e87d4334b6c7d50a9bc19c074e9e5e28641",
+    "docs/manual/usage/configuration.md": "6915cb04d6225ee0f238a95c9335969e22e677ddb9fe6a135e258ca338792afc",
+    "docs/manual/usage/dotfiles.md": "c94aeac21a09693a0f89d78945f5b46aa92221787dc5bedad0bc65c2fc1662e2",
+    "docs/manual/usage/modular-services.md": "4f45d59164cbe1a4ca4e2607e6c8f0c4ea719d1203fb105551f9255e4867045b",
+    "docs/manual/writing-modules.md": "c26576594f5f879c3c9286bdb50ab5d05e6473f8c1668e12939b0e8629a108f1"
+  },
+  "outputs": {
+    "LICENSE": "8998a19a31199a5ae2c268b71f99b7e2abaaf78e3cf8b72e8a596374279c261a",
+    "references/configuration.md": "32685636ae500773300876aa5379aa28f2b7bde1698ecf2d12631c64c0e5652a",
+    "references/dotfiles.md": "40ffa2f1eeab14b2f4943e5c93cd83c45fc592fcf75699e57680286b7aefd3b2",
+    "references/modular-services.md": "1e977670a982496b0d67b9eff97ee5ae9954a9b27f983772ee75bf63a820b45b",
+    "references/nixos.md": "e8b785cc427bdf3287afd48fbf25c8ec6880cbb11517ae67cebc7e68f7b7ce59",
+    "references/writing-modules.md": "812c6e62725b88abd54b9e759f5401f08e588582694ef89b32893fb57b9ee54c"
+  },
+  "revision": "cbcbfa2778e0c5653ef349df3ebae8288efac3c0",
+  "selection": [
+    {
+      "output": "references/nixos.md",
+      "source": "docs/manual/nix-flakes/nixos.md",
+      "title": "NixOS module"
+    },
+    {
+      "output": "references/configuration.md",
+      "source": "docs/manual/usage/configuration.md",
+      "title": "Configuration"
+    },
+    {
+      "output": "references/dotfiles.md",
+      "source": "docs/manual/usage/dotfiles.md",
+      "title": "Dotfiles"
+    },
+    {
+      "output": "references/modular-services.md",
+      "source": "docs/manual/usage/modular-services.md",
+      "title": "Modular services"
+    },
+    {
+      "output": "references/writing-modules.md",
+      "source": "docs/manual/writing-modules.md",
+      "title": "Writing modules"
+    }
+  ],
+  "upstream": "https://github.com/nix-community/home-manager"
+}

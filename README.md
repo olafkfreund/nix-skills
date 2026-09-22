@@ -4,8 +4,10 @@ Portable skills for AI coding agents, maintained from pinned upstream sources.
 
 | Skill | Purpose | Initial reference |
 | --- | --- | --- |
-| [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
 | [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv v2.3.1 |
+| [home-manager](skills/home-manager/SKILL.md) | Configure Home Manager user environments and NixOS integration | Home Manager master snapshot |
+| [microvm-nix](skills/microvm-nix/SKILL.md) | Configure declarative microVMs with microvm.nix | microvm.nix main snapshot |
+| [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
 | [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | master snapshot; development series 26.11 |
 | [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | 17 curated topics from the 2026-09-22 dump |
 
@@ -28,7 +30,7 @@ git checkout --detach <reviewed-commit-sha>
 ```
 
 Copy or link the **whole** desired skill directory into your agent's supported skill directory.
-Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs/wiki, `LICENSE` for devenv) with `SKILL.md`.
+Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs/wiki, `LICENSE` for devenv/Home Manager/microvm.nix) with `SKILL.md`.
 
 For Codex, current documented locations include a project's `.agents/skills/` and the user's `~/.agents/skills/`; symlinked skill directories are supported.
 See [official skill discovery documentation](https://learn.chatgpt.com/docs/build-skills).
@@ -38,6 +40,8 @@ For example, from the clone, on a machine where this destination is not already 
 mkdir -p ~/.agents/skills
 ln -s "$PWD/skills/nix-language" ~/.agents/skills/nix-language
 ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
+ln -s "$PWD/skills/home-manager" ~/.agents/skills/home-manager
+ln -s "$PWD/skills/microvm-nix" ~/.agents/skills/microvm-nix
 ln -s "$PWD/skills/nixpkgs-development" ~/.agents/skills/nixpkgs-development
 ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 ```
@@ -45,7 +49,7 @@ ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
 No installation is performed by this repository's checks or update workflow.
 
-Invoke `$nix-language`, `$devenv-project`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
+Invoke `$home-manager`, `$microvm-nix`, `$nix-language`, `$devenv-project`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
 Other agents can install the same folder using their own skill mechanism.
 For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
@@ -78,7 +82,7 @@ home-manager.users.alice = {
   imports = [ inputs.nix-skills.homeManagerModules.default ];
   programs.nix-skills = {
     enable = true;
-    skills = [ "nix-language" "devenv-project" "nixpkgs-development" "nixos-wiki" ];
+    skills = [ "home-manager" "microvm-nix" "nix-language" "devenv-project" "nixpkgs-development" "nixos-wiki" ];
     # Omitting skills selects the complete registered collection.
     directory = ".agents/skills";
   };
@@ -130,7 +134,7 @@ nix flake check
 ```
 
 `check-fast` runs offline collection validation, unit tests and workflow lint;
-`check-providers` also runs all four explicit maintained-source checks, including
+`check-providers` also runs all six explicit maintained-source checks, including
 network-dependent regeneration. Entering the environment does not run either
 command, regenerate sources, install skills or start services. The environment
 was validated with Devenv 2.3.1 and the committed module/input pins.
@@ -206,6 +210,38 @@ run `devenv allow` or modify user trust. A candidate update changes only the
 module pin in its temporary fixture; unrelated input changes fail for review.
 Local builds can use configured substitutes; CI explicitly uses upstream's
 published devenv/Cachix cache keys. There is no fallback to the host CLI.
+
+### Home Manager maintenance
+
+```sh
+python3 scripts/check.py --skill home-manager
+python3 scripts/update.py --skill home-manager --check
+python3 scripts/update.py --skill home-manager --revision <full-commit-sha>
+python3 scripts/update.py --skill home-manager --latest
+```
+
+Home Manager tracks the `master` branch by full commit revision. The package
+contains selected manual pages for NixOS-module integration, configuration,
+dotfiles, modular services, and writing modules. It does not mirror the full
+option catalogue. Relative source links are pinned to the selected commit,
+fenced examples are preserved, and the authored `SKILL.md` is never replaced.
+An upstream path or license change fails for review rather than changing the
+curated selection automatically.
+
+### microvm.nix maintenance
+
+```sh
+python3 scripts/check.py --skill microvm-nix
+python3 scripts/update.py --skill microvm-nix --check
+python3 scripts/update.py --skill microvm-nix --revision <full-commit-sha>
+python3 scripts/update.py --skill microvm-nix --latest
+```
+
+microvm.nix tracks the `main` branch by full commit revision. The package
+contains selected documentation for VM declarations, declarative deployment,
+host integration, options, networking, and shares. Generated references pin
+relative source links and preserve fenced examples; authored instructions and
+the reviewed selection remain immutable to automation.
 
 ### Nixpkgs maintenance
 
@@ -300,9 +336,10 @@ After the workflows reach the default branch, **Update references** runs each Mo
 Each skill generates and validates with read-only permissions, then passes an
 allowlisted artifact to a separate publication job. That job rejects stale bases,
 symlinks, traversal, invalid hashes, instruction/selection changes, Nixpkgs evaluator/branch-policy changes, and changes to
-the sibling skill. It updates `automation/nix-reference-update` or
-`automation/devenv-reference-update`, `automation/nixpkgs-reference-update`, or
-`automation/nixos-wiki-reference-update`,
+the sibling skill. It updates `automation/nix-reference-update`,
+`automation/devenv-reference-update`, `automation/home-manager-reference-update`,
+`automation/microvm-nix-reference-update`, `automation/nixpkgs-reference-update`,
+or `automation/nixos-wiki-reference-update`,
 with at most one open PR per skill.
 Artifacts, branches, and job concurrency are separate for each skill. No-op
 artifacts are verified but produce no branch or PR.
@@ -329,6 +366,18 @@ Failed generation publishes no package. Failed PR creation leaves a validated up
 The initial Nix live updater passed as a no-op. After merging the devenv addition, validate the first live run too; a no-op does not prove changed-source PR publication.
 
 ## Sources and licensing
+
+Home Manager references originate in [nix-community/home-manager](https://github.com/nix-community/home-manager)
+and retain its accompanying [LICENSE](skills/home-manager/LICENSE). microvm.nix
+references originate in [microvm-nix/microvm.nix](https://github.com/microvm-nix/microvm.nix)
+and retain its accompanying [LICENSE](skills/microvm-nix/LICENSE). Both packages
+record the selected branch revision, source-file hashes, and generated-output
+hashes in `sources.json`; the repository does not relicense copied upstream
+material.
+
+Design history: [intent](intent/2026-09-22-14-home-manager-microvm.md),
+[spec](spec/2026-09-22-14-home-manager-microvm.md),
+[implementation plan](plan/2026-09-22-14-home-manager-microvm.md).
 
 The copied references originate in [Nix](https://github.com/NixOS/nix), whose upstream README identifies LGPL v2.1; the upstream licence accompanies the skill as [COPYING](skills/nix-language/COPYING).
 Generated references identify the Nix contributors and link to original files at the recorded revision.

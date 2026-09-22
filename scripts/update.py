@@ -319,12 +319,18 @@ def generated_files(skill):
     if skill == "nixos-wiki":
         from wiki import GENERATED as wiki_files
         return wiki_files
+    if skill == "home-manager":
+        from home_manager import generated_files as home_manager_files
+        return home_manager_files()
+    if skill == "microvm-nix":
+        from microvm import generated_files as microvm_files
+        return microvm_files()
     raise ValueError("Unknown skill")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
     mode.add_argument("--revision")
@@ -345,6 +351,16 @@ def main():
             parser.error("Nixpkgs uses --revision, not --release")
         from nixpkgs import main as nixpkgs_main
         return nixpkgs_main(args)
+    if args.skill == "home-manager":
+        if args.release or args.dump or args.sha256:
+            parser.error("Home Manager uses --revision or --latest")
+        from home_manager import main as home_manager_main
+        return home_manager_main(args)
+    if args.skill == "microvm-nix":
+        if args.release or args.dump or args.sha256:
+            parser.error("microvm.nix uses --revision or --latest")
+        from microvm import main as microvm_main
+        return microvm_main(args)
     if args.revision:
         parser.error("--revision is only supported for nixpkgs-development")
     if args.skill == "devenv-project":
