@@ -243,3 +243,23 @@ validated package and disable only the Nixpkgs update path if necessary; preserv
 sibling schedules. Consumers can reinstall the entire skill from the previous
 known-good repository commit. No host configuration, user trust or installed
 agent files should require restoration because this work does not modify them.
+
+## Implementation checkpoint — 2026-09-22
+
+Independent work completed while PR #4 remains open: pinned source and upstream
+lib-docs inspected; initial package, converter, and bounded fixture implemented.
+Two generations produced identical bytes. Twelve Python tests passed, including
+conversion/code preservation, includes, ancestry and package links/hashes. The
+pinned evaluator passed semantic assertions and actual build-hook/shell-output
+checks on x86_64-linux. The existing Nix package remains unchanged.
+
+Upstream generated IDs encode apostrophes as `-prime`; attribute paths are a
+separate field. Selected API identities are checked against both. Nix returns
+build outputs in store-path order, so fixtures are identified by their expected
+files. The Python excerpt retains an upstream duplicate `setuptools` argument;
+a visible adaptation note tells consumers to remove the duplicate before use.
+
+Remaining: integrate the shared updater, validator, artifact publication and CI
+after separately authorized merging of PR #4; expand failure/publication checks;
+update README; run all three skills on clean CI; open the implementation PR.
+This checkpoint is not a completed automatic-update implementation.
