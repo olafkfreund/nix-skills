@@ -46,6 +46,8 @@ class CollectionTests(unittest.TestCase):
                         original.replace("description: Review example configurations.", "description: >"),
                         original.replace("description: Review example configurations.", "description: [invalid, metadata]"),
                         original.replace("description: Review example configurations.", "description: false"),
+                        original.replace("description: Review example configurations.", "description: TRUE"),
+                        original.replace("description: Review example configurations.", "description: Review\ninvalid yaml"),
                         original.replace("description: Review example configurations.", "description: 123"),
                         original.replace("description: Review example configurations.", "description: Review\ndescription:"),
                         original + "\nTODO: finish this\n",

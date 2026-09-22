@@ -32,7 +32,9 @@ this exception does not authorize new policies, generators or privileges.
 Create `skills/<name>/SKILL.md` and insert its name into the sorted `skills.json`
 list. Names are lowercase letters/digits separated by single hyphens, at most
 64 characters. `default` and `nix-skills` are reserved collection output names.
-The directory and frontmatter name must match. Use a nonempty, single-line
+The directory and frontmatter name must match. Frontmatter contains exactly the
+two fields shown below; put other descriptive information in the body or linked
+resources. Use a nonempty, single-line
 plain-text description starting with a letter that says when the skill should
 trigger. Avoid YAML quoting, block scalars, `: ` and ` #` in this field; this
 repository deliberately uses a small metadata convention without a YAML runtime.

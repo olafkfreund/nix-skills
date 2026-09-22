@@ -32,12 +32,12 @@ def validate(root):
                 raise ValueError(f"Unsupported package entry: {path}")
         text = (package / "SKILL.md").read_text()
         match = re.match(r"\A---\n(.*?)\n---\n", text, re.S)
-        if not match:
-            raise ValueError(f"Missing frontmatter: {name}")
+        if not match or len(match[1].splitlines()) != 2:
+            raise ValueError(f"Expected exactly name and description frontmatter: {name}")
         for field in ("name", "description"):
             values = re.findall(rf"^{field}: (.+)$", match[1], re.M)
-            if len(re.findall(rf"^{field}:", match[1], re.M)) != 1 or len(values) != 1 or not values[0].strip() or values[0].strip() in {
-                    "|", ">", "null", "true", "false", '""', "''"}:
+            if len(values) != 1 or not values[0].strip() or values[0].strip().lower() in {
+                    "|", ">", "null", "true", "false", "yes", "no", "on", "off", '""', "''"}:
                 raise ValueError(f"Expected one plain single-line {field}: {name}")
             if field == "name" and values[0] != name:
                 raise ValueError(f"Frontmatter name differs from directory: {name}")

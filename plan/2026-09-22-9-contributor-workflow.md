@@ -226,8 +226,10 @@ by this development task.
 - Reserve `default` and `nix-skills` in the registry to prevent collisions with
   the approved collection package outputs. This is an additional input constraint
   discovered during packaging review, not an expansion of updater authority.
-- Metadata uses the documented plain single-line convention, without adding a
-  YAML dependency. TODO/FIXME/TBD rejection applies to authored entrypoint prose;
+- Metadata uses exactly the documented name/description plain single-line fields,
+  without adding a YAML dependency. Other metadata goes in body/resources.
+  Extra malformed YAML and YAML boolean values are rejected. TODO/FIXME/TBD
+  rejection applies to authored entrypoint prose;
   upstream reference comments are retained. Existing source-directive checks and
   provider validation remain unchanged.
 - Local x86_64 flake checks and collection build passed, including exact contents,
