@@ -7,8 +7,9 @@ Portable skills for AI coding agents, maintained from pinned upstream sources.
 | [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
 | [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv v2.3.1 |
 | [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | master snapshot; development series 26.11 |
+| [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | 17 curated topics from the 2026-09-22 dump |
 
-Each package records its release or development series, exact source revision, curated selection, and
+Each package records its upstream snapshot identity, curated selection, and
 input/output hashes in its own `sources.json`. References cover selected topics,
 not every upstream feature. Agents must check the project's actual versions.
 The Nix skill does not supply NixOS options or replace Nixpkgs API documentation.
@@ -27,7 +28,7 @@ git checkout --detach <reviewed-commit-sha>
 ```
 
 Copy or link the **whole** desired skill directory into your agent's supported skill directory.
-Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs, `LICENSE` for devenv) with `SKILL.md`.
+Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs/wiki, `LICENSE` for devenv) with `SKILL.md`.
 
 For Codex, current documented locations include a project's `.agents/skills/` and the user's `~/.agents/skills/`; symlinked skill directories are supported.
 See [official skill discovery documentation](https://learn.chatgpt.com/docs/build-skills).
@@ -38,12 +39,13 @@ mkdir -p ~/.agents/skills
 ln -s "$PWD/skills/nix-language" ~/.agents/skills/nix-language
 ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
 ln -s "$PWD/skills/nixpkgs-development" ~/.agents/skills/nixpkgs-development
+ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 ```
 
 If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
 No installation is performed by this repository's checks or update workflow.
 
-Invoke `$nix-language`, `$devenv-project`, or `$nixpkgs-development` in Codex or let the agent select it from its description.
+Invoke `$nix-language`, `$devenv-project`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
 Other agents can install the same folder using their own skill mechanism.
 For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
@@ -161,6 +163,53 @@ the Python excerpt identifies an upstream duplicate argument needing adaptation.
 Consumers must use their own project's pin rather than assume master APIs exist
 in older Nixpkgs. Roll back by restoring the entire skill from a reviewed commit.
 
+### NixOS Wiki maintenance and lookup
+
+The wiki skill bundles 17 reviewed English topic pages, the copyright policy and
+latest template source, with one retained revision per page. It preserves raw
+wikitext, examples and notices; it does not render MediaWiki templates or mirror
+the whole wiki. Search excerpts can omit caveats, so read page notices and complete
+examples before use. Advice still needs checking against the consumer's actual pin.
+
+```sh
+python3 skills/nixos-wiki/scripts/wiki.py search 'rebuild'
+python3 skills/nixos-wiki/scripts/wiki.py show 'Nixos-rebuild'
+python3 skills/nixos-wiki/scripts/wiki.py show 'Garbage Collection' --follow
+python3 skills/nixos-wiki/scripts/wiki.py show 'Template:Warning'
+python3 scripts/check.py --skill nixos-wiki
+python3 scripts/update.py --skill nixos-wiki --check
+```
+
+Lookup and `--check` need only Python 3.10+, work offline, and never execute wiki
+examples. `show` limits each original-text window to 200 lines / 16 KiB and gives
+continuation arguments (`--start`, `--offset`); `--lines` can request a smaller
+window. Template search requires `--templates`. Missing redirect targets are
+labeled as live, unpinned links; revision citations do not pin templates used by
+the live website's renderer. Other agents may read individual JSON records instead.
+
+Ingestion additionally requires `zstd`; CI supplies it from a fixed Nixpkgs commit.
+No global installation is needed. On a task branch or disposable copy:
+
+```sh
+python3 scripts/update.py --skill nixos-wiki --latest
+python3 scripts/update.py --skill nixos-wiki --dump /path/to/wikidump.xml.zst --sha256 <expected-sha256>
+```
+
+The updater bounds download/decompression/XML processing, rejects DTD/entities,
+and verifies the compressed hash and decoder success. It rejects regressions,
+mutated revision identities, missing primary titles, broken primary redirects and
+copyright-policy changes. Same-dump and irrelevant-history/recompression changes
+are no-ops; advanced retained revisions with identical text are reported as
+provenance-only updates. Changes require review, including template changes.
+
+Retained JSON contains the exact consumed text and metadata, allowing offline
+reproduction after the moving dump URL changes. The compressed checksum identifies
+the original acquisition; the subset cannot reconstruct the full historical XML.
+No full dump, contributor identities/history or media are distributed. Source
+origin, selection, namespace/size/schema policy and copyright-policy identity are
+immutable to automation, as are SKILL.md and the package's lookup helper. Restore
+the complete package from a reviewed repository commit to roll back.
+
 ## Automatic updates
 
 After the workflows reach the default branch, **Update references** runs each Monday at 06:17 UTC and on manual dispatch.
@@ -168,7 +217,8 @@ Each skill generates and validates with read-only permissions, then passes an
 allowlisted artifact to a separate publication job. That job rejects stale bases,
 symlinks, traversal, invalid hashes, instruction/selection changes, Nixpkgs evaluator/branch-policy changes, and changes to
 the sibling skill. It updates `automation/nix-reference-update` or
-`automation/devenv-reference-update`, or `automation/nixpkgs-reference-update`,
+`automation/devenv-reference-update`, `automation/nixpkgs-reference-update`, or
+`automation/nixos-wiki-reference-update`,
 with at most one open PR per skill.
 Artifacts, branches, and job concurrency are separate for each skill. No-op
 artifacts are verified but produce no branch or PR.
@@ -220,3 +270,10 @@ The license of the nixdoc generator does not replace the upstream source license
 Nixpkgs design history: [intent](intent/2026-09-22-5-nixpkgs-skill.md),
 [spec](spec/2026-09-22-5-nixpkgs-skill.md),
 [implementation plan](plan/2026-09-22-5-nixpkgs-skill.md).
+
+Wiki text is from the [official NixOS Wiki](https://wiki.nixos.org/), under the
+retained [MIT COPYING](skills/nixos-wiki/COPYING) from copyright-policy revision
+22887. Media can have other terms and is excluded. Wiki design history:
+[intent](intent/2026-09-22-8-nixos-wiki-skill.md),
+[spec](spec/2026-09-22-8-nixos-wiki-skill.md),
+[plan](plan/2026-09-22-8-nixos-wiki-skill.md).

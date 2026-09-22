@@ -118,9 +118,11 @@ class DevenvTests(unittest.TestCase):
 class ArtifactTests(unittest.TestCase):
     def test_artifact_roundtrip_and_rejections(self):
         import nixpkgs
+        import wiki
         for skill, provider, reference, license_name in [
                 ("devenv-project", devenv, "configuration", "LICENSE"),
-                ("nixpkgs-development", nixpkgs, "packaging", "COPYING")]:
+                ("nixpkgs-development", nixpkgs, "packaging", "COPYING"),
+                ("nixos-wiki", wiki, "index", "COPYING")]:
             with self.subTest(skill=skill):
                 self.artifact_roundtrip(skill, provider, reference, license_name)
 
@@ -147,11 +149,19 @@ class ArtifactTests(unittest.TestCase):
                 with patch.object(artifact, 'ROOT', root):
                     artifact.pack(skill, artifacts)
                     self.assertFalse(artifact.accept(skill, artifacts))
-                    manifest = json.loads((package / 'sources.json').read_text())
-                    target = package / ('references/' + reference + '.md')
-                    target.write_text(target.read_text() + '\nChanged upstream excerpt.\n')
-                    manifest['outputs'][('references/' + reference + '.md')] = update.digest(target.read_bytes())
-                    (package / 'sources.json').write_bytes(update.encoded(manifest))
+                    if skill == 'nixos-wiki':
+                        pages = json.loads((package / 'references/pages.json').read_text())
+                        templates = json.loads((package / 'references/templates.json').read_text())
+                        pages['NixOS']['revision_id'] += 1000000
+                        files, _ = provider.generate(pages, templates, 'b'*64)
+                        for name, data in files.items():
+                            (package / name).write_bytes(data)
+                    else:
+                        manifest = json.loads((package / 'sources.json').read_text())
+                        target = package / ('references/' + reference + '.md')
+                        target.write_text(target.read_text() + '\nChanged upstream excerpt.\n')
+                        manifest['outputs'][('references/' + reference + '.md')] = update.digest(target.read_bytes())
+                        (package / 'sources.json').write_bytes(update.encoded(manifest))
                     (root / '.update-report.md').write_text('Changed selected source.\n')
                     artifact.pack(skill, artifacts)
                     git('restore', 'skills')
