@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 14
 spec: spec/2026-09-22-14-home-manager-microvm.md
 ---
@@ -98,4 +98,3 @@ workflow/documentation additions. Do not delete the approved artifacts or
 alter existing providers. Restore the prior scheduled matrices and rebuild
 checks; no host rebuild, skill installation, or repository-setting change is
 part of rollback.
-
