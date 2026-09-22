@@ -263,3 +263,30 @@ Remaining: integrate the shared updater, validator, artifact publication and CI
 after separately authorized merging of PR #4; expand failure/publication checks;
 update README; run all three skills on clean CI; open the implementation PR.
 This checkpoint is not a completed automatic-update implementation.
+
+## Integration checkpoint — 2026-09-22
+
+The user authorized merging all PRs. PR #4 passed its checks and was merged as
+`947712dcf5ed0b55223ce0651eac89dbcbb6fa08`; this is the sibling-comparison base.
+The task branch incorporates that merge. Shared updater, offline validator,
+artifact boundary, workflow matrices and README now include Nixpkgs.
+
+The converter preserves HTML entities in prose so names such as `<pkg>` render
+as text; fenced and inline executable examples remain unchanged. Reference-link
+definitions are read from the full selected source page, including definitions
+outside a chosen section. Both changes follow the approved conversion design.
+
+Twenty-four Python tests pass, including the Nixpkgs artifact round-trip, changed
+and no-op publication, stale/malicious artifacts, immutable evaluator policy,
+partial-write restoration, generated schema/selection errors and deterministic
+synthetic generation. All three offline validators and actionlint pass. The
+actual pinned Nixpkgs regeneration/runtime check passed twice; the Nix sibling
+regeneration check passed. Both sibling package trees match the integration base.
+
+Manual usage review: package creation routes to stdenv/helpers and preserves
+hooks; dependency overrides route to `override`/`overrideAttrs`; overlay recursion
+review distinguishes previous recipes from final dependencies; older consumer
+pins require inspecting the consumer's actual API rather than upgrading to this
+snapshot. These are instruction walkthroughs, not native-agent discovery tests.
+Clean-runner CI and the first live updater remain to be observed before closing
+this task; a live no-op does not establish changed-source PR publication.

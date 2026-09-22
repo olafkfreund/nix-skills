@@ -313,17 +313,28 @@ def generated_files(skill):
     if skill == "devenv-project":
         from devenv import GENERATED as devenv_files
         return devenv_files
+    if skill == "nixpkgs-development":
+        from nixpkgs import GENERATED as nixpkgs_files
+        return nixpkgs_files
     raise ValueError("Unknown skill")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
+    mode.add_argument("--revision")
     mode.add_argument("--latest", action="store_true")
     mode.add_argument("--check", action="store_true")
     args = parser.parse_args()
+    if args.skill == "nixpkgs-development":
+        if args.release:
+            parser.error("Nixpkgs uses --revision, not --release")
+        from nixpkgs import main as nixpkgs_main
+        return nixpkgs_main(args)
+    if args.revision:
+        parser.error("--revision is only supported for nixpkgs-development")
     if args.skill == "devenv-project":
         from devenv import main as devenv_main
         return devenv_main(args)

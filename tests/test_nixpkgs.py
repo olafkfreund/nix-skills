@@ -1,4 +1,7 @@
 import json
+import copy
+import shutil
+import tempfile
 from pathlib import Path
 import sys
 import unittest
@@ -8,6 +11,7 @@ from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import check
 import nixpkgs
+import update
 
 
 class NixpkgsTests(unittest.TestCase):
@@ -73,6 +77,82 @@ class NixpkgsTests(unittest.TestCase):
                 self.assertTrue(target.is_relative_to(package) and target.is_file(), link)
                 if parsed.fragment:
                     self.assertIn(unquote(parsed.fragment), check.anchors(target.read_text()), link)
+
+
+    def test_policy_and_replacement_boundaries(self):
+        old = json.loads((nixpkgs.PACKAGE / 'sources.json').read_text())
+        for field, value in [('branch', 'other'), ('toolchain', {}), ('selection', {})]:
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                check.immutable_policy(old, old | {field: value}, 'nixpkgs-development')
+        with tempfile.TemporaryDirectory() as directory:
+            package = Path(directory) / 'nixpkgs-development'
+            shutil.copytree(nixpkgs.PACKAGE, package)
+            original = {name: (package/name).read_bytes() for name in nixpkgs.GENERATED}
+            files = dict(original)
+            files['COPYING'] += b'\n'
+            with self.assertRaises(ValueError):
+                update.publish(files, package, skill='nixpkgs-development')
+            manifest = json.loads(files['sources.json'])
+            manifest['outputs']['COPYING'] = update.digest(files['COPYING'])
+            files['sources.json'] = update.encoded(manifest)
+            replace, calls = update.os.replace, []
+            def fail_second(source, target):
+                calls.append(target)
+                if len(calls) == 2:
+                    raise OSError('simulated partial replacement')
+                replace(source, target)
+            with patch.object(update.os, 'replace', side_effect=fail_second), self.assertRaises(OSError):
+                update.publish(files, package, skill='nixpkgs-development')
+            self.assertEqual(original, {name: (package/name).read_bytes() for name in original})
+
+    def test_schema_and_missing_selection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            (source/'lib').mkdir()
+            (source/'lib/test.nix').write_text('x: x\n')
+            record = dict(id='lib.test', attrPath='lib.test', description='Example',
+                          source=dict(file='lib/test.nix', line=1))
+            document = dict(schemaVersion=1, groups=[], entries=[record])
+            self.assertIn('lib.test', nixpkgs.parse_library(json.dumps(document), source)[1])
+            for invalid in [document | {'schemaVersion': 2},
+                            document | {'entries': [record, record]},
+                            document | {'entries': [record | {'source': dict(file='../escape', line=1)}]}]:
+                with self.assertRaises(ValueError):
+                    nixpkgs.parse_library(json.dumps(invalid), source)
+            for name, content in {
+                    'doc/test.md': '# Selected {#selected}\nPinned prose.\n',
+                    'doc/function-catalog.json': '{"sources": []}',
+                    'doc/manpage-urls.json': '{}', '.version': '26.11', 'COPYING': 'MIT',
+                    'doc/README.md': '# Syntax\n', 'doc/nav.json': '{}',
+                    'doc/doc-support/lib-function-docs.nix': '{}',
+                    'doc/doc-support/package.nix': '{}',
+                    'pkgs/by-name/ni/nixdoc/package.nix': '{}',
+                    'pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py': '# renderer',
+            }.items():
+                path = source/name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content)
+            old = dict(toolchain={}, selection=dict(apis=['lib.test'], sections=[dict(
+                reference='packaging', path='doc/test.md', anchor='selected', heading='Selected', children=False)]))
+            generated = nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode())
+            self.assertEqual(generated, nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode()))
+            (source/'doc/test.md').write_text('# Selected {#selected}\nChanged prose.\n')
+            self.assertNotEqual(generated, nixpkgs.generate(old, 'b'*40, source, json.dumps(document).encode()))
+            old = dict(selection=dict(apis=['lib.missing'], sections=[]))
+            with self.assertRaisesRegex(ValueError, 'Missing selected API'):
+                nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode())
+
+    def test_noop_and_provenance_report(self):
+        from argparse import Namespace
+        old = json.loads((nixpkgs.PACKAGE/'sources.json').read_text())
+        with patch.object(nixpkgs, 'resolve_revision', return_value=old['revision']), \
+             patch.object(nixpkgs, 'pinned_inputs', side_effect=AssertionError('No-op built tools')):
+            nixpkgs.main(Namespace(latest=True, check=False, revision=None))
+        changed = copy.deepcopy(old)
+        changed['revision'] = 'b'*40
+        self.assertIn('provenance-only', nixpkgs.report(old, changed))
+        changed['coverage_inputs']['doc/new.md'] = '0'*64
+        self.assertIn('outside selection', nixpkgs.report(old, changed))
 
 
 if __name__ == '__main__':

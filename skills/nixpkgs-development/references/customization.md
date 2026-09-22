@@ -4,9 +4,9 @@ Nixpkgs master snapshot `7561e7e3e12a06677b1525a12bcccb0b4e4c601d`; development 
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
-- [<pkg>.override](#sec-pkg-override)
-- [<pkg>.overrideAttrs](#sec-pkg-overrideAttrs)
-- [<pkg>.overrideDerivation](#sec-pkg-overrideDerivation)
+- [&lt;pkg&gt;.override](#sec-pkg-override)
+- [&lt;pkg&gt;.overrideAttrs](#sec-pkg-overrideAttrs)
+- [&lt;pkg&gt;.overrideDerivation](#sec-pkg-overrideDerivation)
 - [Set overlays in NixOS or Nix expressions](#sec-overlays-argument)
 - [Defining overlays](#sec-overlays-definition)
 - [Introduction](#module-system-introduction)
@@ -20,7 +20,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 [Upstream source](https://github.com/NixOS/nixpkgs/blob/7561e7e3e12a06677b1525a12bcccb0b4e4c601d/doc/using/overrides.chapter.md)
 
 
-## <pkg>.override
+## &lt;pkg&gt;.override
 
 <a id="sec-pkg-override"></a>
 
@@ -76,7 +76,7 @@ If you want to ensure that things keep working, consider [becoming a maintainer]
 [Upstream source](https://github.com/NixOS/nixpkgs/blob/7561e7e3e12a06677b1525a12bcccb0b4e4c601d/doc/using/overrides.chapter.md)
 
 
-## <pkg>.overrideAttrs
+## &lt;pkg&gt;.overrideAttrs
 
 <a id="sec-pkg-overrideAttrs"></a>
 
@@ -119,7 +119,7 @@ Note that `separateDebugInfo` is processed only by the `stdenv.mkDerivation` fun
 [Upstream source](https://github.com/NixOS/nixpkgs/blob/7561e7e3e12a06677b1525a12bcccb0b4e4c601d/doc/using/overrides.chapter.md)
 
 
-## <pkg>.overrideDerivation
+## &lt;pkg&gt;.overrideDerivation
 
 <a id="sec-pkg-overrideDerivation"></a>
 

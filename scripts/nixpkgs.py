@@ -1,6 +1,5 @@
 """Curated Nixpkgs master snapshots and upstream-generated library documentation."""
 
-import html
 import json
 import posixpath
 from pathlib import Path
@@ -9,7 +8,7 @@ import tempfile
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
 
-from update import ROOT, digest, encoded, evaluate, pinned_tools, prose, run
+from update import ROOT, digest, encoded, evaluate, pinned_tools, run
 
 UPSTREAM = 'https://github.com/NixOS/nixpkgs'
 PACKAGE = ROOT / 'skills/nixpkgs-development'
@@ -221,11 +220,11 @@ def index_anchors(text, path, anchors):
         anchors.setdefault(pending, set()).add((path, title))
 
 
-def convert(text, path, revision, anchors, bundled, manpages):
+def convert(text, path, revision, anchors, bundled, manpages, full_text=None):
     """Translate the selected NRD forms, never altering executable fenced content."""
     output, stack = [], []
     definitions = {}
-    for _, line, kind in lines(text):
+    for _, line, kind in lines(full_text if full_text is not None else text):
         match = re.match(r'^\s*\[([^]]+)\]:\s*(\S+)\s*$', line) if kind == 'prose' else None
         if match:
             if match[1] in definitions:
@@ -305,7 +304,6 @@ def convert(text, path, revision, anchors, bundled, manpages):
         line = re.sub(r'^(\s*):\s+', r'\1Definition: ', line)
         if re.search(r'\{[.#=]|\{[\w-]+\}`|@[-\w]+@|<!--|\]\[', line):
             raise ValueError('Unresolved documentation syntax: ' + line.strip())
-        line = html.unescape(line)
         for i, value in enumerate(protected):
             line = line.replace(f'\x00{i}\x00', value)
         output.append(line)
@@ -369,14 +367,14 @@ def generate(old, revision, source, library):
               'Source citations are pinned; public manual links may move.\n\n')
     documents = {name: '# ' + name.title() + '\n\n' + header for name in ['packaging', 'customization', 'helpers', 'library']}
     for item, text in excerpts:
-        documents[item['reference']] += f"- [{html.unescape(item['heading'])}](#{item['anchor']})\n"
+        documents[item['reference']] += f"- [{item['heading']}](#{item['anchor']})\n"
     for name in selected['apis']:
         documents['library'] += f'- [`{name}`](#function-library-{name})\n'
     for item, text in excerpts:
         body = '\n\n' + f"[Upstream source]({UPSTREAM}/blob/{revision}/{item['path']})\n\n"
         if item.get('note'):
             body += '**Adaptation note:** ' + item['note'] + '\n\n'
-        body += convert(text, item['path'], revision, anchors, bundled, manpages)
+        body += convert(text, item['path'], revision, anchors, bundled, manpages, read(item['path']))
         documents[item['reference']] += body
     for name in selected['apis']:
         entry = entries[name]
@@ -439,3 +437,60 @@ def report(old, new):
             result.append('None; this may be a provenance-only refresh.')
         result.append('')
     return '\n'.join(result)
+
+
+def validate_manifest(manifest):
+    if manifest['branch'] != 'master' or not re.fullmatch(r'\d+\.\d+', manifest['source_version']):
+        raise ValueError('Invalid Nixpkgs branch/development version')
+    tool = manifest['toolchain']
+    if (tool['upstream'] != 'https://github.com/NixOS/nix' or
+            not SHA.fullmatch(tool['revision']) or not re.fullmatch(r'\d+\.\d+\.\d+', tool['release'])):
+        raise ValueError('Invalid pinned evaluator')
+    selection = manifest['selection']
+    sections, apis = selection['sections'], selection['apis']
+    if not sections or not apis or len(set(apis)) != len(apis):
+        raise ValueError('Empty/duplicate Nixpkgs selection')
+    if set(manifest['api_inputs']) != set(apis) or any(
+            not re.fullmatch(r'[0-9a-f]{64}', h) for h in manifest['api_inputs'].values()):
+        raise ValueError('Invalid selected API hashes')
+    expected = {'COPYING', '.version', 'doc/function-catalog.json', 'doc/manpage-urls.json',
+                'doc/README.md', 'doc/nav.json', 'doc/doc-support/lib-function-docs.nix',
+                'doc/doc-support/package.nix', 'pkgs/by-name/ni/nixdoc/package.nix',
+                'pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py',
+                'generated:lib-functions.json'}
+    for item in sections:
+        if (item['reference'] not in {'packaging', 'customization', 'helpers'} or
+                type(item['children']) is not bool or not item['heading'] or
+                not re.fullmatch(r'[\w.:-]+', item['anchor'])):
+            raise ValueError('Invalid section selection')
+        expected.add(item['path'])
+    if not expected <= manifest['inputs'].keys():
+        raise ValueError('Missing consumed input hashes')
+    for field in ['inputs', 'coverage_inputs']:
+        for name in manifest[field]:
+            if name == 'generated:lib-functions.json' and field == 'inputs':
+                continue
+            if Path(name).is_absolute() or '..' in Path(name).parts or '\\' in name:
+                raise ValueError('Invalid provenance path')
+
+
+def main(args):
+    from check import validate
+    from update import publish
+    old = validate(PACKAGE, skill='nixpkgs-development')
+    revision = resolve_revision(old) if args.latest else args.revision or old['revision']
+    if args.latest and revision == old['revision']:
+        print('Already at recorded Nixpkgs master SHA; no update')
+        return
+    source, nix, system, library = pinned_inputs(old, revision)
+    files, new = generate(old, revision, source, library)
+    runtime_check(source, nix, system)
+    if args.check:
+        changed = [name for name, content in files.items() if (PACKAGE / name).read_bytes() != content]
+        if changed:
+            raise ValueError('Regeneration differs: ' + repr(changed))
+        print('Nixpkgs source identity, reproducibility, and runtime checks passed')
+    else:
+        publish(files, PACKAGE, skill='nixpkgs-development')
+        (ROOT / '.update-report.md').write_text(report(old, new))
+        print('Generated Nixpkgs references at ' + revision)
