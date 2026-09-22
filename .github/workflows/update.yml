@@ -1,0 +1,116 @@
+name: Update references
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: update-nix-references
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+      base: ${{ steps.diff.outputs.base }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31
+      - run: python3 scripts/update.py --latest
+      - run: python3 scripts/check.py --base HEAD
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - id: diff
+        shell: bash
+        run: |
+          echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          if git diff --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            tar -cf "$RUNNER_TEMP/references.tar" \
+              skills/nix-language/references/language.md \
+              skills/nix-language/references/builtins.md \
+              skills/nix-language/sources.json \
+              skills/nix-language/COPYING
+            cp .update-report.md "$RUNNER_TEMP/update-report.md"
+          fi
+      - if: steps.diff.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: references
+          path: |
+            ${{ runner.temp }}/references.tar
+            ${{ runner.temp }}/update-report.md
+          retention-days: 7
+          if-no-files-found: error
+  publish:
+    needs: generate
+    if: needs.generate.outputs.changed == 'true'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: references
+          path: ${{ runner.temp }}/nix-update
+      - name: Verify base and accept only generated files
+        env:
+          EXPECTED_BASE: ${{ needs.generate.outputs.base }}
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_BASE"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import sys
+          import tarfile
+          sys.path.insert(0, 'scripts')
+          from update import GENERATED
+          expected = {'skills/nix-language/' + name for name in GENERATED}
+          archive = Path(os.environ['RUNNER_TEMP']) / 'nix-update/references.tar'
+          with tarfile.open(archive) as tar:
+              members = tar.getmembers()
+              if len(members) != len(expected) or {m.name for m in members} != expected:
+                  raise ValueError('Unexpected artifact file list')
+              if any(not m.isfile() or m.size > 2_000_000 for m in members):
+                  raise ValueError('Unsupported artifact entry')
+              for member in members:
+                  Path(member.name).write_bytes(tar.extractfile(member).read())
+          PY
+          python3 scripts/check.py --base "$EXPECTED_BASE"
+          git diff --check
+      - name: Update one branch and PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        shell: bash
+        run: |
+          branch=automation/nix-reference-update
+          if git diff --quiet; then exit 0; fi
+          git switch -C "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add skills/nix-language
+          git commit -m 'docs(nix-language): refresh upstream references'
+          git push --force-with-lease origin "$branch"
+          pr=$(gh pr list --head "$branch" --base "$DEFAULT_BRANCH" --state open --json number --jq '.[0].number // empty')
+          body="$RUNNER_TEMP/nix-update/update-report.md"
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --title 'docs(nix-language): refresh upstream references' --body-file "$body"
+          else
+            gh pr create --head "$branch" --base "$DEFAULT_BRANCH" \
+              --title 'docs(nix-language): refresh upstream references' --body-file "$body" || {
+              echo '::error::Cannot open update PR. Check Actions workflow permissions: Allow GitHub Actions to create and approve pull requests. No personal token is required or added.'
+              exit 1
+            }
+          fi

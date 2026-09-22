@@ -1,0 +1,28 @@
+name: Check
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit or branch to validate (leave empty for current ref)
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}-${{ inputs.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31
+      - run: python3 scripts/check.py
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - run: python3 scripts/update.py --check
+      - run: git diff --exit-code

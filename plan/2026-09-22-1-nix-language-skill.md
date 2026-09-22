@@ -108,6 +108,15 @@ Manual behavioural prompts:
 
 Record actual observations; do not claim testing on other agents merely because the file format is portable.
 
+## Implementation findings and adjustments
+
+- Upstream has no GitHub Release objects (`/releases/latest` returned 404 and `/releases` was empty). Discover stable numeric Git tags instead, resolve annotated tags to commits, require `officialRelease = true` in the pinned flake, and validate the published versioned manual. Initial release: `2.35.2`, commit `2c73b59da29606068c0c98db015dd3a66955525d`.
+- The selected upstream derivation section contains an undefined reference to the `system` configuration option. Supply that one definition through reviewed selection metadata; protect it from automatic edits with the rest of the selection.
+- Add `.gitignore` for Python bytecode and the transient update report; neither belongs in the skill package.
+- Restoration on ordinary replacement failures is tested. Multi-file updates do not promise atomic recovery from power loss or filesystem failure; consumers use complete commit-pinned packages.
+- The optional skill-creator validator requires PyYAML; run it in a temporary Nix shell rather than adding a Python dependency to the project.
+- Repository workflow PR creation is disabled. Document the setting as a prerequisite, preserve the configured permission, and report failures without adding credentials.
+
 ## Rollback
 
 - Before merge, abandon or revise the task branch without changing `main` or the upstream Nix checkout.
