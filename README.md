@@ -10,6 +10,7 @@ Portable skills for AI coding agents, maintained from pinned upstream sources, p
 | [nix-darwin](skills/nix-darwin/SKILL.md) | Configure nix-darwin macOS systems and darwin-rebuild generations | nix-darwin master snapshot |
 | [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
 | [nix-workflow](skills/nix-workflow/SKILL.md) | Choose Nix commands, find packages and files, use dev shells, debug builds, and navigate the ecosystem | Authored guidance; ecosystem status checked 2026-09-23 |
+| [nixos-coding-agents](skills/nixos-coding-agents/SKILL.md) | Choose, install and sandbox AI coding agents with llm-agents.nix, agent-images and agent-box | Authored guidance linking upstream; checked 2026-09-23 |
 | [nixos-operations](skills/nixos-operations/SKILL.md) | Operate NixOS: rebuild modes, generations and rollback, upgrades, store cleaning, boot and services | NixOS manual chapters from the Nixpkgs master snapshot |
 | [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | master snapshot; development series 26.11 |
 | [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | 17 curated topics from the 2026-09-22 dump |
@@ -55,7 +56,7 @@ ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
 No installation is performed by this repository's checks or update workflow.
 
-Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixos-operations`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
+Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixos-coding-agents`, `$nixos-operations`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
 Other agents can install the same folder using their own skill mechanism.
 For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
@@ -88,7 +89,7 @@ home-manager.users.alice = {
   imports = [ inputs.nix-skills.homeManagerModules.default ];
   programs.nix-skills = {
     enable = true;
-    skills = [ "home-manager" "microvm-nix" "nix-darwin" "nix-language" "nix-workflow" "devenv-project" "nixos-operations" "nixpkgs-development" "nixos-wiki" ];
+    skills = [ "home-manager" "microvm-nix" "nix-darwin" "nix-language" "nix-workflow" "devenv-project" "nixos-coding-agents" "nixos-operations" "nixpkgs-development" "nixos-wiki" ];
     # Omitting skills selects the complete registered collection.
     directory = ".agents/skills";
   };
