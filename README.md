@@ -2,6 +2,129 @@
 
 Portable skills for AI coding agents, maintained from pinned upstream sources, plus authored workflow guidance.
 
+## Getting started
+
+### What this is for
+
+AI coding agents often give Nix advice that is out of date, meant for another
+distribution, or imperative: `nix-env -i`, editing generated files, `curl | sh`.
+These skills give your agent current, source-backed guidance for Nix, NixOS,
+Home Manager, nix-darwin, devenv, Nixpkgs and running AI coding agents on
+NixOS. Each skill is pinned and version-checked, so the agent proposes
+declarative, reversible changes instead of guesses. The collection installs
+skills, not agents.
+
+### 1. Install the skills for your agent
+
+**Recommended: declaratively, on NixOS with Home Manager as a NixOS module.**
+Add the input to your system flake and commit the lock file:
+
+```nix
+inputs.nix-skills.url = "github:olafkfreund/nix-skills";
+```
+
+Enable the module for your user (replace `alice`; `inputs` must be in scope),
+choosing your agents:
+
+```nix
+home-manager.users.alice = {
+  imports = [ inputs.nix-skills.homeManagerModules.default ];
+  programs.nix-skills = {
+    enable = true;
+    agents = [ "claude" ];
+  };
+};
+```
+
+Rebuild through NixOS (`nixos-rebuild`), never `home-manager switch`.
+
+| Agent | `agents` value | Skill directory | Call a skill | List skills |
+| --- | --- | --- | --- | --- |
+| [Claude Code](https://code.claude.com/docs/en/skills) | `"claude"` | `~/.claude/skills` | `/nixos-coding-agents` | `/skills` |
+| [Codex](https://learn.chatgpt.com/docs/build-skills) | `"codex"` | `~/.agents/skills` | `$nixos-coding-agents` | `/skills` |
+| [OpenCode](https://opencode.ai/docs/skills) | `"opencode"` | `~/.config/opencode/skills` | Name the skill in your prompt | Ask the agent |
+| [Antigravity](https://www.antigravity.google/docs/migration/workflows-to-skills/) | `"antigravity"` | `~/.gemini/config/skills` | `/nixos-coding-agents` | Ask the agent |
+
+All four also pick a skill automatically when your request matches its
+description. Directories and syntax were checked against each agent's
+documentation on 2026-09-23.
+
+OpenCode also reads `~/.claude/skills` and `~/.agents/skills`, and needs skill
+names to be unique. If you already selected `"claude"` or `"codex"`, OpenCode
+sees the skills; do not add `"opencode"` as well.
+
+For a subset of skills, a custom directory or the plain data package, see
+[Declarative installation on NixOS](#declarative-installation-on-nixos).
+Without Home Manager, clone a reviewed commit and link the skill directories
+by hand, as in [Use](#use).
+
+### 2. Check that the agent sees them
+
+```sh
+ls ~/.claude/skills   # or your agent's directory from the table
+```
+
+Then, in the agent, run `/skills` (Claude Code, Codex) or ask "Which skills do
+you have available?" (OpenCode, Antigravity). The module installs each skill
+as a link into `/nix/store`. Claude Code and Codex document support for
+linked skill directories; OpenCode and Antigravity do not. If a skill is
+missing there, [open an issue](https://github.com/olafkfreund/nix-skills/issues).
+
+### 3. Start with this prompt
+
+Open your agent in your system configuration repository and paste:
+
+```text
+Use the nix-skills skills. I'm on NixOS and want to set up this machine for
+agentic coding. Read my system configuration first, tell me what you found,
+and propose changes as a diff. Do not rebuild, install or run containers
+until I approve.
+```
+
+To call a skill explicitly, use the "Call a skill" column above, for example
+`/nixos-coding-agents` in Claude Code or `$nixos-coding-agents` in Codex.
+
+### Examples
+
+| You ask | Skill |
+| --- | --- |
+| "My rebuild fails with 'The option … does not exist'. What changed?" | `nixos-operations`, `nixos-wiki` |
+| "Add a devenv shell with Python 3.12 and Postgres to this repo." | `devenv-project` |
+| "Which package provides `libssl.so`, and how do I reference it?" | `nix-workflow` |
+| "Move my shell and git config into Home Manager." | `home-manager` |
+| "Package this Go CLI with `buildGoModule`." | `nixpkgs-development` |
+| "Run Claude Code on this repo so it cannot read `~/.ssh`." | `nixos-coding-agents` |
+
+### User story: start coding with agents on NixOS
+
+As a NixOS user with no AI agent yet, I want a coding agent set up
+declaratively, and optionally sandboxed, so that I can start agentic coding
+without breaking my system or exposing my secrets.
+
+1. **Run an agent once, without installing it.**
+
+   ```sh
+   nix run github:numtide/llm-agents.nix#claude-code   # or #codex, #opencode, #antigravity-cli
+   ```
+
+   **Check:** it starts, and nothing is installed.
+2. **Install the skills** for that agent, as in step 1 above, and rebuild.
+   **Check:** as in step 2 above.
+3. **Give the start prompt** from your system configuration repository.
+   **Check:** the agent reads your configuration and proposes a diff without
+   applying it. Typically the diff adds the llm-agents.nix input and your
+   agent, the Numtide binary cache, and optionally
+   `virtualisation.podman.enable` for sandboxing.
+4. **Review the diff, then build and switch yourself:** `nixos-rebuild build`,
+   then `nixos-rebuild switch`. **Check:** the agent is on your `PATH` without
+   `nix run`. **Undo:** roll back to the previous generation.
+5. **Per project.** In a code repository, ask for a devenv shell
+   (`devenv-project`). For repositories you do not trust, ask to run the agent
+   in a container or an agent-box worktree (`nixos-coding-agents`).
+   **Check:** the devenv shell activates, and the sandbox check from
+   [`nixos-coding-agents` stories 3 and 4](skills/nixos-coding-agents/references/user-stories.md)
+   passes.
+
 | Skill | Purpose | Initial reference |
 | --- | --- | --- |
 | [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv v2.3.1 |
@@ -36,9 +159,10 @@ git checkout --detach <reviewed-commit-sha>
 Copy or link the **whole** desired skill directory into your agent's supported skill directory.
 Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs/wiki, `LICENSE` for devenv/Home Manager/microvm.nix) with `SKILL.md`.
 
-For Codex, current documented locations include a project's `.agents/skills/` and the user's `~/.agents/skills/`; symlinked skill directories are supported.
-See [official skill discovery documentation](https://learn.chatgpt.com/docs/build-skills).
-For example, from the clone, on a machine where this destination is not already managed declaratively:
+This is the manual route for any agent; use the agent's skill directory from the table in [Getting started](#1-install-the-skills-for-your-agent).
+The example uses Codex's `~/.agents/skills/`; Codex also reads a project's `.agents/skills/`, and symlinked skill directories are supported
+([Codex skill discovery documentation](https://learn.chatgpt.com/docs/build-skills)).
+From the clone, on a machine where this destination is not already managed declaratively:
 
 ```sh
 mkdir -p ~/.agents/skills
@@ -48,6 +172,7 @@ ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
 ln -s "$PWD/skills/home-manager" ~/.agents/skills/home-manager
 ln -s "$PWD/skills/microvm-nix" ~/.agents/skills/microvm-nix
 ln -s "$PWD/skills/nix-darwin" ~/.agents/skills/nix-darwin
+ln -s "$PWD/skills/nixos-coding-agents" ~/.agents/skills/nixos-coding-agents
 ln -s "$PWD/skills/nixos-operations" ~/.agents/skills/nixos-operations
 ln -s "$PWD/skills/nixpkgs-development" ~/.agents/skills/nixpkgs-development
 ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
@@ -57,21 +182,12 @@ If your configuration manages agent files declaratively, declare that link or co
 No installation is performed by this repository's checks or update workflow.
 
 Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixos-coding-agents`, `$nixos-operations`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
-Other agents can install the same folder using their own skill mechanism.
+Other agents use the same folders; see the "Call a skill" column in [Getting started](#1-install-the-skills-for-your-agent).
 For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
 
 To update, select a newly reviewed repository commit, check it out, and replace the complete copied directory (or retain the link to that pinned checkout).
 To roll back, repeat with the previous commit.
-
-## Maintain
-
-For a new skill, bug fix or development setup, start with
-[CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
-`skills.json` registers portable packages; it does not enroll source updaters.
-Read-only PR checks validate the collection, package/module builds and explicit
-maintained providers. A reviewed merge makes a contribution available to users
-who choose to update their pin.
 
 ### Declarative installation on NixOS
 
@@ -144,6 +260,15 @@ x86_64 builds from aarch64 evaluation.
 Review updates to the consumer's locked `nix-skills` input before rebuilding.
 Roll back by restoring the previous lock and rebuilding, or using your system's
 previous generation. Repository builds and checks never activate a home or host.
+
+## Maintain
+
+For a new skill, bug fix or development setup, start with
+[CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
+`skills.json` registers portable packages; it does not enroll source updaters.
+Read-only PR checks validate the collection, package/module builds and explicit
+maintained providers. A reviewed merge makes a contribution available to users
+who choose to update their pin.
 
 ### Development environment
 
