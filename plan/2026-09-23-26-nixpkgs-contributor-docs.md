@@ -38,6 +38,19 @@ Spec: `spec/2026-09-23-26-nixpkgs-contributor-docs.md`.
     source and exist in the pinned source. It becomes `…/blob/REV/P` for a
     file or `…/tree/REV/P` for a directory, keeping any fragment.
   - Reference definitions resolve the same way, and duplicates are an error.
+- **D2a Reviewed anchor fixes** (plan revision, approved by the maintainer
+  after step 2 hit the stop rule): at the pinned revision, `CONTRIBUTING.md`
+  line 501 links to `#changes-rebuilding-all-tests`. No heading has that slug;
+  the real one is `changes-rebuilding-all-nixos-tests`, which line 504 of the
+  same file uses correctly. So:
+  - A github section may carry `anchor_fixes: {broken-slug: real-slug}`.
+  - It applies only to same-file `#slug` links.
+  - Each broken slug must not be a real slug, and each target must be one.
+  - Every entry must be used by that section's excerpt, or generation fails.
+  - Manual sections reject the field.
+
+  When upstream fixes its link, the weekly update fails once and a reviewer
+  removes the entry. Unknown slugs without a reviewed fix remain an error.
 - **D3 Output:**
   - `references/contributing.md` is added to `GENERATED`, the `documents`
     list (`# Contributing`) and the table of contents.

@@ -177,9 +177,14 @@ def excerpt_github(text, selection):
     return text[start:end].strip() + '\n', slug
 
 
-def convert_github(text, path, revision, source, full_text, bundled_slugs):
+def convert_github(text, path, revision, source, full_text, bundled_slugs, fixes=None):
     """Pin GitHub-Markdown links to the source revision; fenced content is never altered."""
     slugs = {h[3] for h in github_headings(full_text)}
+    # Reviewed corrections for upstream links to headings that do not exist; each must be used.
+    fixes, used = dict(fixes or {}), set()
+    for broken, target in fixes.items():
+        if broken in slugs or target not in slugs:
+            raise ValueError(f'Invalid anchor fix: {broken} -> {target}')
     definitions = {}
     for _, line, kind in lines(full_text):
         match = re.match(r'^\s*\[([^]]+)\]:\s*(\S+)\s*$', line) if kind == 'prose' else None
@@ -197,6 +202,9 @@ def convert_github(text, path, revision, source, full_text, bundled_slugs):
             raise ValueError('Protocol-relative link: ' + target)
         if not parsed.path:
             slug = unquote(parsed.fragment)
+            if slug in fixes:
+                used.add(slug)
+                slug = fixes[slug]
             if slug not in slugs:
                 raise ValueError('Unknown heading link: ' + target)
             if (path, slug) in bundled_slugs:
@@ -237,6 +245,8 @@ def convert_github(text, path, revision, source, full_text, bundled_slugs):
         for i, value in enumerate(protected):
             line = line.replace(f'\x00{i}\x00', value)
         output.append(line)
+    if used != fixes.keys():
+        raise ValueError('Unused anchor fix: ' + ', '.join(sorted(fixes.keys() - used)))
     return ''.join(output)
 
 
@@ -482,7 +492,8 @@ def generate(old, revision, source, library):
             body += '**Adaptation note:** ' + item['note'] + '\n\n'
         if item.get('format', 'manual') == 'github':
             body = f'\n\n<a id="{item["anchor"]}"></a>' + body
-            body += convert_github(text, item['path'], revision, source, read(item['path']), bundled_slugs)
+            body += convert_github(text, item['path'], revision, source, read(item['path']), bundled_slugs,
+                                   item.get('anchor_fixes'))
             documents[item['reference']] += body
             continue
         body += convert(text, item['path'], revision, anchors, bundled, manpages, read(item['path']))
@@ -576,10 +587,14 @@ def validate_manifest(manifest):
     for item in sections:
         form = item.get('format', 'manual')
         if form == 'github':
+            fixes = item.get('anchor_fixes', {})
             valid = (item['path'] in GITHUB_SOURCES and item['reference'] == 'contributing' and
-                     type(item.get('level')) is int and 1 <= item['level'] <= 6)
+                     type(item.get('level')) is int and 1 <= item['level'] <= 6 and isinstance(fixes, dict) and
+                     all(isinstance(k, str) and isinstance(v, str) and re.fullmatch(r'[\w-]+', k) and
+                         re.fullmatch(r'[\w-]+', v) and k != v for k, v in fixes.items()))
         else:
-            valid = form == 'manual' and 'level' not in item and item['reference'] in {'packaging', 'customization', 'helpers'}
+            valid = (form == 'manual' and 'level' not in item and 'anchor_fixes' not in item and
+                     item['reference'] in {'packaging', 'customization', 'helpers'})
         if (not valid or type(item['children']) is not bool or not item['heading'] or
                 not re.fullmatch(r'[\w.:-]+', item['anchor'])):
             raise ValueError('Invalid section selection')

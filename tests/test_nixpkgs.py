@@ -194,6 +194,16 @@ class NixpkgsTests(unittest.TestCase):
                 write_source(source, {'CONTRIBUTING.md': '## Overview\n' + text + '\n'})
                 with self.subTest(text=text), self.assertRaisesRegex(ValueError, error):
                     run(item('Overview', 'contributing-overview'))
+            write_source(source, {'CONTRIBUTING.md': '## Overview\nSee [next](#old-name).\n## New name\nx\n'})
+            out = run(item('Overview', 'contributing-overview', anchor_fixes={'old-name': 'new-name'}))
+            self.assertIn(f'[next]({nixpkgs.UPSTREAM}/blob/{"a"*40}/CONTRIBUTING.md#new-name)', out)
+            for fixes, error in [({'old-name': 'missing'}, 'Invalid anchor fix'),
+                                 ({'overview': 'new-name'}, 'Invalid anchor fix'),
+                                 ({'old-name': 'new-name', 'spare': 'new-name'}, 'Unused anchor fix')]:
+                with self.subTest(fixes=fixes), self.assertRaisesRegex(ValueError, error):
+                    run(item('Overview', 'contributing-overview', anchor_fixes=fixes))
+            with self.assertRaisesRegex(ValueError, 'Unknown heading'):
+                run(item('Overview', 'contributing-overview'))
             write_source(source, {'CONTRIBUTING.md': '## Overview\n' + 'x' * (nixpkgs.CONTRIBUTING_LIMIT + 1) + '\n'})
             with self.assertRaisesRegex(ValueError, 'size limit'):
                 run(item('Overview', 'contributing-overview'))
@@ -210,7 +220,9 @@ class NixpkgsTests(unittest.TestCase):
                     {k: v for k, v in good.items() if k != 'level'}, good | {'format': 'html'},
                     good | {'anchor': old['selection']['sections'][0]['anchor']},
                     dict(old['selection']['sections'][0], reference='contributing'),
-                    dict(old['selection']['sections'][0], level=2)]:
+                    dict(old['selection']['sections'][0], level=2),
+                    good | {'anchor_fixes': {'a': 'a'}}, good | {'anchor_fixes': {'a b': 'c'}},
+                    dict(old['selection']['sections'][0], anchor_fixes={'a': 'b'})]:
             broken = copy.deepcopy(old)
             broken['selection']['sections'].append(bad)
             broken['inputs'][bad['path']] = 'a' * 64
