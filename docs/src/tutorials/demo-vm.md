@@ -76,7 +76,7 @@ the console. To start from scratch, delete `nix-skills-demo.qcow2`.
 
 ## Change the agents
 
-Clone the repository, edit the `demo.agents` default in `demo/demo.nix`
+Clone the repository, edit `nix-skills.agentic.agents` in `demo/demo.nix`
 (choose from `claude-code`, `codex`, `opencode` and `gemini-cli`), and run
 `nix run ./demo`. Gemini CLI has no skill directory in the Home Manager
 module yet, so it does not get the skills installed.
@@ -88,7 +88,7 @@ module yet, so it does not get the skills installed.
   readable inside it.
 - It is built only as a VM. `nixos-rebuild` cannot build
   `nixosConfigurations.demo` for real hardware, because it defines no disks
-  or bootloader. To set up your own machine, follow
-  [Getting started](getting-started.md).
+  or bootloader. To set up your own machine with the same module, follow
+  [Set up your own machine](../how-to/own-machine.md).
 - A test in CI boots this VM and checks the agents and skills on every
   change to the demo, the module or the skills.

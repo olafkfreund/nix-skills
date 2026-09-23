@@ -10,6 +10,7 @@
 # How-to guides
 
 - [Install the skills](how-to/install.md)
+- [Set up your own machine](how-to/own-machine.md)
 - [Update and roll back](how-to/update-and-rollback.md)
 - [Fix skill discovery](how-to/fix-discovery.md)
 - [Contribute a skill](how-to/contribute.md)

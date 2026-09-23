@@ -31,15 +31,16 @@
         "aarch64-linux"
       ];
       forSystems = nixpkgs.lib.genAttrs systems;
-      specialArgs = { inherit nix-skills llm-agents; };
+      agentic = import ./agentic.nix { inherit nix-skills llm-agents; };
       modules = [
         home-manager.nixosModules.home-manager
+        agentic
         ./demo.nix
       ];
-      demoFor = system: nixpkgs.lib.nixosSystem { inherit system specialArgs modules; };
+      demoFor = system: nixpkgs.lib.nixosSystem { inherit system modules; };
     in
     {
-      nixosModules.demo = ./demo.nix;
+      nixosModules.agentic = agentic;
       nixosConfigurations.demo = demoFor "x86_64-linux";
 
       packages = forSystems (system: rec {
@@ -58,7 +59,7 @@
       checks = forSystems (system: {
         vm-test = import ./test.nix {
           pkgs = nixpkgs.legacyPackages.${system};
-          inherit specialArgs modules;
+          inherit modules;
           skillCount = builtins.length (builtins.fromJSON (builtins.readFile "${nix-skills}/skills.json"));
         };
       });
