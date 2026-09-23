@@ -78,6 +78,10 @@ NixOS system operations are split out to #30.
     current `master` SHA from `git ls-remote` as `revision`, and the D3
     `selection`, as #14 did for its initial snapshots.
   - Generate with `update.py --skill nix-darwin --revision <that SHA>`.
+- Deviation (step 4): the README also documents each maintained provider in
+  a maintenance section, the automation branch list and the sources/licensing
+  paragraph. nix-darwin is added to all three, since a new weekly branch and
+  licence would otherwise be undocumented.
 - **D8 Routing:** in `skills/nix-workflow/SKILL.md`, the Home Manager row names
   `nix-darwin` for darwin systems, with an upstream fallback link.
 - **Stop rule:** stop, revise this plan and ask if any of these happens:

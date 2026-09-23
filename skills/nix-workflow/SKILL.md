@@ -71,6 +71,7 @@ one is missing, use the linked upstream documentation instead.
 | Developer | Project environment, expressions | This skill for shells; `devenv-project` for devenv ([devenv.sh](https://devenv.sh/)); `nix-language` for the language ([Nix manual](https://nix.dev/manual/nix/latest/language/)) |
 | Packager | Derivations, overrides, overlays | `nixpkgs-development` ([Nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/)) |
 | Home Manager user, including darwin | User configuration | `home-manager` ([Home Manager manual](https://nix-community.github.io/home-manager/)) |
+| macOS system administrator | nix-darwin system configuration | `nix-darwin` ([nix-darwin](https://github.com/nix-darwin/nix-darwin)) |
 | NixOS administrator | System configuration and rebuilds | `nixos-wiki` ([NixOS manual](https://nixos.org/manual/nixos/stable/), [NixOS Wiki](https://wiki.nixos.org/)) |
 | VM user | Declarative microVMs | `microvm-nix` ([microvm.nix](https://microvm-nix.github.io/microvm.nix/)) |
 
