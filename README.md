@@ -533,24 +533,23 @@ It never merges or installs the result.
 Reports identify changed selected inputs, coverage changes, and option/built-in metadata changes.
 Changes to upstream's devenv setup skill are review signals; authored instructions are never automatically replaced.
 
-The repository must allow GitHub Actions to create PRs under **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
-This setting is enabled for this repository; forks must configure it separately.
-Keep the default token permission read-only: only the publication job requests `contents: write`, `pull-requests: write` and `actions: write`, the last only to start **Check** on the update PR.
-No personal access token is required or configured.
-See [GitHub's repository workflow permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository).
+Update branches are pushed, and update PRs opened, with the repository secret `UPDATE_PR_TOKEN`, so they get the same
+`push` and `pull_request` **Check** runs as any other branch, with no approval step.
+`main` is protected: a PR is required, `collection-check` from GitHub Actions must pass, and the rules include admins,
+so an update can only merge after **Check** passes.
+`GITHUB_TOKEN` stays read-only everywhere; the publication job only reads the repository with it.
 
-After opening or updating an update PR, the publication job starts **Check** on that PR's exact head commit
-(`gh workflow run check.yml --ref <update-branch> -f ref=<head-sha>`), so every update is tested automatically.
-The results are attached to the head commit, not to the PR's check list: GitHub does not count a dispatched run in the
-PR's status, so `gh pr checks` and the merge box still show only an approval-required `pull_request` run.
-Read the result with `gh run list --workflow check.yml --commit <head-sha>`, or approve the pending run
-(**Approve workflows to run** in the merge box) to get the usual PR check as well.
-`main` has no branch protection, so never merge an update whose **Check** has not passed.
-To re-run it by hand, use the same command:
+`UPDATE_PR_TOKEN` currently holds a classic token with account-wide scopes, an accepted risk. It is exposed only to the
+single publication step that pushes the branch and opens the PR, never to generation, artifact acceptance or **Check**,
+and it is not stored in the job's git configuration.
+To narrow it, replace the secret's value with a fine-grained token limited to this repository
+(Contents and Pull requests: read and write, with an expiry); no workflow change is needed:
 
 ```sh
-gh workflow run check.yml --ref automation/nix-reference-update -f ref=<head-sha>
+gh secret set UPDATE_PR_TOKEN --repo olafkfreund/nix-skills
 ```
+
+If the secret is missing or invalid, publication fails with an error naming it.
 
 Failed generation publishes no package. Failed PR creation leaves a validated update branch and an actionable workflow error.
 The initial Nix live updater passed as a no-op. After merging the devenv addition, validate the first live run too; a no-op does not prove changed-source PR publication.

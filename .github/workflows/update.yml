@@ -70,14 +70,13 @@ jobs:
       group: publish-${{ matrix.skill }}-references
       cancel-in-progress: false
     permissions:
-      contents: write
-      pull-requests: write
-      actions: write # only to start Check on the update PR's head commit
+      contents: read # pushes and PRs use UPDATE_PR_TOKEN, so update PRs get normal checks
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: references-${{ matrix.skill }}
@@ -90,18 +89,22 @@ jobs:
       - name: Update one branch and PR
         if: steps.artifact.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          UPDATE_PR_TOKEN: ${{ secrets.UPDATE_PR_TOKEN }}
+          GH_TOKEN: ${{ secrets.UPDATE_PR_TOKEN }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           SKILL: ${{ matrix.skill }}
           UPDATE_BRANCH: ${{ matrix.branch }}
         shell: bash
         run: |
+          [ -n "$UPDATE_PR_TOKEN" ] || { echo '::error::UPDATE_PR_TOKEN is not set; update PRs are published with it.'; exit 1; }
           git switch -C "$UPDATE_BRANCH"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "skills/$SKILL"
           git commit -m "docs($SKILL): refresh upstream references"
-          git push --force-with-lease origin "$UPDATE_BRANCH"
+          auth=$(printf 'x-access-token:%s' "$UPDATE_PR_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            push --force-with-lease origin "$UPDATE_BRANCH"
           pr=$(gh pr list --head "$UPDATE_BRANCH" --base "$DEFAULT_BRANCH" --state open --json number --jq '.[0].number // empty')
           body="$RUNNER_TEMP/references/report.md"
           if [ -n "$pr" ]; then
@@ -109,11 +112,7 @@ jobs:
           else
             gh pr create --head "$UPDATE_BRANCH" --base "$DEFAULT_BRANCH" \
               --title "docs($SKILL): refresh upstream references" --body-file "$body" || {
-              echo '::error::Cannot open update PR. Check Actions permissions: Allow GitHub Actions to create and approve pull requests. No personal token is required.'
+              echo '::error::Cannot open update PR with UPDATE_PR_TOKEN. Check that the secret is set, valid, and allowed to open pull requests on this repository.'
               exit 1
             }
           fi
-          # Token-created PRs get approval-required pull_request runs; a dispatch always runs.
-          head=$(git rev-parse HEAD)
-          gh workflow run check.yml --ref "$UPDATE_BRANCH" -f ref="$head"
-          echo "Started Check for $UPDATE_BRANCH at $head"
