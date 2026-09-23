@@ -347,12 +347,15 @@ def generated_files(skill):
     if skill == "nix-darwin":
         from nix_darwin import generated_files as nix_darwin_files
         return nix_darwin_files()
+    if skill == "nixos-operations":
+        from nixos_operations import GENERATED as nixos_operations_files
+        return nixos_operations_files
     raise ValueError("Unknown skill")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin", "nixos-operations"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
     mode.add_argument("--revision")
@@ -388,6 +391,11 @@ def main():
             parser.error("nix-darwin uses --revision or --latest")
         from nix_darwin import main as nix_darwin_main
         return nix_darwin_main(args)
+    if args.skill == "nixos-operations":
+        if args.release or args.dump or args.sha256:
+            parser.error("NixOS operations uses --revision, --latest or --check")
+        from nixos_operations import main as nixos_operations_main
+        return nixos_operations_main(args)
     if args.revision:
         parser.error("--revision is only supported for nixpkgs-development")
     if args.skill == "devenv-project":
