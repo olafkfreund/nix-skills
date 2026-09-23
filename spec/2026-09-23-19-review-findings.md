@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 19
 intent: intent/2026-09-23-19-review-findings.md
 ---
