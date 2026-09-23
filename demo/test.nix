@@ -1,13 +1,12 @@
-# Offline VM test: agents start, skills are installed for Claude Code and Codex only.
+# Offline VM test of the demo (nixosModules.agentic plus demo settings): agents start,
+# skills are installed for Claude Code and Codex only.
 {
   pkgs,
-  specialArgs,
   modules,
   skillCount,
 }:
 pkgs.testers.runNixOSTest {
   name = "nix-skills-demo";
-  node.specialArgs = specialArgs;
   nodes.machine = {
     imports = modules;
   };
