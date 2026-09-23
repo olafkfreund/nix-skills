@@ -528,13 +528,13 @@
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
-    "references/contributing.md": "20f83fdd59418baa7f7e6657a059b89288db1e7567a8c70ea83e6a6f5e1ae65b",
-    "references/customization.md": "4c0c2fcf7e8df6f26efd19a6bb654724d16115091bcf4e61b7c47bc72c7744e9",
-    "references/helpers.md": "d9c91a79a9a910e28b4669dde4093d27aaba82c435960269a30ba04339b58f2a",
-    "references/library.md": "e183ea9e7012b636d2629e47413e5a8aa63a642453ddcff81576883168bf8879",
-    "references/packaging.md": "921c541478bf6f17e03b3f4965e23a079d71902d99008695c7ecf0ce8da4211b"
+    "references/contributing.md": "96bb5a830ea3e47b39ed0c380bd07030b4c148275d3da47173b9e39dfb9024ec",
+    "references/customization.md": "3b9fb30fd4cf551a9cf234905ddc6c3cb96f989b2a284d7b9b964bbbc19823ff",
+    "references/helpers.md": "fc2509406bcea32b9a4d14c58fa1a9f312e27d777701ba0fccc388cb88232fbe",
+    "references/library.md": "5bc89fad70989632aaf8de4db232b3dbf47e34dbb647c1b285d80d480d7342ab",
+    "references/packaging.md": "27b28a237dc057890cdd1b342e746a312ecd25684396add75ab3ab7025b8d535"
   },
-  "revision": "f7f73ce248a33fac06d2754ec43bd84c73ad9ed3",
+  "revision": "4593931c855e7cf2ab412b659dd2841030f753df",
   "selection": {
     "apis": [
       "lib.attrsets.attrByPath",
