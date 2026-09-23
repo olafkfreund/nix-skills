@@ -154,10 +154,10 @@ class NixpkgsTests(unittest.TestCase):
 
     def test_github_sections_and_links(self):
         contributing = ('# Contributing\n\n## Overview\nSee [naming](#package-naming), [by-name](pkgs/by-name/README.md),\n'
-                        '[tests](/nixos/tests), [site](https://nixos.org) and [ref][r].\n\n'
+                        '[tests](/nixos/tests), [site](https://nixos.org), [ref][r] and [named][n].\n\n'
                         '```md\n## Not a heading\n[raw](./left/alone)\n```\n\n'
                         '## Package naming\nUse `[x](./kept)` literally.\n### Child\nchild\n'
-                        '## Later\nsecond\n\n[r]: CONTRIBUTING.md\n')
+                        '## Later\nsecond\n\n[r]: CONTRIBUTING.md\n[n]: #package-naming\n')
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory)
             write_source(source, FIXTURE | {'CONTRIBUTING.md': contributing, 'pkgs/by-name/README.md': '# By name\n',
@@ -175,6 +175,7 @@ class NixpkgsTests(unittest.TestCase):
             self.assertIn(f'[by-name]({nixpkgs.UPSTREAM}/blob/{"a"*40}/pkgs/by-name/README.md)', out)
             self.assertIn(f'[tests]({nixpkgs.UPSTREAM}/tree/{"a"*40}/nixos/tests)', out)  # root-relative directory
             self.assertIn(f'[ref]({nixpkgs.UPSTREAM}/blob/{"a"*40}/CONTRIBUTING.md)', out)
+            self.assertIn('[named](#contributing-naming)', out)          # reference link to a bundled heading
             self.assertIn('[raw](./left/alone)', out)                     # fenced code untouched
             self.assertIn('`[x](./kept)`', out)                            # inline code untouched
             self.assertIn('### Child', out)
@@ -200,7 +201,7 @@ class NixpkgsTests(unittest.TestCase):
     def test_github_selection_schema(self):
         old = json.loads((nixpkgs.PACKAGE / 'sources.json').read_text())
         good = dict(format='github', reference='contributing', path='CONTRIBUTING.md',
-                    heading='Overview', level=2, anchor='contributing-overview', children=False)
+                    heading='Overview', level=2, anchor='contributing-schema-test', children=False)
         manifest = copy.deepcopy(old)
         manifest['selection']['sections'].append(good)
         manifest['inputs']['CONTRIBUTING.md'] = 'a' * 64

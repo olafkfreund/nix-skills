@@ -227,7 +227,9 @@ def convert_github(text, path, revision, source, full_text, bundled_slugs):
             key = (match[2] or match[1]).lower()
             if key not in definitions:
                 raise ValueError('Missing link definition: ' + key)
-            return destination(definitions[key], match[1])
+            # Converted links are held back so the inline pass does not reread them.
+            protected.append(destination(definitions[key], match[1]))
+            return f'\x00{len(protected)-1}\x00'
         line = re.sub(r'\[([^]\n]+)\]\[([^]\n]*)\]', reference, line)
         line = re.sub(r'\[([^]\n]*)\]\(([^\s)]+)\)', lambda m: destination(m[2], m[1]), line)
         if re.search(r'\]\((?!https?://|#)|href="(?!https?://)', line):
