@@ -47,6 +47,20 @@ Advice that fits one of these can be wrong for another.
    upstream repository for its status and any successor. Prefer the Nixpkgs
    language builders first.
 
+## References
+
+- [Finding things](references/finding-things.md): which package provides a
+  file, store and dependency queries, and referring to libraries from Nix.
+- [Shells](references/shells.md): `nix develop`, `nix shell`, `nix run`,
+  defining devShells, direnv, and project versus host tools.
+- [Troubleshooting](references/troubleshooting.md): evaluation versus build
+  errors, reading logs, and searching Nixpkgs issues, pull requests and Hydra.
+- [Configuration](references/configuration.md): settings precedence, the
+  client and daemon, trusted users, caches, remote builders and declarative
+  owners.
+- [Ecosystem](references/ecosystem.md): helper tools, pinning, flake
+  frameworks, Nix implementations and lang2nix status.
+
 ## Other skills by role
 
 These skills belong to the same collection, but may not all be installed. If
