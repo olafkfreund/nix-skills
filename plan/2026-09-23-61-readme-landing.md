@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 61
 spec: spec/2026-09-23-61-readme-landing.md
 ---
