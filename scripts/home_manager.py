@@ -12,6 +12,12 @@ CONFIG = {
         {"source": "docs/manual/usage/dotfiles.md", "output": "references/dotfiles.md", "title": "Dotfiles"},
         {"source": "docs/manual/usage/modular-services.md", "output": "references/modular-services.md", "title": "Modular services"},
         {"source": "docs/manual/writing-modules.md", "output": "references/writing-modules.md", "title": "Writing modules"},
+        {"source": "docs/manual/installation/nix-darwin.md", "output": "references/install-nix-darwin.md", "title": "nix-darwin module installation"},
+        {"source": "docs/manual/nix-flakes/nix-darwin.md", "output": "references/flake-nix-darwin.md", "title": "nix-darwin module with flakes"},
+        {"source": "docs/manual/installation/standalone.md", "output": "references/install-standalone.md", "title": "Standalone installation"},
+        {"source": "docs/manual/nix-flakes/standalone.md", "output": "references/flake-standalone.md", "title": "Standalone with flakes"},
+        {"source": "docs/manual/usage/rollbacks.md", "output": "references/rollbacks.md", "title": "Rollbacks"},
+        {"source": "docs/manual/usage/updating.md", "output": "references/updating.md", "title": "Updating"},
     ],
 }
 
