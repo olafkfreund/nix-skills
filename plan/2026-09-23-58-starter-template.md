@@ -118,6 +118,19 @@ nixpkgs `config` changes.
 - **CONTRIBUTING.md:** one line saying the template must keep evaluating,
   which `demo.yml` checks.
 
+### Deviations during implementation
+
+- **Template override.** `--override-input agentic "path:<repo>/demo"` fails
+  with `access to absolute path '/nix/store/flake.nix' is forbidden`. That
+  form copies only `demo/` into the store, so the demo's relative input
+  `path:..` no longer points at the repository. The override uses the
+  repository root with `?dir=demo` instead, the same shape users fetch
+  (`github:…?dir=demo`): `path:$GITHUB_WORKSPACE?dir=demo` in CI, and
+  `path:$PWD?dir=demo` locally.
+- **Home Manager state version.** The template also sets
+  `home-manager.users.alice.home.stateVersion = "26.05"`, because Home
+  Manager refuses to evaluate a user without it.
+
 ## Steps
 
 1. **`demo/agentic.nix`, and `demo/demo.nix` and `demo/flake.nix` moved
