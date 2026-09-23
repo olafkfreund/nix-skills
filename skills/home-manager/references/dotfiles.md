@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/usage/dotfiles.md](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage/dotfiles.md)
+Upstream source: [docs/manual/usage/dotfiles.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/dotfiles.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -43,7 +43,7 @@ This error is about a file that Home Manager wants to manage as a
 symbolic link in your home directory. It is separate from package
 profile collisions, which usually mention `installPackages` or a
 `collision between .../bin/...` path. For package collisions, see
-[Why is there a collision error when switching generation?](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/faq/collision.md#_why_is_there_a_collision_error_when_switching_generation).
+[Why is there a collision error when switching generation?](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/faq/collision.md#_why_is_there_a_collision_error_when_switching_generation).
 
 ## Resolving file collisions {#sec-usage-dotfiles-collisions}
 

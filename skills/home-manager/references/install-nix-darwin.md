@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/installation/nix-darwin.md](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/installation/nix-darwin.md)
+Upstream source: [docs/manual/installation/nix-darwin.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/installation/nix-darwin.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -73,7 +73,7 @@ or
 ```
 
 to your shell configuration, depending on whether
-[home-manager.useUserPackages](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/installation/nix-darwin.md#nix-darwin-opt-home-manager.useUserPackages) is enabled. This
+[home-manager.useUserPackages](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/installation/nix-darwin.md#nix-darwin-opt-home-manager.useUserPackages) is enabled. This
 file can be sourced directly by POSIX.2-like shells such as
 [Bash](https://www.gnu.org/software/bash/) or [Z
 shell](http://zsh.sourceforge.net/). [Fish](https://fishshell.com) users
@@ -128,5 +128,5 @@ Use `home-manager.sharedModules` to add Home Manager modules to every user
 declared under `home-manager.users`.
 :::
 
-Once installed you can see [Using Home Manager](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage.md#ch-usage) for a more detailed
+Once installed you can see [Using Home Manager](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage.md#ch-usage) for a more detailed
 description of Home Manager and how to use it.
