@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 24
 intent: intent/2026-09-23-24-nix-workflow-skill.md
 ---
