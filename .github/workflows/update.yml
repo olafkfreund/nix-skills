@@ -72,6 +72,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write # only to start Check on the update PR's head commit
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -112,3 +113,7 @@ jobs:
               exit 1
             }
           fi
+          # Token-created PRs get approval-required pull_request runs; a dispatch always runs.
+          head=$(git rev-parse HEAD)
+          gh workflow run check.yml --ref "$UPDATE_BRANCH" -f ref="$head"
+          echo "Started Check for $UPDATE_BRANCH at $head"
