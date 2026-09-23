@@ -199,6 +199,27 @@ class WikiTests(unittest.TestCase):
             with patch.object(wiki,'urlopen',return_value=response),self.assertRaisesRegex(ValueError,'redirect'):
                 wiki.download(path)
 
+    def test_lookup_check_follows_retained_redirects(self):
+        records=copy.deepcopy(self.pages | self.templates)
+        for record in records.values():record['redirect']=None
+        wiki.lookup_check(wiki.PACKAGE,records)
+        records['Storage optimization']['redirect']={'title':'Firewall','fragment':''}
+        wiki.lookup_check(wiki.PACKAGE,records)
+        records['Storage optimization']['redirect']={'title':'Not bundled','fragment':''}
+        with self.assertRaisesRegex(ValueError,'Storage optimization'):wiki.lookup_check(wiki.PACKAGE,records)
+
+    def test_redirect_without_title(self):
+        data=self.xml().replace(b'<revision>',b'<redirect /><revision>',1)
+        with self.assertRaisesRegex(ValueError,'Redirect without title'):wiki.extract(io.BytesIO(data))
+
+    def test_supplied_dump_hash_is_verified_before_noop(self):
+        with tempfile.TemporaryDirectory() as directory:
+            dump=Path(directory)/'dump.xml.zst';dump.write_bytes(b'not the recorded dump')
+            result=subprocess.run([sys.executable,str(update.ROOT/'scripts/update.py'),'--skill','nixos-wiki',
+                                   '--dump',str(dump),'--sha256',self.manifest['snapshot_sha256']],capture_output=True,text=True)
+            self.assertNotEqual(result.returncode,0)
+            self.assertIn('Dump SHA-256 mismatch',result.stderr)
+
     def test_cli_flag_rejection(self):
         for args in [['--skill','nixos-wiki','--release','1.0'],['--skill','nixos-wiki','--dump','x'],
                      ['--skill','nixos-wiki','--check','--sha256','a'*64],['--dump','x','--sha256','a'*64]]:
