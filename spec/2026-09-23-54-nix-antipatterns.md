@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 54
 intent: intent/2026-09-23-54-nix-antipatterns.md
 ---
