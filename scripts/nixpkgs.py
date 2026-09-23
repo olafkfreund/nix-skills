@@ -6,9 +6,8 @@ from pathlib import Path
 import re
 import tempfile
 from urllib.parse import unquote, urlsplit
-from urllib.request import Request, urlopen
 
-from update import ROOT, digest, encoded, evaluate, pinned_tools, run
+from update import ROOT, digest, encoded, evaluate, github_json, pinned_tools, run
 
 UPSTREAM = 'https://github.com/NixOS/nixpkgs'
 PACKAGE = ROOT / 'skills/nixpkgs-development'
@@ -34,8 +33,7 @@ def resolve_revision(old, requested=None):
         raise ValueError('Invalid upstream SHA')
     if revision != old['revision']:
         url = 'https://api.github.com/repos/NixOS/nixpkgs/compare/' + old['revision'] + '...' + revision
-        with urlopen(Request(url, headers={'User-Agent': 'nix-skills'}), timeout=30) as response:
-            comparison = json.load(response)
+        comparison = github_json(url)
         if (comparison.get('status') != 'ahead' or comparison.get('behind_by') != 0 or
                 comparison.get('merge_base_commit', {}).get('sha') != old['revision']):
             raise ValueError('Master did not advance from the recorded revision')

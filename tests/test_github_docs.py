@@ -81,10 +81,19 @@ class GithubDocsTests(unittest.TestCase):
 
     def test_latest_noop_does_not_fetch_source(self):
         manifest = json.loads((Path(__file__).parents[1] / "skills/home-manager/sources.json").read_text())
-        args = Namespace(revision=None, latest=True, release=None, dump=None, sha256=None)
+        args = Namespace(revision=None, latest=True, check=False, release=None, dump=None, sha256=None)
         with patch.object(github_docs, "resolve_revision", return_value=manifest["revision"]):
             with patch.object(github_docs, "pinned_source", side_effect=AssertionError("unexpected fetch")):
                 github_docs.main(args, home_manager.CONFIG)
+
+    def test_check_uses_recorded_revision_not_live_branch(self):
+        manifest = json.loads((Path(__file__).parents[1] / "skills/home-manager/sources.json").read_text())
+        args = Namespace(revision=None, latest=False, check=True, release=None, dump=None, sha256=None)
+        with patch.object(github_docs, "run", side_effect=AssertionError("live branch lookup")), \
+             patch.object(github_docs, "pinned_source", side_effect=RuntimeError("stop")) as source:
+            with self.assertRaisesRegex(RuntimeError, "stop"):
+                github_docs.main(args, home_manager.CONFIG)
+        source.assert_called_once_with(home_manager.CONFIG["upstream"], manifest["revision"])
 
 
 if __name__ == "__main__":

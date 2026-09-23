@@ -90,7 +90,9 @@ def extract(stream, limits=LIMITS):
                 raise ValueError('Revision count limit exceeded')
             fields, chunks, text_bytes = {}, {}, 0
         elif stack == ['mediawiki', 'page', 'redirect']:
-            page['redirect_title'] = attrs.get('title')
+            if not attrs.get('title'):
+                raise ValueError('Redirect without title')
+            page['redirect_title'] = attrs['title']
         elif len(stack) == 3 and stack[:2] == ['mediawiki', 'page'] and local in {'title', 'ns', 'id'}:
             if local in page:
                 raise ValueError('Duplicate page metadata')
@@ -340,7 +342,7 @@ def main(args):
     with tempfile.TemporaryDirectory(prefix='nixos-wiki-') as directory:
         path = Path(args.dump) if args.dump else Path(directory) / 'dump.xml.zst'
         snapshot = args.sha256 if args.dump else download(path)
-        if hash_file(path) != snapshot:
+        if args.dump and hash_file(path) != snapshot:
             raise ValueError('Dump SHA-256 mismatch')
         if snapshot == old['snapshot_sha256']:
             print('Already at this dump snapshot; no update')
@@ -367,9 +369,13 @@ def lookup_check(package, records=None):
         _, records = helper['load'](package)
     if not helper['search'](records, 'rebuild'):
         raise ValueError('Lookup search returned no expected result')
-    hops, record, missing = helper['route'](records, 'Garbage Collection', True)
-    if missing or not hops or record['title'] != 'Storage optimization':
-        raise ValueError('Bundled redirect lookup failed')
+    # Exercise whichever redirects the snapshot retains; upstream may add or drop them.
+    for title, source in records.items():
+        if source['namespace'] != 0 or not source['redirect']:
+            continue
+        hops, record, missing = helper['route'](records, title, True)
+        if missing or not hops or record['title'] != hops[-1]['redirect']['title']:
+            raise ValueError('Bundled redirect lookup failed: ' + title)
     body, _, _ = helper['window'](records['NixOS modules']['text'])
     if not body or len(body.encode()) > 16384:
         raise ValueError('Lookup window bound failed')

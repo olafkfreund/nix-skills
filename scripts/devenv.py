@@ -4,9 +4,8 @@ import json
 from pathlib import Path
 import re
 from urllib.parse import urljoin, urlsplit
-from urllib.request import Request, urlopen
 
-from update import ROOT, check_external, digest, encoded, prose, publish, run, section
+from update import ROOT, check_external, digest, encoded, github_json, prose, publish, run, section
 
 PACKAGE = ROOT / 'skills/devenv-project'
 UPSTREAM = 'https://github.com/cachix/devenv'
@@ -24,9 +23,7 @@ def version(release):
 
 
 def api(path):
-    with urlopen(Request('https://api.github.com/repos/cachix/devenv/' + path,
-                         headers={'User-Agent': 'nix-skills'}), timeout=30) as response:
-        return json.load(response)
+    return github_json('https://api.github.com/repos/cachix/devenv/' + path)
 
 
 def resolve_release(old, requested):

@@ -47,12 +47,12 @@ class NixpkgsTests(unittest.TestCase):
 
     def test_automatic_revision_ancestry(self):
         old = dict(upstream=nixpkgs.UPSTREAM, branch='master', revision='a'*40)
-        with patch.object(nixpkgs, 'run', return_value='a'*40+'\trefs/heads/master'), patch.object(nixpkgs, 'urlopen') as api:
+        with patch.object(nixpkgs, 'run', return_value='a'*40+'\trefs/heads/master'), patch.object(nixpkgs, 'github_json') as api:
             self.assertEqual(nixpkgs.resolve_revision(old), old['revision'])
             api.assert_not_called()
         for status in ['ahead', 'behind', 'diverged']:
             response = dict(status=status, behind_by=0, merge_base_commit={'sha':old['revision']})
-            with patch.object(nixpkgs, 'run', return_value='b'*40+'\trefs/heads/master'), patch.object(nixpkgs, 'urlopen'), patch.object(nixpkgs.json, 'load', return_value=response):
+            with patch.object(nixpkgs, 'run', return_value='b'*40+'\trefs/heads/master'), patch.object(nixpkgs, 'github_json', return_value=response):
                 if status == 'ahead':
                     self.assertEqual(nixpkgs.resolve_revision(old), 'b'*40)
                 else:
