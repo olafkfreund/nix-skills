@@ -7,6 +7,48 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from check_collection import validate
 from check_jobs import validate as validate_jobs
+from nix_style import MARKER, findings
+
+
+def fenced(language, body, marker=False):
+    return (MARKER + "\n" if marker else "") + f"```{language}\n{body}\n```\n"
+
+
+class NixStyleTests(unittest.TestCase):
+    def test_flags_unneeded_quotes_and_store_searches(self):
+        for body in ('pkgs."foo-bar"', 'packages."x86_64-linux".default', '"foo-bar" = 1;', '{ "a_b" = 1; }'):
+            with self.subTest(body=body):
+                self.assertEqual([k for k, _ in findings(fenced("nix", body))], ["quoted-name"])
+        for body in ("find /nix/store/*foo-* -name x", "ls /nix/store | grep foo", "ls /nix/store/*-openssl*/lib"):
+            with self.subTest(body=body):
+                self.assertEqual([k for k, _ in findings(fenced("sh", body))], ["store-search"])
+        path = "/nix/store/0123456789abcdfghijklmnpqrsvwxyz-foo"
+        self.assertEqual([k for k, _ in findings(fenced("nix", f'x = "{path}";'))], ["store-path"])
+
+    def test_allows_required_quotes_values_and_counterexamples(self):
+        for body in ('".config/foo" = x;', '"2.0" = x;', '"a.b" = 1;', '"with" = 1;', '"or" = 1;',
+                     '"${name}" = 1;', 'description = "foo-bar";', 'x = "a" == "b";', '[ "foo-bar" ]'):
+            with self.subTest(body=body):
+                self.assertEqual(findings(fenced("nix", body)), [])
+        self.assertEqual(findings(fenced("sh", 'pkgs."foo-bar"')), [])
+        self.assertEqual(findings(fenced("sh", "find /nix/store/*foo-* -name x", marker=True)), [])
+        self.assertEqual(findings('Prose may say pkgs."foo-bar" and find /nix/store.\n'), [])
+
+    def test_validate_fails_authored_and_reports_generated(self):
+        from check_collection import generated_findings
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            package = root / "skills/example-skill"
+            (package / "references").mkdir(parents=True)
+            (root / "skills.json").write_text('["example-skill"]')
+            (package / "SKILL.md").write_text(
+                "---\nname: example-skill\ndescription: Review example configurations.\n---\n# Guide\n")
+            (package / "references/example.md").write_text(fenced("nix", 'x = pkgs."foo-bar";'))
+            with self.assertRaisesRegex(ValueError, "quoted-name"):
+                validate(root)
+            (package / "sources.json").write_text('{"outputs": {"references/example.md": "sha256-x"}}')
+            self.assertEqual(validate(root), ["example-skill"])
+            self.assertEqual(generated_findings(root), {"quoted-name": 1})
 
 
 class CollectionTests(unittest.TestCase):
