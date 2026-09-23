@@ -492,6 +492,7 @@
   },
   "inputs": {
     ".version": "10da67a8975114bc7e3b434c15f4bbd9b1749357e17063173fb5091280aa42f7",
+    "CONTRIBUTING.md": "a3b71f72a2895870bca12b6a9cf3faa5d986778994ba07cb448a9d0f44d6bfea",
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
     "doc/README.md": "d3633f2ff9c821f690ecb3258a9904997a019c2d9f4a35b8a55e61db10344664",
     "doc/build-helpers.md": "3737c8f1bfa051819e534b6b2eab81a2dee1de66f710ba0230b1926a2a984450",
@@ -520,12 +521,14 @@
     "lib/fixed-points.nix": "0c64407d26933465c706bf5cd10d137cb3ec0cdb4d9a25babfee9e60aeb79fa9",
     "lib/lists.nix": "5aeb229dc8e4e2feab1f4c683000e63b0238f08a4e07a4d944225fba346c87ba",
     "lib/strings.nix": "268f290d3b04c7ee2715d40267ec28e2029e10b8d2a8724ddca6d33a37d05dc9",
+    "pkgs/README.md": "4f1a150cf311b594574e87f4dc6d3eb9712f57f5cbd28fbbc4558b24861c0069",
+    "pkgs/by-name/README.md": "a50aa760e32839c9c4b8b72f54eef5feb9993603b46794677ea1b832416ba2cb",
     "pkgs/by-name/ni/nixdoc/package.nix": "838d2d3eed7c906e81f7f3a727c698dc630d5c762409d6739a4cdc876fa32d0c",
     "pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py": "b4d238cbadc9f7fc0908edba64d586d3e8ad7b129a4de332e0b1ce1f932d130f"
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
-    "references/contributing.md": "3abf77c85187f709614f0bfe0e445b37e5d97e50aba287031ea0241da2b12e1b",
+    "references/contributing.md": "28bda0ada558bf47865321b3aa1495e0c151037d9e90a2e387e8f4ebe12a9984",
     "references/customization.md": "2574617cffab6a49a802075a195fccda9b8a724ed3e793e10c759e0da9bb2738",
     "references/helpers.md": "8e5fc30a468e407556092461b7f82a7c9ebbeb004ef74adae081d9ddbea804f3",
     "references/library.md": "33eb0cc42e5ea7456dd5bda00c3e1fcbe4c1a627464aca4e8a6d77ed0d573b73",
@@ -916,6 +919,135 @@
         "heading": "`buildRustPackage`: Compiling Rust applications with Cargo",
         "path": "doc/languages-frameworks/rust.section.md",
         "reference": "helpers"
+      },
+      {
+        "anchor": "contributing-overview",
+        "children": false,
+        "format": "github",
+        "heading": "Overview",
+        "level": 2,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-create-pull-requests",
+        "children": true,
+        "format": "github",
+        "heading": "How to create pull requests",
+        "level": 2,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-review-pull-requests",
+        "children": false,
+        "format": "github",
+        "heading": "How to review pull requests",
+        "level": 2,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-branch-conventions",
+        "anchor_fixes": {
+          "changes-rebuilding-all-tests": "changes-rebuilding-all-nixos-tests"
+        },
+        "children": true,
+        "format": "github",
+        "heading": "Branch conventions",
+        "level": 2,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-commit-conventions",
+        "children": true,
+        "format": "github",
+        "heading": "Commit conventions",
+        "level": 2,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-file-naming",
+        "children": false,
+        "format": "github",
+        "heading": "File naming and organisation",
+        "level": 3,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "contributing-formatting",
+        "children": false,
+        "format": "github",
+        "heading": "Formatting",
+        "level": 3,
+        "path": "CONTRIBUTING.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-quick-start",
+        "children": false,
+        "format": "github",
+        "heading": "Quick Start to Adding a Package",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-commit-conventions",
+        "children": false,
+        "format": "github",
+        "heading": "Commit conventions",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-package-naming",
+        "children": false,
+        "format": "github",
+        "heading": "Package naming",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-versioning",
+        "children": false,
+        "format": "github",
+        "heading": "Versioning",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-patches",
+        "children": true,
+        "format": "github",
+        "heading": "Patches",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "pkgs-readme-automatic-updates",
+        "children": false,
+        "format": "github",
+        "heading": "Automatic package updates",
+        "level": 2,
+        "path": "pkgs/README.md",
+        "reference": "contributing"
+      },
+      {
+        "anchor": "by-name-directories",
+        "children": true,
+        "format": "github",
+        "heading": "Name-based package directories",
+        "level": 1,
+        "path": "pkgs/by-name/README.md",
+        "reference": "contributing"
       }
     ]
   },
