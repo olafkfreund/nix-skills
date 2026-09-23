@@ -22,6 +22,16 @@ Read only the relevant reference:
   and entry points for Python, JavaScript, Go, and Rust packaging.
 - [Library](references/library.md): selected generated API descriptions, types,
   arguments, and examples with pinned declarations.
+- [Contributing](references/contributing.md): Nixpkgs' own contributor rules.
+  These cover pull requests and review, target branches and mass rebuilds,
+  commit messages, `pkgs/by-name` placement, package naming, versioning,
+  patches and automatic updates. Read it for any change intended for Nixpkgs
+  itself.
+
+For library and NixOS module contributions, also read upstream's
+[lib/README.md](https://github.com/NixOS/nixpkgs/blob/master/lib/README.md)
+and [nixos/README.md](https://github.com/NixOS/nixpkgs/blob/master/nixos/README.md).
+These links follow the master branch; they are not pinned.
 
 Choose the mechanism that matches the change: `override` changes recipe arguments;
 `overrideAttrs` changes mkDerivation inputs; overlays compose package sets;
@@ -42,6 +52,31 @@ Report evaluation, actual builds, and runtime tests separately. Documentation
 examples can use historical versions or illustrative values; inspect them before
 adapting or running them. Do not execute arbitrary snippets merely to read docs.
 Respect existing task authorization and keep secrets out of the Nix store.
+
+Before working around a build or packaging failure, read the full build log,
+then search NixOS/nixpkgs issues and pull requests for the distinctive error
+and the package name, for example
+`gh search issues --repo NixOS/nixpkgs "<error>"` and
+`gh search prs --repo NixOS/nixpkgs "<package>"`. Cite what you found, and
+whether a fix has reached the user's pin, before proposing a local workaround.
+
+Use [nixpkgs-review](https://github.com/Mic92/nixpkgs-review) to build what a
+Nixpkgs change affects:
+
+- `nixpkgs-review wip` for uncommitted changes;
+- `nixpkgs-review rev HEAD` for a commit;
+- `nixpkgs-review pr NUMBER` for a pull request.
+
+It builds every affected package, which can be many and slow, so check the
+scope and ask before running it on a large change. Read its report of failed,
+broken and skipped packages before stating a result. Never use `post-result`,
+`approve`, `merge`, `--post-result` or `--approve-pr` without the user's
+explicit authorization: they act on GitHub under the user's identity.
+
+Version-bump pull requests from `r-ryantm` come from
+[nixpkgs-update](https://nix-community.github.io/nixpkgs-update/). Review them
+like any update: read the upstream changelog, build with `nixpkgs-review pr`,
+and check the linked [update logs](https://nixpkgs-update-logs.nix-community.org/).
 
 This skill does not supply a complete package/API catalogue or NixOS/Home Manager
 option reference. Host installation and deployment follow local policy. Public
