@@ -23,6 +23,15 @@ def check_style(path, text):
         raise ValueError(f"Nix style ({kind}): {path}: {line}")
 
 
+def check_skill_table(text, names):
+    """The README's `| Skill |` table must link exactly the registered skills."""
+    table = re.search(r"^\| Skill \|.*\n(?:\|.*\n?)*", text, re.M)
+    listed = set(re.findall(r"\[([a-z0-9-]+)\]\(skills/\1/SKILL\.md\)", table[0])) if table else set()
+    missing, extra = sorted(set(names) - listed), sorted(listed - set(names))
+    if not table or missing or extra:
+        raise ValueError(f"README skill table must match skills.json: missing {missing}, extra {extra}")
+
+
 def generated_findings(root):
     """Count style findings in generated references; reported, never failing."""
     counts = {}
@@ -98,6 +107,7 @@ def validate(root):
     readme = root / "README.md"
     if readme.is_file():
         check_style(readme, readme.read_text())
+        check_skill_table(readme.read_text(), names)
     return names
 
 
