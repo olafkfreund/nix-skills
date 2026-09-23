@@ -10,6 +10,7 @@ Portable skills for AI coding agents, maintained from pinned upstream sources, p
 | [nix-darwin](skills/nix-darwin/SKILL.md) | Configure nix-darwin macOS systems and darwin-rebuild generations | nix-darwin master snapshot |
 | [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
 | [nix-workflow](skills/nix-workflow/SKILL.md) | Choose Nix commands, find packages and files, use dev shells, debug builds, and navigate the ecosystem | Authored guidance; ecosystem status checked 2026-09-23 |
+| [nixos-operations](skills/nixos-operations/SKILL.md) | Operate NixOS: rebuild modes, generations and rollback, upgrades, store cleaning, boot and services | NixOS manual chapters from the Nixpkgs master snapshot |
 | [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | master snapshot; development series 26.11 |
 | [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | 17 curated topics from the 2026-09-22 dump |
 
@@ -46,6 +47,7 @@ ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
 ln -s "$PWD/skills/home-manager" ~/.agents/skills/home-manager
 ln -s "$PWD/skills/microvm-nix" ~/.agents/skills/microvm-nix
 ln -s "$PWD/skills/nix-darwin" ~/.agents/skills/nix-darwin
+ln -s "$PWD/skills/nixos-operations" ~/.agents/skills/nixos-operations
 ln -s "$PWD/skills/nixpkgs-development" ~/.agents/skills/nixpkgs-development
 ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 ```
@@ -53,7 +55,7 @@ ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
 If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
 No installation is performed by this repository's checks or update workflow.
 
-Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
+Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixos-operations`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
 Other agents can install the same folder using their own skill mechanism.
 For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
 Portability of the files does not imply native discovery has been tested in every agent.
@@ -86,7 +88,7 @@ home-manager.users.alice = {
   imports = [ inputs.nix-skills.homeManagerModules.default ];
   programs.nix-skills = {
     enable = true;
-    skills = [ "home-manager" "microvm-nix" "nix-darwin" "nix-language" "nix-workflow" "devenv-project" "nixpkgs-development" "nixos-wiki" ];
+    skills = [ "home-manager" "microvm-nix" "nix-darwin" "nix-language" "nix-workflow" "devenv-project" "nixos-operations" "nixpkgs-development" "nixos-wiki" ];
     # Omitting skills selects the complete registered collection.
     directory = ".agents/skills";
   };
@@ -264,6 +266,26 @@ host integration, options, networking, and shares. Generated references pin
 relative source links and preserve fenced examples; authored instructions and
 the reviewed selection remain immutable to automation.
 
+### NixOS operations maintenance
+
+```sh
+python3 scripts/check.py --skill nixos-operations
+python3 scripts/update.py --skill nixos-operations --check
+python3 scripts/update.py --skill nixos-operations --revision <full-commit-sha>
+python3 scripts/update.py --skill nixos-operations --latest
+```
+
+NixOS operations follows Nixpkgs `master` by full commit revision, with its own
+manifest and the same pinned Nix toolchain and master-ancestry check as
+`nixpkgs-development`. It bundles selected NixOS manual chapters (changing the
+configuration, upgrading, rollback, store cleaning, boot problems and service
+management). Links to NixOS options come from a reviewed map of option names,
+and resolve to each option's declaring file, found by evaluating the NixOS
+options at the pinned revision. An unmapped, missing or unused option link
+fails the update for review. The provider reuses the `nixpkgs-development`
+manual converter unchanged. Its excerpts are covered by the Nixpkgs
+[COPYING](skills/nixos-operations/COPYING).
+
 ### nix-darwin maintenance
 
 ```sh
@@ -375,6 +397,7 @@ symlinks, traversal, invalid hashes, instruction/selection changes, Nixpkgs eval
 the sibling skill. It updates `automation/nix-reference-update`,
 `automation/devenv-reference-update`, `automation/home-manager-reference-update`,
 `automation/microvm-nix-reference-update`, `automation/nix-darwin-reference-update`,
+`automation/nixos-operations-reference-update`,
 `automation/nixpkgs-reference-update`,
 or `automation/nixos-wiki-reference-update`,
 with at most one open PR per skill.

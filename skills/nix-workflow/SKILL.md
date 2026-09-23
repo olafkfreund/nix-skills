@@ -72,7 +72,7 @@ one is missing, use the linked upstream documentation instead.
 | Packager | Derivations, overrides, overlays | `nixpkgs-development` ([Nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/)) |
 | Home Manager user, including darwin | User configuration | `home-manager` ([Home Manager manual](https://nix-community.github.io/home-manager/)) |
 | macOS system administrator | nix-darwin system configuration | `nix-darwin` ([nix-darwin](https://github.com/nix-darwin/nix-darwin)) |
-| NixOS administrator | System configuration and rebuilds | `nixos-wiki` ([NixOS manual](https://nixos.org/manual/nixos/stable/), [NixOS Wiki](https://wiki.nixos.org/)) |
+| NixOS administrator | System configuration and rebuilds | `nixos-operations` for rebuilds, generations, upgrades, store cleaning, boot and services; `nixos-wiki` for community guidance ([NixOS manual](https://nixos.org/manual/nixos/stable/), [NixOS Wiki](https://wiki.nixos.org/)) |
 | VM user | Declarative microVMs | `microvm-nix` ([microvm.nix](https://microvm-nix.github.io/microvm.nix/)) |
 
 Report what you actually ran, which commands only evaluated and which built
