@@ -40,7 +40,8 @@ def validate(package=PACKAGE, skill="nix-language"):
         upstream = {"nix-language": UPSTREAM, "devenv-project": "https://github.com/cachix/devenv",
                     "nixpkgs-development": "https://github.com/NixOS/nixpkgs",
                     "home-manager": "https://github.com/nix-community/home-manager",
-                    "microvm-nix": "https://github.com/microvm-nix/microvm.nix"}[skill]
+                    "microvm-nix": "https://github.com/microvm-nix/microvm.nix",
+                    "nix-darwin": "https://github.com/nix-darwin/nix-darwin"}[skill]
         manifest = json.loads((package / "sources.json").read_text())
         if manifest["upstream"] != upstream or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
             raise ValueError("Invalid upstream provenance")
@@ -72,7 +73,7 @@ def validate(package=PACKAGE, skill="nix-language"):
             if set(manifest["inputs"]) != expected_inputs:
                 raise ValueError("Missing/unexpected selected source hashes")
         else:
-            provider_name = {"home-manager": "home_manager", "microvm-nix": "microvm"}[skill]
+            provider_name = {"home-manager": "home_manager", "microvm-nix": "microvm", "nix-darwin": "nix_darwin"}[skill]
             provider = __import__(provider_name)
             provider.validate_manifest(package)
             coverage = manifest["inputs"]
@@ -120,7 +121,7 @@ def immutable_policy(old, new, skill):
         transition(old["records"], new["records"])
         return
     fields = ["selection", "upstream"]
-    if skill in {"home-manager", "microvm-nix"}:
+    if skill in {"home-manager", "microvm-nix", "nix-darwin"}:
         fields.append("branch")
     if skill == "nixpkgs-development":
         fields += ["branch", "toolchain"]
@@ -142,7 +143,7 @@ def boundary(base, package=PACKAGE, skill="nix-language"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", help="Trusted base commit for automated-update boundary checks")
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin"], default="nix-language")
     args = parser.parse_args()
     package = ROOT / "skills" / args.skill
     validate(package, skill=args.skill)

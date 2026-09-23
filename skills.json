@@ -2,6 +2,7 @@
   "devenv-project",
   "home-manager",
   "microvm-nix",
+  "nix-darwin",
   "nix-language",
   "nix-workflow",
   "nixos-wiki",

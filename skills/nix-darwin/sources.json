@@ -1,0 +1,20 @@
+{
+  "branch": "master",
+  "inputs": {
+    "LICENSE": "bcef4dd04cc15150f6dce87ed9a1e843c9566e3a423fc340db1ff0a0b947dbf2",
+    "README.md": "fac7d884454fcd568e708673557f4d3d6c59ab1f80fa708b7d65d09a2e9d5762"
+  },
+  "outputs": {
+    "LICENSE": "bcef4dd04cc15150f6dce87ed9a1e843c9566e3a423fc340db1ff0a0b947dbf2",
+    "references/readme.md": "95aa8cd2f0570094f0bb28e38cc78a2f47c25967b4bd744b358e7dc34378057c"
+  },
+  "revision": "4cff07de74b50e64bdd68cd4e722ab5b6b35ee48",
+  "selection": [
+    {
+      "output": "references/readme.md",
+      "source": "README.md",
+      "title": "nix-darwin README"
+    }
+  ],
+  "upstream": "https://github.com/nix-darwin/nix-darwin"
+}

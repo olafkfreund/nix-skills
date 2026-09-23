@@ -9,7 +9,7 @@
   '';
   scripts.check-providers.exec = ''
     set -eu
-    for skill in nix-language devenv-project home-manager microvm-nix nixpkgs-development nixos-wiki; do
+    for skill in nix-language devenv-project home-manager microvm-nix nix-darwin nixpkgs-development nixos-wiki; do
       python3 scripts/check.py --skill "$skill"
       python3 scripts/update.py --skill "$skill" --check
     done
