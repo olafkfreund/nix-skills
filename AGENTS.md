@@ -28,7 +28,9 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing the collection.
 - `scripts/check_collection.py`: offline generic metadata/resource validation.
 - `scripts/check.py`, `update.py`, provider modules, `artifact.py`: explicit
   maintained-source validation and tightly scoped automated publication.
-- `flake.nix`, `nix/`: data packages and opt-in Home Manager installation.
+- `flake.nix`, `nix/`: data packages, the documentation site and opt-in Home Manager installation.
+- `docs/`: mdBook site sources; `nix build .#docs` generates the catalog, options and
+  update schedule pages and checks links and Nix style. Never edit generated pages.
 - Root `devenv.*`: contributor tools; `tests/devenv/` is a separate provider
   fixture. The environment and distribution locks are updated independently.
 
