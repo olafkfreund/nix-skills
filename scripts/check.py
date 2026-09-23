@@ -41,7 +41,8 @@ def validate(package=PACKAGE, skill="nix-language"):
                     "nixpkgs-development": "https://github.com/NixOS/nixpkgs",
                     "home-manager": "https://github.com/nix-community/home-manager",
                     "microvm-nix": "https://github.com/microvm-nix/microvm.nix",
-                    "nix-darwin": "https://github.com/nix-darwin/nix-darwin"}[skill]
+                    "nix-darwin": "https://github.com/nix-darwin/nix-darwin",
+                    "nixos-operations": "https://github.com/NixOS/nixpkgs"}[skill]
         manifest = json.loads((package / "sources.json").read_text())
         if manifest["upstream"] != upstream or not re.fullmatch(r"[0-9a-f]{40}", manifest["revision"]):
             raise ValueError("Invalid upstream provenance")
@@ -53,6 +54,10 @@ def validate(package=PACKAGE, skill="nix-language"):
             coverage = manifest["language_inputs"]
         elif skill == "nixpkgs-development":
             from nixpkgs import validate_manifest
+            validate_manifest(manifest)
+            coverage = manifest["coverage_inputs"]
+        elif skill == "nixos-operations":
+            from nixos_operations import validate_manifest
             validate_manifest(manifest)
             coverage = manifest["coverage_inputs"]
         elif skill == "devenv-project":
@@ -123,7 +128,7 @@ def immutable_policy(old, new, skill):
     fields = ["selection", "upstream"]
     if skill in {"home-manager", "microvm-nix", "nix-darwin"}:
         fields.append("branch")
-    if skill == "nixpkgs-development":
+    if skill in {"nixpkgs-development", "nixos-operations"}:
         fields += ["branch", "toolchain"]
     if any(old[field] != new[field] for field in fields):
         raise ValueError("Automatic update changed immutable skill policy")
@@ -143,7 +148,7 @@ def boundary(base, package=PACKAGE, skill="nix-language"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", help="Trusted base commit for automated-update boundary checks")
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin", "nixos-operations"], default="nix-language")
     args = parser.parse_args()
     package = ROOT / "skills" / args.skill
     validate(package, skill=args.skill)
