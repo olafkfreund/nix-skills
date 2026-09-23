@@ -1,6 +1,6 @@
 # Operations
 
-NixOS manual from Nixpkgs master snapshot `f7f73ce248a33fac06d2754ec43bd84c73ad9ed3`; development series 26.11.
+NixOS manual from Nixpkgs master snapshot `4593931c855e7cf2ab412b659dd2841030f753df`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -12,7 +12,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 - [Service Management](#sec-systemctl)
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/installation/changing-config.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/installation/changing-config.chapter.md)
 
 
 # Changing the Configuration
@@ -20,7 +20,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 <a id="sec-changing-config"></a>
 
 The file `/etc/nixos/configuration.nix` contains the current
-configuration of your machine. Whenever you've [changed something](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/configuration/configuration.md) (source section: Guides) in that file, you should do
+configuration of your machine. Whenever you've [changed something](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/configuration/configuration.md) (source section: Guides) in that file, you should do
 
 ```ShellSession
 # nixos-rebuild switch
@@ -32,7 +32,7 @@ booting, and try to realise the configuration in the running system
 
 **Warning**
 
-This command doesn't start/stop [user services](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/modules/system/boot/systemd/user.nix) (source section: systemd.user.services)
+This command doesn't start/stop [user services](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/modules/system/boot/systemd/user.nix) (source section: systemd.user.services)
 automatically. `nixos-rebuild` only runs a `daemon-reload` for each user with running
 user services.
 
@@ -137,7 +137,7 @@ loopback interface (`127.0.0.1`), and the VM's NixOS firewall
 must be configured to allow these connections.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/installation/upgrading.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/installation/upgrading.chapter.md)
 
 
 # Upgrading NixOS
@@ -294,7 +294,7 @@ modules. You can also specify a channel explicitly, e.g.
 ```
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/administration/rollback.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/administration/rollback.section.md)
 
 
 # Rolling Back Configuration Changes
@@ -339,7 +339,7 @@ lrwxrwxrwx 1 root root 78 Aug 12 13:54 /nix/var/nix/profiles/system-268-link -> 
 ```
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/administration/cleaning-store.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/administration/cleaning-store.chapter.md)
 
 
 # Cleaning the Nix Store
@@ -412,7 +412,7 @@ you must rebuild your system with `nixos-rebuild boot` or `nixos-rebuild
 switch` to update the `/boot` partition and clear space.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/administration/boot-problems.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/administration/boot-problems.section.md)
 
 
 # Boot Problems
@@ -477,7 +477,7 @@ Definition: Like `boot.debug1`, but runs stage1 until kernel modules are loaded 
 
 `boot.debug1mounts`
 
-Definition: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/modules/system/boot/stage-1.nix) (source section: fileSystems.<name>.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/modules/system/boot/stage-1.nix) (source section: fileSystems.<name>.neededForBoot) on a file system.
+Definition: Like `boot.debug1` or `boot.debug1devices`, but runs stage1 until all filesystems that are mounted during initrd are mounted (see [neededForBoot](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/modules/system/boot/stage-1.nix) (source section: fileSystems.<name>.neededForBoot)). As a motivating example, this could be useful if you've forgotten to set [neededForBoot](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/modules/system/boot/stage-1.nix) (source section: fileSystems.<name>.neededForBoot) on a file system.
 
 **Note**
 
@@ -500,7 +500,7 @@ Definition: Print every shell command executed by the stage 1 and 2 boot scripts
 Notice that for `boot.shell_on_fail`, `boot.debug1`, `boot.debug1devices`, and `boot.debug1mounts`, if you did **not** select "start the new shell as pid 1", and you `exit` from the new shell, boot will proceed normally from the point where it failed, as if you'd chosen "ignore the error and continue".
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/doc/manual/administration/service-mgmt.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/doc/manual/administration/service-mgmt.chapter.md)
 
 
 # Service Management
@@ -605,11 +605,11 @@ the service on boot.
 
 *User* systemd services on the other hand, should be treated
 differently. Given a package that has a systemd unit file at
-`#pkg-out#/lib/systemd/user/`, using [systemd.packages](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/modules/system/boot/systemd.nix) (source section: systemd.packages) will
+`#pkg-out#/lib/systemd/user/`, using [systemd.packages](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/modules/system/boot/systemd.nix) (source section: systemd.packages) will
 make you able to start the service via `systemctl --user start`, but it
 won't start automatically on login. However, You can imperatively
 enable it by adding the package's attribute to
-[systemd.packages](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/nixos/modules/system/boot/systemd.nix) (source section: systemd.packages) and then do this (e.g):
+[systemd.packages](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/modules/system/boot/systemd.nix) (source section: systemd.packages) and then do this (e.g):
 
 ```ShellSession
 $ mkdir -p ~/.config/systemd/user/default.target.wants

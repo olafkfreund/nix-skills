@@ -361,9 +361,9 @@
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
-    "references/operations.md": "fc8d276fcdf3c0bb6e96e5ecc123079b21b6c3ba4e0137f7064783c3e220c2d3"
+    "references/operations.md": "5e4a0af414d898e6d08e06d9b75a7efae06ab0f964dc6912ee7da7d29c2708ec"
   },
-  "revision": "f7f73ce248a33fac06d2754ec43bd84c73ad9ed3",
+  "revision": "4593931c855e7cf2ab412b659dd2841030f753df",
   "selection": {
     "sections": [
       {
