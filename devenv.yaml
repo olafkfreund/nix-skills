@@ -3,4 +3,5 @@ inputs:
     url: github:cachix/devenv/2418e1b43797c44de5166176622c8d8fa0149871?dir=src/modules
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/256551e45f6303e142ab4a98be1bf243feb77dc0
-require_version: true
+# The CLI comes from the contributor's host, so accept any compatible 2.x CLI, not only the exact modules version.
+require_version: ">=2.2.2, <3"
