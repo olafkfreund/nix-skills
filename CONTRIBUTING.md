@@ -65,6 +65,11 @@ Authored code examples must not quote attribute names that are valid Nix identif
 counterexample needs `<!-- nix-style: counterexample -->` on the line before its fence.
 Keep the entrypoint short and put detailed material in linked references.
 
+The documentation site lives in `docs/src/`; list every page in `docs/src/SUMMARY.md`.
+`nix build .#docs` (also a flake check) generates the skill catalog, module options and
+update schedule from repository data and fails on broken links, missing anchors or Nix
+style findings. Never edit the generated reference pages by hand.
+
 Document source URLs, exact versions/revisions, modifications, attribution and
 redistribution rights for copied material; include required license files.
 Do not imply the repository grants rights to third-party sources. Authored-only

@@ -16,12 +16,18 @@
     in {
       packages = forSystems (system: import ./nix/packages.nix {
         pkgs = import nixpkgs { inherit system; };
+      } // {
+        docs = import ./nix/docs.nix {
+          pkgs = import nixpkgs { inherit system; };
+          inherit home-manager;
+          module = self.homeManagerModules.default;
+        };
       });
       homeManagerModules.default = import ./nix/home-manager.nix;
       checks = forSystems (system: import ./nix/checks.nix {
         pkgs = import nixpkgs { inherit system; };
         inherit home-manager;
         packages = self.packages.${system};
-      });
+      } // { inherit (self.packages.${system}) docs; });
     };
 }

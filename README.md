@@ -2,6 +2,8 @@
 
 Portable skills for AI coding agents, maintained from pinned upstream sources, plus authored workflow guidance.
 
+**Documentation:** <https://olafkfreund.github.io/nix-skills/>
+
 ## Getting started
 
 ### What this is for

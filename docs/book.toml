@@ -1,0 +1,14 @@
+[book]
+title = "nix-skills"
+description = "Portable Nix, NixOS and Home Manager skills for AI coding agents"
+authors = ["olafkfreund"]
+language = "en"
+src = "src"
+
+[output.html]
+site-url = "/nix-skills/"
+git-repository-url = "https://github.com/olafkfreund/nix-skills"
+edit-url-template = "https://github.com/olafkfreund/nix-skills/edit/main/docs/{path}"
+
+[output.html.search]
+enable = true
