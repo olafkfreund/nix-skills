@@ -70,6 +70,10 @@ The documentation site lives in `docs/src/`; list every page in `docs/src/SUMMAR
 update schedule from repository data and fails on broken links, missing anchors or Nix
 style findings. Never edit the generated reference pages by hand.
 
+`demo/` is a separate flake with its own lock. Update `demo/flake.lock` deliberately and on
+its own (lock-only bumps are exempt from intent/spec/plan), and confirm the **Demo VM**
+workflow passes.
+
 Document source URLs, exact versions/revisions, modifications, attribution and
 redistribution rights for copied material; include required license files.
 Do not imply the repository grants rights to third-party sources. Authored-only

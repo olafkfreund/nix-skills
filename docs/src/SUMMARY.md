@@ -5,6 +5,7 @@
 # Tutorials
 
 - [Getting started](tutorials/getting-started.md)
+- [Try it in a demo VM](tutorials/demo-vm.md)
 
 # How-to guides
 
