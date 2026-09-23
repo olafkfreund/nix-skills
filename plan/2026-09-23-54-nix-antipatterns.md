@@ -95,6 +95,25 @@ Markdown must not quote valid identifiers or search or hard-code
 `/nix/store`, that `check_collection.py` enforces this, and that the rare
 deliberate counterexample needs the marker.
 
+### Deviation during implementation
+
+- **Step 2's expected report was incomplete.** It said "9 quoted-name", but
+  the actual report is `9 quoted-name, 20 store-path`.
+- **The 20 store paths are legitimate upstream example output, not
+  advice:**
+  - `home-manager/references/rollbacks.md` (10): `--list-generations`
+    output;
+  - `nix-language/references/language.md` (6) and `builtins.md` (1):
+    `builtins.getContext` and `storePath` examples;
+  - `nixpkgs-development/references/helpers.md` (2): build error messages;
+  - `nixos-operations/references/operations.md` (1): `systemctl status`
+    output.
+- **No behaviour changes.** Generated references are reported, never
+  failed, as the spec says.
+- **Required quotes are left alone.** `{ "/nix/store/…-a.drv" = …; }` in
+  `builtins.md` is not counted as `quoted-name`: a store path is not an
+  identifier, so its quotes are required.
+
 ## Steps
 
 1. **`scripts/nix_style.py` and its tests.** Write the module and the

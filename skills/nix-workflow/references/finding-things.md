@@ -4,6 +4,7 @@
 
 A command like this is the wrong tool:
 
+<!-- nix-style: counterexample -->
 ```sh
 find /nix/store/*something-* -iname libsomething.so
 ```

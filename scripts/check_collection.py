@@ -8,7 +8,30 @@ import re
 from urllib.parse import unquote, urlsplit
 
 from check import anchors, links
+from nix_style import findings
 from update import prose
+
+
+def generated(package):
+    """Relative paths a provider generates for this package (keys of sources.json outputs)."""
+    sources = package / "sources.json"
+    return set(json.loads(sources.read_text()).get("outputs", {})) if sources.is_file() else set()
+
+
+def check_style(path, text):
+    for kind, line in findings(text):
+        raise ValueError(f"Nix style ({kind}): {path}: {line}")
+
+
+def generated_findings(root):
+    """Count style findings in generated references; reported, never failing."""
+    counts = {}
+    for package in sorted((Path(root) / "skills").iterdir()):
+        for relative in sorted(generated(package)):
+            if relative.endswith(".md"):
+                for kind, _ in findings((package / relative).read_text()):
+                    counts[kind] = counts.get(kind, 0) + 1
+    return counts
 
 
 def validate(root):
@@ -46,8 +69,11 @@ def validate(root):
                 raise ValueError(f"Use a plain text description starting with a letter: {name}")
         if not text[match.end():].strip():
             raise ValueError(f"Empty instructions: {name}")
+        outputs = generated(package)
         for path in package.rglob("*.md"):
             text = path.read_text()
+            if path.relative_to(package).as_posix() not in outputs:
+                check_style(path, text)
             lines = []
             prose(text, lambda line: lines.append(line) or line)
             visible = "".join(lines)
@@ -69,6 +95,9 @@ def validate(root):
                     raise ValueError(f"Missing/escaping resource: {link}")
                 if parsed.fragment and unquote(parsed.fragment) not in anchors(target.read_text()):
                     raise ValueError(f"Missing resource anchor: {link}")
+    readme = root / "README.md"
+    if readme.is_file():
+        check_style(readme, readme.read_text())
     return names
 
 
@@ -77,3 +106,7 @@ if __name__ == "__main__":
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args()
     print(f"Validated {len(validate(args.root))} registered skill packages (offline)")
+    counts = generated_findings(args.root)
+    if counts:
+        summary = ", ".join(f"{n} {kind}" for kind, n in sorted(counts.items()))
+        print(f"Nix style in generated references (not failing): {summary}")
