@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 41
 spec: spec/2026-09-23-41-readme-onboarding.md
 ---
