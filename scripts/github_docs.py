@@ -170,7 +170,9 @@ def report(old, new):
 def main(args, config):
     package = ROOT / "skills" / config["skill"]
     old = json.loads((package / "sources.json").read_text())
-    revision = resolve_revision(old, config["upstream"], config["branch"], args.revision)
+    # --check reproduces the recorded revision; only --latest follows the live branch.
+    requested = args.revision or (old["revision"] if args.check else None)
+    revision = resolve_revision(old, config["upstream"], config["branch"], requested)
     if args.latest and revision == old["revision"]:
         print("Already at newest upstream revision; no update")
         return

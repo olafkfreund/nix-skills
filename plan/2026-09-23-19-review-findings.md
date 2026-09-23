@@ -57,6 +57,13 @@ added. Generated skill content must stay byte-identical.
 - **D6 (finding 6):** in `scripts/wiki.py` `main`, change the line
   `if hash_file(path) != snapshot:` to
   `if args.dump and hash_file(path) != snapshot:`.
+- **D7 (found in PR #20 CI, approved as a plan revision):** `github_docs.main`
+  (used by `home-manager` and `microvm-nix`) resolved the live upstream branch
+  head in `--check` mode. Any upstream commit then made `check.yml` fail on
+  every PR and on `main`. `--check` now passes the recorded
+  `old["revision"]` to `resolve_revision`, which keeps its upstream, branch and
+  SHA validation. Only `--latest` follows the live branch. This matches
+  `nixpkgs.main` (`args.revision or old['revision']`).
 - **Stop rule:** if any `update.py --check` output differs from the committed
   references, stop. Do not edit generated files. Revise this plan and ask.
 
@@ -104,6 +111,15 @@ Each step is one commit with its tests. Messages use Conventional Commits with
 
    → Verify with `python3 -m unittest tests.test_wiki` and
    `python3 scripts/update.py --skill nixos-wiki --check`.
+4a. **D7:** in `scripts/github_docs.py` `main`, set
+   `requested = args.revision or (old["revision"] if args.check else None)`.
+   In `tests/test_github_docs.py`, add a test that `--check` never calls `run`
+   (no `git ls-remote`) and fetches the recorded revision, and add
+   `check=False` to the existing `--latest` no-op test's `Namespace`.
+   → Verify that the new test fails without the fix, that
+   `python3 -m unittest tests.test_github_docs` passes, and that
+   `update.py --skill home-manager --check` and `--skill microvm-nix --check`
+   pass.
 5. **Full verification:** run the commands under Tests below.
    → Verify that all pass and `git status` is clean.
 6. **PR:** push with `git push -u origin fix/19-review-findings`. Open a PR
@@ -121,7 +137,7 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 for s in nix-language devenv-project home-manager microvm-nix nixpkgs-development nixos-wiki; do
   python3 scripts/check.py --skill "$s"
 done
-for s in nix-language devenv-project nixpkgs-development nixos-wiki; do
+for s in nix-language devenv-project home-manager microvm-nix nixpkgs-development nixos-wiki; do
   python3 scripts/update.py --skill "$s" --check
 done
 git diff --exit-code
@@ -132,6 +148,13 @@ tests, and there is no diff in `skills/`.
 
 Limitation: the network and Nix checks run on one x86_64-linux host. The
 authenticated API path is proven only by the post-merge `update.yml` dispatch.
+
+## Deviations
+
+- The original Tests list ran `update.py --check` for only four skills. It was
+  copied from a review of an out-of-date checkout and missed `home-manager` and
+  `microvm-nix`, which `check.yml` also checks. PR #20 CI exposed the
+  pre-existing D7 defect. The list now covers all six skills.
 
 ## Rollback
 
