@@ -46,6 +46,9 @@ Spec: `spec/2026-09-23-24-nix-workflow-skill.md`.
     `devenv-project`, `nix-language`, `nixpkgs-development`, `home-manager`,
     `nixos-wiki` and `microvm-nix`.
   - One sentence per reference saying when to read it.
+  - Deviation (step 1): the shipped routing table does not cite issue #27. An
+    installed skill's reader has no context for this repository's issue
+    numbers. #27 is tracked in the PR and issues instead.
 - **D4 References:** content exactly as listed in the spec's "References"
   section. The reported
   `find /nix/store/*something-* -iname libsomething.so` is the worked example
