@@ -40,7 +40,7 @@ def validate(root):
     if (not isinstance(names, list) or not names
             or any(not isinstance(n, str) or len(n) > 64
                    or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", n) for n in names)
-            or any(n in {"default", "nix-skills"} for n in names)
+            or any(n in {"default", "nix-skills", "docs"} for n in names)
             or names != sorted(set(names))):
         raise ValueError("Registry must be a sorted unique list of valid skill names")
     directory = root / "skills"
