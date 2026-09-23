@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 37
 intent: intent/2026-09-23-37-nixos-coding-agents.md
 ---
