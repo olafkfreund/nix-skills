@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/usage/modular-services.md](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage/modular-services.md)
+Upstream source: [docs/manual/usage/modular-services.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/modular-services.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -6,7 +6,7 @@ Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
 Home Manager supports nixpkgs
 [modular services](https://nixos.org/manual/nixos/unstable/#modular-services)
-under [](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage/modular-services.md#opt-home.services). This is the Home Manager analog to the
+under [](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/modular-services.md#opt-home.services). This is the Home Manager analog to the
 NixOS `system.services` namespace: each entry is an abstract service
 sourced from `<nixpkgs/lib/services/lib.nix>` with the upstream portable
 systemd module loaded into it, so service modules shipped with packages
@@ -32,7 +32,7 @@ Each service exposes the upstream NixOS-style schema: [`process.argv`],
 NixOS-style attrs (`wantedBy`, `serviceConfig`, `unitConfig`,
 `environment`, ...) into the section-based INI shape
 (`{ Unit; Service; Install; }`) that Home Manager's
-[](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage/modular-services.md#opt-systemd.user.services) consumes. Only common keys are mapped
+[](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/modular-services.md#opt-systemd.user.services) consumes. Only common keys are mapped
 explicitly; uncommon options remain reachable via `unitConfig`,
 `serviceConfig`, or `socketConfig`.
 
@@ -115,7 +115,7 @@ home.services.demo.systemd.services."".unitConfig.X-SwitchMethod = "reload";
 
 Home Manager mirrors the surface of nixpkgs' portable systemd module:
 services and sockets only. Other unit kinds Home Manager supports
-natively under [](https://github.com/nix-community/home-manager/blob/cbcbfa2778e0c5653ef349df3ebae8288efac3c0/docs/manual/usage/modular-services.md#opt-systemd.user.services) (timers, paths, mounts, ...)
+natively under [](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/modular-services.md#opt-systemd.user.services) (timers, paths, mounts, ...)
 are intentionally not modeled on `home.services` until upstream grows them,
 to keep both surfaces aligned.
 
