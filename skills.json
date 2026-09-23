@@ -5,6 +5,7 @@
   "nix-darwin",
   "nix-language",
   "nix-workflow",
+  "nixos-coding-agents",
   "nixos-operations",
   "nixos-wiki",
   "nixpkgs-development"
