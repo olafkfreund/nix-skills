@@ -3,6 +3,7 @@
   "home-manager",
   "microvm-nix",
   "nix-language",
+  "nix-workflow",
   "nixos-wiki",
   "nixpkgs-development"
 ]
