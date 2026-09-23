@@ -1,6 +1,6 @@
 # Library
 
-Nixpkgs master snapshot `9c0ece3dc2086e85434c5d2477eb6bc118d20ff8`; development series 26.11.
+Nixpkgs master snapshot `8f61efd04af9e890e0df64e03c244c62330c2788`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -18,7 +18,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 - [`lib.fileset.toSource`](#function-library-lib.fileset.toSource)
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/attrsets.nix#L88)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/attrsets.nix#L88)
 
 
 ## `lib.attrsets.attrByPath`
@@ -75,7 +75,7 @@ attrByPath ["z" "z"] 6 x
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/attrsets.nix#L1023)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/attrsets.nix#L1023)
 
 
 ## `lib.attrsets.mapAttrs`
@@ -116,7 +116,7 @@ mapAttrs (name: value: name + "-" + value)
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/attrsets.nix#L1092)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/attrsets.nix#L1092)
 
 
 ## `lib.attrsets.mapAttrsToList`
@@ -158,7 +158,7 @@ mapAttrsToList (name: value: name + value)
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/attrsets.nix#L1492)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/attrsets.nix#L1492)
 
 
 ## `lib.attrsets.optionalAttrs`
@@ -201,7 +201,7 @@ optionalAttrs (false) { my = "set"; }
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/attrsets.nix#L1778)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/attrsets.nix#L1778)
 
 
 ## `lib.attrsets.recursiveUpdate`
@@ -253,7 +253,7 @@ returns: {
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/lists.nix#L839)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/lists.nix#L839)
 
 
 ## `lib.lists.optionals`
@@ -295,7 +295,7 @@ optionals false [ 2 3 ]
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/lists.nix#L1985)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/lists.nix#L1985)
 
 
 ## `lib.lists.unique`
@@ -306,7 +306,7 @@ Remove duplicate elements from the `list`. O(n^2) complexity.
 
 **Note**
 
-If the list only contains strings and order is not important, the complexity can be reduced to O(n log n) by using [`lib.lists.uniqueStrings`](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/lists.nix) (source section: lib.lists.uniqueStrings) instead.
+If the list only contains strings and order is not important, the complexity can be reduced to O(n log n) by using [`lib.lists.uniqueStrings`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/lists.nix) (source section: lib.lists.uniqueStrings) instead.
 
 **End note.**
 
@@ -338,7 +338,7 @@ unique [ 3 2 3 4 ]
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/strings.nix#L1219)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/strings.nix#L1219)
 
 
 ## `lib.strings.escapeShellArg`
@@ -376,7 +376,7 @@ escapeShellArg "esc'ape\nme"
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/strings.nix#L260)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/strings.nix#L260)
 
 
 ## `lib.strings.concatMapStringsSep`
@@ -419,7 +419,7 @@ concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
 
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/customisation.nix#L267)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/customisation.nix#L267)
 
 
 ## `lib.customisation.callPackageWith`
@@ -474,7 +474,7 @@ callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
 ```
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/fixed-points.nix#L340)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/fixed-points.nix#L340)
 
 
 ## `lib.fixedPoints.composeExtensions`
@@ -482,10 +482,10 @@ callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
 <a id="function-library-lib.fixedPoints.composeExtensions"></a>
 
 Compose two overlay functions and return a single overlay function that combines them.
-For more details see: [`composeManyExtensions`](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/fixed-points.nix) (source section: lib.fixedPoints.composeManyExtensions).
+For more details see: [`composeManyExtensions`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/fixed-points.nix) (source section: lib.fixedPoints.composeManyExtensions).
 
 
-[Declaration](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/fileset/default.nix#L418)
+[Declaration](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/fileset/default.nix#L418)
 
 
 ## `lib.fileset.toSource`
@@ -527,7 +527,7 @@ Definition: The local directory [path](https://nixos.org/manual/nix/stable/langu
 Definition: The file set whose files to import into the store.
   File sets can be created using other functions in this library.
   This argument can also be a path,
-  which gets [implicitly coerced to a file set](https://github.com/NixOS/nixpkgs/blob/9c0ece3dc2086e85434c5d2477eb6bc118d20ff8/lib/fileset/default.nix) (source section: Implicit coercion from paths to file sets).
+  which gets [implicitly coerced to a file set](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/fileset/default.nix) (source section: Implicit coercion from paths to file sets).
 
 **Note**
 
