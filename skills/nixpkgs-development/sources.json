@@ -528,13 +528,13 @@
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
-    "references/contributing.md": "28bda0ada558bf47865321b3aa1495e0c151037d9e90a2e387e8f4ebe12a9984",
-    "references/customization.md": "2574617cffab6a49a802075a195fccda9b8a724ed3e793e10c759e0da9bb2738",
-    "references/helpers.md": "8e5fc30a468e407556092461b7f82a7c9ebbeb004ef74adae081d9ddbea804f3",
-    "references/library.md": "33eb0cc42e5ea7456dd5bda00c3e1fcbe4c1a627464aca4e8a6d77ed0d573b73",
-    "references/packaging.md": "2a64ba6a28cfca081c06ab2052f5ff3405da6669fd10334d346a7a58122337e4"
+    "references/contributing.md": "41676eb74596cdaa88b4554e073c20ddda8c90f003d8c87648fff3a0e9269585",
+    "references/customization.md": "ec05311c0257b25f1fe2fd9b2adfbcd6593eb1fae2390aa2fed2687311d6efba",
+    "references/helpers.md": "b343263c81b9087fbe57e5c750d600dbdd884ea9d348465369656e728810ecc4",
+    "references/library.md": "7eb083d123a84bcf3a780d918c1793a975ca8d25dd7d5d760dccf2f8a1bd56b4",
+    "references/packaging.md": "e2630d1d9c979b9d468936c96ef0c16b717312afc2b405778505fd6ca17448c1"
   },
-  "revision": "9c0ece3dc2086e85434c5d2477eb6bc118d20ff8",
+  "revision": "8f61efd04af9e890e0df64e03c244c62330c2788",
   "selection": {
     "apis": [
       "lib.attrsets.attrByPath",
