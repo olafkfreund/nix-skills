@@ -83,7 +83,8 @@ exposure but are not a hard boundary. It covers:
 - Nix builds inside a container.
 
 **Examples.** Use an unfree predicate listing named packages, never
-`allowUnfree = true`. Include a "checked against upstream on 2026-09-23"
+`allowUnfree = true`. (Superseded; see "Deviations during implementation".)
+Include a "checked against upstream on 2026-09-23"
 line in `SKILL.md`.
 
 ### Resolved while planning (the spec left these to implementation)
@@ -110,6 +111,29 @@ Checked in the nixpkgs source on 2026-09-23:
   - A stricter `virtualisation.containers.policy` is described only in prose
     with a link to `containers-policy.json(5)`, unless step 3 below confirms
     a working example.
+
+### Deviations during implementation
+
+- **The unfree predicate is dropped (steps 1, 2, 4).**
+  - llm-agents.nix `lib/default.nix` redefines `licenses.unfree` with
+    `free = true`, on purpose, so its packages evaluate without `allowUnfree`.
+  - Checked on 2026-09-23: `claude-code.meta.license` reads
+    `{ shortName = "unfree"; free = true; }` and `meta.unfree` is `false`.
+    Instantiating `claude-code` through `overlays.shared-nixpkgs` with a
+    default nixpkgs config succeeds.
+  - An `allowUnfreePredicate` is therefore a no-op for these packages. The
+    "unfree predicate listing named packages" decision above, and its use in
+    stories 2 and 6, would have been wrong.
+  - Instead:
+    - Story 2 states that no unfree setting is needed or effective.
+    - Story 6 checks `meta.license.shortName`.
+    - `SKILL.md` says the same.
+    - `security.md` gains "The nixpkgs unfree check does not apply".
+  - This is an evidence-driven correction within the approved scope and
+    security intent; no new behaviour is added.
+- **README lists (step 5).** Besides the table row, `README.md` lists every
+  skill in the Codex invocation line and in the Home Manager `skills = [ … ]`
+  example, so the new skill is added to both.
 
 ## Steps
 
