@@ -1,4 +1,4 @@
-Upstream source: [doc/src/intro.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/intro.md)
+Upstream source: [doc/src/intro.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/intro.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -54,5 +54,5 @@ other Hypervisors that have been explicitly authored for
 that is renowned for being safer than C. On macOS, vfkit leverages
 Apple's native Virtualization.framework for running Linux VMs.
 Note that building the guest still requires access to a Linux builder; see
-[the FAQ](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/faq.md#im-on-macos-and-builds-fail-with-required-system-aarch64-linux-what-do-i-do)
+[the FAQ](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/faq.md#im-on-macos-and-builds-fail-with-required-system-aarch64-linux-what-do-i-do)
 for setup options.

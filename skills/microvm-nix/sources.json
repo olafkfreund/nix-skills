@@ -15,18 +15,18 @@
   },
   "outputs": {
     "LICENSE": "bd26a011e61210fa79f5bd5632758773c9dae8a1c26bbfaedcbb88d6300d5609",
-    "references/declarative.md": "1f98347efe0a39d2e695c7354dfa2d2b3e7562d6213225aff0272e3aa6015585",
-    "references/declaring.md": "0a4b8d34ba9ab9866a689019c7b6cd1eefb7e8305620561cb5c5915f7eea8261",
-    "references/host-systemd.md": "60a30ef392444e6bbcfab8c2cf3fdecb41746b37af307e27ff5df657700f42d7",
-    "references/host.md": "2e8be304ccf6ff9f0256478c4d8bee86cc643b44b8474a489fda235d5c435969",
-    "references/interfaces.md": "82ad767530b94d84bc3ab85c1092f0b54a320823f12b0e80f768fd600a891d84",
-    "references/intro.md": "b76e703e60071b81cb45a81a856f7ad231779b0102918e2142920706d16b2f5e",
-    "references/options.md": "0347a5acdafdcd4245e3b61e1a1baa51c8e1aed8b73d021660efdd4bbaa0aa77",
-    "references/routed-network.md": "6e40d5139484a003068cbac2bfde98e268f8786bffd56e6e28db25c955e434ff",
-    "references/shares.md": "659151088f6b4477815cf0eb9ced2abece4ed8bee0682020411c3a61c169db8d",
-    "references/simple-network.md": "1de3ae93db9639fbbdc2958af3c108b3b821bca78b737fa16af9c26dae650535"
+    "references/declarative.md": "ad1fd8a7001df5f00d9c71cdd1e14247949adb85f2599d3b4a7665328ab5ee97",
+    "references/declaring.md": "ce61d0619a5e100c8ea5c324726c24e0c88e1fd8d99449417a2f190b5913167e",
+    "references/host-systemd.md": "42809f76e22fc919d9d4de04819ac96d8b54b7698f0f94054b6f54c8f686c29c",
+    "references/host.md": "26ca0177d410c53332c7525a0c23f93f91dfd61e236826db8b07e89d52026da9",
+    "references/interfaces.md": "fcb0ce8b66e236ceca7f90f37fa603dc83fa02a0888e67f4fabafed2f19def26",
+    "references/intro.md": "78b7a43a19862345226be4bdef05a6d876e6a94283834ccbcc18ffced3f5b2a6",
+    "references/options.md": "f3b3f125dce32386290f6a3b035bf0fe03483c88f31244181ca790e8aa10ca18",
+    "references/routed-network.md": "9f944998938051605c7a9b14102e6f4621e72c9c7affb86cc60ebf3ff6c1482c",
+    "references/shares.md": "4dba32b821ce3638f0b555be92c54b520ccab316348b5a630951ba0d5f507809",
+    "references/simple-network.md": "0abee1240b90d7e4bb7f055034a62e281fd67d7ae1799808265b73884ed40fe6"
   },
-  "revision": "187b0a390ee054028106a674e7b01b1cb940cbba",
+  "revision": "b2fd8eb40192c4fefd16c26b979954f7d354d1aa",
   "selection": [
     {
       "output": "references/intro.md",
