@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 48
 spec: spec/2026-09-23-48-update-pr-token.md
 ---
