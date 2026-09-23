@@ -1,4 +1,4 @@
-Upstream source: [doc/src/host.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/host.md)
+Upstream source: [doc/src/host.md](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/host.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -12,8 +12,8 @@ host MicroVMs reliably:
 - systemd services `microvm-virtiofsd@` to start virtiofsd instances
 - systemd services `microvm@` to start a MicroVM
 - configuration options to [declaratively build MicroVMs with the host
-  system](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/declarative.md)
-- tools to [manage MicroVMs imperatively](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/microvm-command.md)
+  system](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/declarative.md)
+- tools to [manage MicroVMs imperatively](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/microvm-command.md)
 
 Prepare your host by including the microvm.nix `host` nixosModule:
 
