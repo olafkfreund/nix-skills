@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 43
 spec: spec/2026-09-23-43-update-pr-checks.md
 ---
