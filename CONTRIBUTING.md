@@ -59,6 +59,10 @@ The checker rejects unfinished TODO/FIXME/TBD markers in entrypoint prose;
 copied reference material can retain upstream comments. Review referenced prose
 for completeness too. Use simple inline Markdown resource links or explicit
 reference definitions; code fences are examples and are not checked as links.
+Authored code examples must not quote attribute names that are valid Nix identifiers
+(`pkgs.foo-bar`, not `pkgs."foo-bar"`) or search or hard-code `/nix/store`;
+`check_collection.py` enforces this outside generated references, and a deliberate
+counterexample needs `<!-- nix-style: counterexample -->` on the line before its fence.
 Keep the entrypoint short and put detailed material in linked references.
 
 Document source URLs, exact versions/revisions, modifications, attribution and

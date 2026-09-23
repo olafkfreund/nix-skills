@@ -47,6 +47,20 @@ Advice that fits one of these can be wrong for another.
    upstream repository for its status and any successor. Prefer the Nixpkgs
    language builders first.
 
+## Nix style
+
+- Never search `/nix/store` (for example `find /nix/store/*foo-* -name libfoo.so`)
+  and never copy a literal store path. Find the providing package with
+  `nix-locate`, and refer to it through Nix: `${pkgs.foo}/lib` or
+  `lib.makeLibraryPath [ pkgs.foo ]`.
+- Do not quote attribute names that are valid identifiers
+  (`[A-Za-z_][A-Za-z0-9_'-]*`, dashes included). Write `pkgs.foo-bar` and
+  `packages.x86_64-linux`, not `pkgs."foo-bar"`. Quote only other names
+  (`".config/foo"`, `"2.0"`), the keywords
+  `assert else if in inherit let or rec then with`, and interpolations
+  (`"${name}"`). Upstream examples in references sometimes quote needlessly;
+  do not copy that style.
+
 ## References
 
 - [Finding things](references/finding-things.md): which package provides a

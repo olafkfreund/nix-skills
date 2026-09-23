@@ -48,3 +48,17 @@ was actually run. Keep secrets out of committed configuration and the Nix store.
 Guidance was informed by upstream's [setup skill](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/public/.well-known/agent-skills/devenv-setup/SKILL.md).
 References contain modified upstream excerpts under [Apache-2.0](LICENSE).
 This portable skill does not replace a machine-specific `devenv` policy skill.
+
+## Nix style
+
+- Never search `/nix/store` (for example `find /nix/store/*foo-* -name libfoo.so`)
+  and never copy a literal store path. Find the providing package with
+  `nix-locate`, and refer to it through Nix: `${pkgs.foo}/lib` or
+  `lib.makeLibraryPath [ pkgs.foo ]`.
+- Do not quote attribute names that are valid identifiers
+  (`[A-Za-z_][A-Za-z0-9_'-]*`, dashes included). Write `pkgs.foo-bar` and
+  `packages.x86_64-linux`, not `pkgs."foo-bar"`. Quote only other names
+  (`".config/foo"`, `"2.0"`), the keywords
+  `assert else if in inherit let or rec then with`, and interpolations
+  (`"${name}"`). Upstream examples in references sometimes quote needlessly;
+  do not copy that style.

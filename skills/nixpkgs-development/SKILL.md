@@ -82,3 +82,17 @@ This skill does not supply a complete package/API catalogue or NixOS/Home Manage
 option reference. Host installation and deployment follow local policy. Public
 manual links can move; packaged excerpts and source citations are revision-pinned.
 Modified upstream material is covered by [COPYING](COPYING).
+
+## Nix style
+
+- Never search `/nix/store` (for example `find /nix/store/*foo-* -name libfoo.so`)
+  and never copy a literal store path. Find the providing package with
+  `nix-locate`, and refer to it through Nix: `${pkgs.foo}/lib` or
+  `lib.makeLibraryPath [ pkgs.foo ]`.
+- Do not quote attribute names that are valid identifiers
+  (`[A-Za-z_][A-Za-z0-9_'-]*`, dashes included). Write `pkgs.foo-bar` and
+  `packages.x86_64-linux`, not `pkgs."foo-bar"`. Quote only other names
+  (`".config/foo"`, `"2.0"`), the keywords
+  `assert else if in inherit let or rec then with`, and interpolations
+  (`"${name}"`). Upstream examples in references sometimes quote needlessly;
+  do not copy that style.
