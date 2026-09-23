@@ -11,7 +11,11 @@ from update import ROOT, digest, encoded, evaluate, github_json, pinned_tools, r
 
 UPSTREAM = 'https://github.com/NixOS/nixpkgs'
 PACKAGE = ROOT / 'skills/nixpkgs-development'
-GENERATED = {'references/' + name + '.md' for name in ['packaging', 'customization', 'helpers', 'library']} | {'COPYING', 'sources.json'}
+REFERENCES = ['packaging', 'customization', 'helpers', 'library', 'contributing']
+GENERATED = {'references/' + name + '.md' for name in REFERENCES} | {'COPYING', 'sources.json'}
+# Plain GitHub-Markdown contributor documents; widening this set is a reviewed change.
+GITHUB_SOURCES = {'CONTRIBUTING.md', 'pkgs/README.md', 'pkgs/by-name/README.md'}
+CONTRIBUTING_LIMIT = 65536
 SHA = re.compile(r'[0-9a-f]{40}')
 FENCE = re.compile(r'^\s*(`{3,}|~{3,})(.*)$')
 DIV = re.compile(r'^\s*(:{3,})\s*\{\.(note|tip|warning|caution|important|example)(?:\s+#([^} ]+))?\}\s*$')
@@ -139,6 +143,99 @@ def excerpt(text, selection):
                         notices.append(''.join(captured))
                     captured = []
     return '\n'.join(notices) + '\n' + text[start:end].strip() + '\n'
+
+
+def github_slug(title):
+    return re.sub(r'[^\w\- ]', '', title.lower()).replace(' ', '-')
+
+
+def github_headings(text):
+    """Prose headings with GitHub's anchor slugs, including -N suffixes for repeats."""
+    result, seen = [], {}
+    for offset, line, kind in lines(text):
+        match = re.match(r'^(#{1,6})[ \t]+(.+?)[ \t]*$', line.rstrip('\n')) if kind == 'prose' else None
+        if match:
+            base = github_slug(match[2])
+            count = seen.get(base, 0)
+            seen[base] = count + 1
+            result.append((offset, len(match[1]), match[2], base if not count else f'{base}-{count}'))
+    return result
+
+
+def excerpt_github(text, selection):
+    items = github_headings(text)
+    matches = [i for i, h in enumerate(items) if h[1] == selection['level'] and h[2] == selection['heading']]
+    if len(matches) != 1:
+        raise ValueError('Missing or ambiguous section: ' + selection['heading'])
+    i = matches[0]
+    start, level, _, slug = items[i]
+    end = len(text)
+    for following, depth, _, _ in items[i + 1:]:
+        if depth <= level or not selection['children']:
+            end = following
+            break
+    return text[start:end].strip() + '\n', slug
+
+
+def convert_github(text, path, revision, source, full_text, bundled_slugs):
+    """Pin GitHub-Markdown links to the source revision; fenced content is never altered."""
+    slugs = {h[3] for h in github_headings(full_text)}
+    definitions = {}
+    for _, line, kind in lines(full_text):
+        match = re.match(r'^\s*\[([^]]+)\]:\s*(\S+)\s*$', line) if kind == 'prose' else None
+        if match:
+            if match[1].lower() in definitions:
+                raise ValueError('Duplicate link definition')
+            definitions[match[1].lower()] = match[2]
+    def destination(target, label):
+        parsed = urlsplit(target)
+        if parsed.scheme:
+            if parsed.scheme not in {'http', 'https'}:
+                raise ValueError('Unsupported URL scheme: ' + target)
+            return f'[{label}]({target})'
+        if parsed.netloc:
+            raise ValueError('Protocol-relative link: ' + target)
+        if not parsed.path:
+            slug = unquote(parsed.fragment)
+            if slug not in slugs:
+                raise ValueError('Unknown heading link: ' + target)
+            if (path, slug) in bundled_slugs:
+                return f'[{label}](#{bundled_slugs[path, slug]})'
+            return f'[{label}]({UPSTREAM}/blob/{revision}/{path}#{slug})'
+        relative = unquote(parsed.path)
+        joined = relative.lstrip('/') if relative.startswith('/') else str(Path(path).parent / relative)
+        desired = posixpath.normpath(joined)
+        resolved = (source / desired).resolve()
+        if desired.startswith('..') or not resolved.is_relative_to(source.resolve()) or not resolved.exists():
+            raise ValueError('Missing/escaping source link: ' + target)
+        kind = 'tree' if resolved.is_dir() else 'blob'
+        fragment = '#' + parsed.fragment if parsed.fragment else ''
+        return f'[{label}]({UPSTREAM}/{kind}/{revision}/{desired}{fragment})'
+    output = []
+    for _, line, kind in lines(text):
+        if kind == 'code':
+            output.append(line)
+            continue
+        protected = []
+        def protect(match):
+            protected.append(match[0])
+            return f'\x00{len(protected)-1}\x00'
+        line = re.sub(r'(`+).*?\1', protect, line)
+        if re.match(r'^\s*\[[^]]+\]:', line):
+            continue
+        def reference(match):
+            key = (match[2] or match[1]).lower()
+            if key not in definitions:
+                raise ValueError('Missing link definition: ' + key)
+            return destination(definitions[key], match[1])
+        line = re.sub(r'\[([^]\n]+)\]\[([^]\n]*)\]', reference, line)
+        line = re.sub(r'\[([^]\n]*)\]\(([^\s)]+)\)', lambda m: destination(m[2], m[1]), line)
+        if re.search(r'\]\((?!https?://|#)|href="(?!https?://)', line):
+            raise ValueError('Unconverted link: ' + line.strip())
+        for i, value in enumerate(protected):
+            line = line.replace(f'\x00{i}\x00', value)
+        output.append(line)
+    return ''.join(output)
 
 
 def expand_includes(text, path, read, active=()):
@@ -346,8 +443,17 @@ def generate(old, revision, source, library):
         index_anchors(group.get('description', ''), path, anchors)
     excerpts = []
     bundled = {}
+    bundled_slugs = {}
     for item in selected['sections']:
         full = read(item['path'])
+        if item.get('format', 'manual') == 'github':
+            text, slug = excerpt_github(full, item)
+            if item['anchor'] in bundled:
+                raise ValueError('Duplicate packaged anchor: ' + item['anchor'])
+            bundled[item['anchor']] = 'contributing.md'
+            bundled_slugs[item['path'], slug] = item['anchor']
+            excerpts.append((item, text))
+            continue
         text = expand_includes(excerpt(full, item), item['path'], read)
         local = {}
         index_anchors(text, item['path'], local)
@@ -363,7 +469,7 @@ def generate(old, revision, source, library):
     header = (f'Nixpkgs master snapshot `{revision}`; development series {version}.\n\n'
               'Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). '
               'Source citations are pinned; public manual links may move.\n\n')
-    documents = {name: '# ' + name.title() + '\n\n' + header for name in ['packaging', 'customization', 'helpers', 'library']}
+    documents = {name: '# ' + name.title() + '\n\n' + header for name in REFERENCES}
     for item, text in excerpts:
         documents[item['reference']] += f"- [{item['heading']}](#{item['anchor']})\n"
     for name in selected['apis']:
@@ -372,6 +478,11 @@ def generate(old, revision, source, library):
         body = '\n\n' + f"[Upstream source]({UPSTREAM}/blob/{revision}/{item['path']})\n\n"
         if item.get('note'):
             body += '**Adaptation note:** ' + item['note'] + '\n\n'
+        if item.get('format', 'manual') == 'github':
+            body = f'\n\n<a id="{item["anchor"]}"></a>' + body
+            body += convert_github(text, item['path'], revision, source, read(item['path']), bundled_slugs)
+            documents[item['reference']] += body
+            continue
         body += convert(text, item['path'], revision, anchors, bundled, manpages, read(item['path']))
         documents[item['reference']] += body
     for name in selected['apis']:
@@ -387,6 +498,8 @@ def generate(old, revision, source, library):
         read(path)
     inputs['generated:lib-functions.json'] = digest(library)
     files = {'references/' + name + '.md': (text.rstrip() + '\n').encode() for name, text in documents.items()}
+    if len(files['references/contributing.md']) > CONTRIBUTING_LIMIT:
+        raise ValueError('Contributing reference exceeds size limit')
     if (source / 'NOTICE').exists():
         raise ValueError('New upstream NOTICE requires reviewed packaging')
     files['COPYING'] = read('COPYING').encode()
@@ -456,9 +569,16 @@ def validate_manifest(manifest):
                 'doc/doc-support/package.nix', 'pkgs/by-name/ni/nixdoc/package.nix',
                 'pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py',
                 'generated:lib-functions.json'}
+    if len({item['anchor'] for item in sections}) != len(sections):
+        raise ValueError('Duplicate section anchor')
     for item in sections:
-        if (item['reference'] not in {'packaging', 'customization', 'helpers'} or
-                type(item['children']) is not bool or not item['heading'] or
+        form = item.get('format', 'manual')
+        if form == 'github':
+            valid = (item['path'] in GITHUB_SOURCES and item['reference'] == 'contributing' and
+                     type(item.get('level')) is int and 1 <= item['level'] <= 6)
+        else:
+            valid = form == 'manual' and 'level' not in item and item['reference'] in {'packaging', 'customization', 'helpers'}
+        if (not valid or type(item['children']) is not bool or not item['heading'] or
                 not re.fullmatch(r'[\w.:-]+', item['anchor'])):
             raise ValueError('Invalid section selection')
         expected.add(item['path'])

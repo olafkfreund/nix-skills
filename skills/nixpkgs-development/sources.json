@@ -525,6 +525,7 @@
   },
   "outputs": {
     "COPYING": "c9cf0650a6820b589f96a92060e0eb937102b808f48cd5e3f35dcba449ea0a41",
+    "references/contributing.md": "3abf77c85187f709614f0bfe0e445b37e5d97e50aba287031ea0241da2b12e1b",
     "references/customization.md": "2574617cffab6a49a802075a195fccda9b8a724ed3e793e10c759e0da9bb2738",
     "references/helpers.md": "8e5fc30a468e407556092461b7f82a7c9ebbeb004ef74adae081d9ddbea804f3",
     "references/library.md": "33eb0cc42e5ea7456dd5bda00c3e1fcbe4c1a627464aca4e8a6d77ed0d573b73",

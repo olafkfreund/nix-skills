@@ -111,6 +111,12 @@ step number.
 
    With no github items selected yet, `contributing.md` contains only its
    header, which the output boundary requires once it is in `GENERATED`.
+   Deviation (step 1): `update.py --revision` cannot create the new output,
+   because `main()` first validates the existing package, which then lacks
+   `contributing.md`. The one-time bootstrap runs the same provider pipeline
+   (`pinned_inputs`, `generate`, `runtime_check`, `publish`) without that
+   pre-check. `publish` still validates the complete staged package before
+   writing. Every later regeneration and `--check` uses `update.py` as normal.
    → Verify:
    - `python3 -m unittest tests.test_nixpkgs` passes;
    - `update.py --skill nixpkgs-development --revision 9c0ece3… ` regenerates;
