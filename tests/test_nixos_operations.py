@@ -18,7 +18,8 @@ FILES = {
     M + 'gc.chapter.md': '# Cleaning {#sec-nix-gc}\nClean.\n',
     M + 'ops.chapter.md': ('# Operations {#sec-ops}\n'
                            'See [config](#ch-configuration), [gc](#sec-nix-gc), [local](#sect-local),\n'
-                           '[units](#opt-systemd.packages) and {manpage}`systemd.special(7)`.\n\n'
+                           '[units](#opt-systemd.packages) and {manpage}`systemd.special(7)`.\n'
+                           'A [wrapped\nlink](#sec-nix-gc) and [trailing\n](#sect-local) text.\n\n'
                            '::: {.warning}\nRun as root.\n:::\n\n'
                            '## Local {#sect-local}\n```\n[raw](#opt-left.alone)\n```\n'),
     'nixos/modules/system/boot/systemd.nix': '{ }\n',
@@ -60,6 +61,8 @@ class NixosOperationsTests(unittest.TestCase):
         self.assertIn(f'[units]({blob}nixos/modules/system/boot/systemd.nix) (source section: systemd.packages)', out)
         self.assertIn('[`systemd.special(7)`](https://example.org/systemd.special.html)', out)
         self.assertIn('**Warning**', out)
+        self.assertIn('[wrapped link](operations.md#sec-nix-gc)', out)    # joined two-line link text
+        self.assertIn('[trailing](operations.md#sect-local)', out)
         self.assertIn('[raw](#opt-left.alone)', out)                         # fenced code untouched
         self.assertIn('nixos/modules/system/boot/systemd.nix', manifest['inputs'])
         nixos_operations.validate_manifest(manifest)
@@ -76,6 +79,9 @@ class NixosOperationsTests(unittest.TestCase):
                   self.sections[1]], DECLARATIONS, 'collides')]:
             with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
                 self.generate(sections, declarations)
+        (self.source / (M + 'gc.chapter.md')).write_text('# Cleaning {#sec-nix-gc}\nA [three\nline\ntext](#nowhere).\n')
+        with self.assertRaisesRegex(ValueError, 'Unconverted local link'):
+            self.generate([self.sections[1]])
         with self.assertRaisesRegex(ValueError, 'Missing or ambiguous section'):
             self.generate([section('ops.chapter.md', 'sec-missing', 'Operations')])
 

@@ -60,6 +60,21 @@ Spec: `spec/2026-09-23-30-nixos-operations.md`.
       recorded revision;
     - generate; `--check` compares bytes; otherwise `publish` (which
       validates the staged package) and writes `.update-report.md`.
+- **D1a Wrapped links** (plan revision, approved by the maintainer after
+  step 3 hit the stop rule):
+  - **Finding:** three links in the selected chapters wrap their text
+    across two source lines, for example `[changed⏎something](#ch-configuration)`
+    and `[next section⏎](#sect-nixos-systemd-nixos)`. The shared `convert`
+    matches links per line, so these were left unconverted. Package
+    validation at publish rejected the output, so nothing was written.
+  - **Fix, in `nixos_operations.py` only (`nixpkgs.py` is still untouched):**
+    - `join_wrapped_links` rejoins link text that spans exactly two prose
+      lines, re-checking joined lines so several wrapped links in one
+      paragraph are handled. It leaves fenced code alone.
+    - `check_local_links` fails generation on any prose link to a local
+      anchor that the output does not define. This closes the dry-run gap:
+      step 1's dry run only checked for leftover `#opt-` links.
+  - A link spanning three or more lines is still an error.
 - **D2 Selection:** the six chapters from spec section 2, with the anchors,
   headings, `children: true` and the three `option_links`.
 - **D3 Registration:**

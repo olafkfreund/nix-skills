@@ -14,6 +14,33 @@ MANUAL = 'nixos/doc/manual/'
 OPTION_LINK = re.compile(r'\]\(#(opt-[^)\s]+)\)')
 
 
+def join_wrapped_links(text):
+    """Rejoin link text that the source wraps across exactly two prose lines."""
+    items = list(lines(text))
+    output, index = [], 0
+    while index < len(items):
+        _, line, kind = items[index]
+        index += 1
+        # A joined line is re-checked, so several wrapped links in one paragraph all rejoin;
+        # one link still spans at most two lines because the next line must start its closing.
+        while (kind == 'prose' and index < len(items) and items[index][2] == 'prose' and
+               re.search(r'\[[^\]\n]*$', line.rstrip('\n')) and re.match(r'^[^\[\]\n]*\]\(', items[index][1])):
+            joined = line.rstrip('\n').rstrip() + ' ' + items[index][1].lstrip()
+            line = re.sub(r'\s+\]\(', '](', joined, count=1)
+            index += 1
+        output.append(line)
+    return ''.join(output)
+
+
+def check_local_links(document):
+    """Fail on any prose link to a local anchor that the output does not define."""
+    ids = set(re.findall(r'id="([^"]+)"', document))
+    for _, line, kind in lines(document):
+        for anchor in re.findall(r'\]\(#([^)\s]+)\)', line) if kind == 'prose' else []:
+            if anchor not in ids:
+                raise ValueError('Unconverted local link: #' + anchor)
+
+
 def fetch(manifest, revision):
     if not SHA.fullmatch(revision):
         raise ValueError('Invalid source revision')
@@ -78,7 +105,7 @@ def generate(old, revision, source, declarations):
     excerpts, bundled = [], {}
     for item in selected['sections']:
         full = read(item['path'])
-        text = expand_includes(excerpt(full, item), item['path'], read)
+        text = join_wrapped_links(expand_includes(excerpt(full, item), item['path'], read))
         # Only prose links are converted, so fenced examples never need a mapping.
         used = {anchor for _, line, kind in lines(text) if kind == 'prose' for anchor in OPTION_LINK.findall(line)}
         mapped = set(item.get('option_links', {}))
@@ -104,6 +131,7 @@ def generate(old, revision, source, declarations):
     for item, text in excerpts:
         document += ('\n\n' + f"[Upstream source]({UPSTREAM}/blob/{revision}/{item['path']})\n\n"
                      + convert(text, item['path'], revision, anchors, bundled, manpages, read(item['path'])))
+    check_local_links(document)
     if (source / 'NOTICE').exists():
         raise ValueError('New upstream NOTICE requires reviewed packaging')
     files = {'references/operations.md': (document.rstrip() + '\n').encode(), 'COPYING': read('COPYING').encode()}
