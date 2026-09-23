@@ -1,6 +1,6 @@
 # Packaging
 
-Nixpkgs master snapshot `8f61efd04af9e890e0df64e03c244c62330c2788`; development series 26.11.
+Nixpkgs master snapshot `f7f73ce248a33fac06d2754ec43bd84c73ad9ed3`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -23,7 +23,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 - [Package tests](#var-passthru-tests-packages)
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ## Using `stdenv`
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
 This attribute ensures that the `bin` subdirectories of these packages appear in the `PATH` environment variable during the build, that their `include` subdirectories are searched by the C compiler, and so on. (See [Package setup hooks](packaging.md#ssec-setup-hooks) for details.)
 
-Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see [Phases](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: Phases).) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
+Often it is necessary to override or modify some aspect of the build. To make this easier, the standard environment breaks the package build into a number of *phases*, all of which can be overridden or modified individually: unpacking the sources, applying patches, configuring, building, and installing. (There are some others; see [Phases](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: Phases).) For instance, a package that doesn’t supply a makefile but instead has to be compiled "manually" could be handled like this:
 
 ```nix
 stdenv.mkDerivation {
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
 
 (Note the use of `''`-style string literals, which are very convenient for large multi-line script fragments because they don’t need escaping of `"` and `\`, and because indentation is intelligently removed.)
 
-There are many other attributes to customise the build. These are listed in [Attributes](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: Attributes).
+There are many other attributes to customise the build. These are listed in [Attributes](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: Attributes).
 
 While the standard environment provides a generic builder, you can still supply your own build script:
 
@@ -133,24 +133,24 @@ genericBuild
 ```
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### Overview
 
 <a id="ssec-stdenv-dependencies-overview"></a>
 
-A full reference of the different kinds of dependencies is provided in [Reference](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: Reference), but here is an overview of the most common ones.
+A full reference of the different kinds of dependencies is provided in [Reference](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: Reference), but here is an overview of the most common ones.
 It should cover most use cases.
 
 Add dependencies to `nativeBuildInputs` if they are executed during the build:
 - those which are needed on `$PATH` during the build, for example `cmake` and `pkg-config`
-- [setup hooks](packaging.md#ssec-setup-hooks), for example [`makeWrapper`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `makeWrapper` \<executable\> \<wrapperfile\> \<args\>)
-- interpreters needed by [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `patch-shebangs.sh`) for build scripts (with the `--build` flag), which can be the case for e.g. `perl`
+- [setup hooks](packaging.md#ssec-setup-hooks), for example [`makeWrapper`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `makeWrapper` \<executable\> \<wrapperfile\> \<args\>)
+- interpreters needed by [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `patch-shebangs.sh`) for build scripts (with the `--build` flag), which can be the case for e.g. `perl`
 
 Add dependencies to `buildInputs` if they will end up copied or linked into the final output or otherwise used at runtime:
 - libraries used by compilers, for example `zlib`,
-- interpreters needed by [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `patch-shebangs.sh`) for scripts which are installed, which can be the case for e.g. `perl`
+- interpreters needed by [`patchShebangs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `patch-shebangs.sh`) for scripts which are installed, which can be the case for e.g. `perl`
 
 **Note**
 
@@ -163,13 +163,13 @@ But it also executes the `wayland-scanner` program as part of the build to gener
 
 
 Dependencies needed only to run tests are similarly classified between native (executed during build) and non-native (executed at runtime):
-- `nativeCheckInputs` for test tools needed on `$PATH` (such as `ctest`) and [setup hooks](packaging.md#ssec-setup-hooks) (for example [`pytestCheckHook`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/python.section.md) (source section: Python))
+- `nativeCheckInputs` for test tools needed on `$PATH` (such as `ctest`) and [setup hooks](packaging.md#ssec-setup-hooks) (for example [`pytestCheckHook`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/python.section.md) (source section: Python))
 - `checkInputs` for libraries linked into test executables (for example the `qcheck` OCaml package)
 
 These dependencies are only injected when [`doCheck`](packaging.md#var-stdenv-doCheck) is set to `true`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### Fixed-point arguments of `mkDerivation`
@@ -225,10 +225,10 @@ pkg
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
 
-See also the section about [`passthru.tests`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/passthru.chapter.md) (source section: `passthru.tests`).
+See also the section about [`passthru.tests`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/passthru.chapter.md) (source section: `passthru.tests`).
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ##### `phases`
@@ -243,7 +243,7 @@ It is discouraged to set this variable, as it is easy to miss some important fun
 Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### The check phase
@@ -252,10 +252,10 @@ Usually, if you just want to add a few phases, it’s more convenient to set one
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](packaging.md#var-stdenv-doCheck) is enabled.
 
-It is highly recommended, for packages' sources that are not distributed with any tests, to at least use [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook) to test that the resulting executable is basically functional.
+It is highly recommended, for packages' sources that are not distributed with any tests, to at least use [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook) to test that the resulting executable is basically functional.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ##### `doCheck`
@@ -271,7 +271,7 @@ Controls whether the check phase is executed. By default it is skipped, but if `
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### The install phase
@@ -281,7 +281,7 @@ in the derivation to enable checks. The exception is cross compilation. Cross co
 The install phase is responsible for installing the package in the Nix store under `out`. The default `installPhase` creates the directory `$out` and calls `make install`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### `runHook` \<hook\>
@@ -293,7 +293,7 @@ Execute \<hook\> and the values in the array associated with it. The array's nam
 For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### `substitute` \<infile\> \<outfile\> \<subs\>
@@ -303,7 +303,7 @@ For example, `runHook postHook` would run the hook `postHook` and all of the val
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ### `substituteInPlace` \<multiple files\> \<subs\>
@@ -313,7 +313,7 @@ Performs string substitution on the contents of \<infile\>, writing the result t
 Like `substitute`, but performs the substitutions in place on the files passed.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md)
 
 
 ## Package setup hooks
@@ -339,7 +339,7 @@ The *existence* of setups hooks has long been documented and packages inside Nix
 First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation`, even with custom builders. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md)
 
 
 ### `description`
@@ -366,7 +366,7 @@ Wrong: `"libpng is a library that allows you to decode PNG images."`
 Right: `"Library for decoding PNG images"`
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md)
 
 
 ### `license`
@@ -381,10 +381,10 @@ The license, or licenses, for the package. One from the attribute set defined in
 - Multiple licenses referenced by attribute (preferred) `with lib.licenses; [ asl20 free ofl ]`.
 - Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
 
-For details, see [Licenses](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md) (source section: Licenses).
+For details, see [Licenses](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md) (source section: Licenses).
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md)
 
 
 ### `maintainers`
@@ -394,7 +394,7 @@ For details, see [Licenses](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e8
 A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice” in the same pull request, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md)
 
 
 ### `mainProgram`
@@ -404,7 +404,7 @@ A list of the maintainers of this Nix expression. Maintainers are defined in [`n
 The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md)
 
 
 ### `platforms`
@@ -420,11 +420,11 @@ The list of Nix platform types on which the package is supported. Hydra builds p
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/passthru.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/passthru.chapter.md)
 
 **Note**
 
-`passthru` attributes follow no particular schema, but there are a few [conventional patterns](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/passthru.chapter.md) (source section: Common `passthru`-attributes).
+`passthru` attributes follow no particular schema, but there are a few [conventional patterns](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/passthru.chapter.md) (source section: Common `passthru`-attributes).
 
 **End note.**
 
@@ -441,15 +441,15 @@ The Nixpkgs systems for continuous integration [Hydra](https://hydra.nixos.org/)
 <a id="var-passthru-tests-packages"></a>
 <a id="var-meta-tests-packages"></a>
 
-Besides tests provided by upstream, that you run in the [`checkPhase`](packaging.md#ssec-check-phase), you may want to define tests derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: Phases):
+Besides tests provided by upstream, that you run in the [`checkPhase`](packaging.md#ssec-check-phase), you may want to define tests derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: Phases):
 
 - They access the package as consumers would, independently from the environment in which it was built
 - They can be run and debugged without rebuilding the package, which is useful if that takes a long time
-- They don't add overhead to each build, as opposed checks added to the [`installCheckPhase`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: The installCheck phase), such as [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook).
+- They don't add overhead to each build, as opposed checks added to the [`installCheckPhase`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: The installCheck phase), such as [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook).
 
-It is also possible to use `passthru.tests` to test the version with [`testVersion`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/testers.chapter.md) (source section: `testVersion`), but since that is a pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook) for that, which has the following advantages over `passthru.tests`:
+It is also possible to use `passthru.tests` to test the version with [`testVersion`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/testers.chapter.md) (source section: `testVersion`), but since that is a pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook) for that, which has the following advantages over `passthru.tests`:
 
-- If the `versionCheckPhase` (the phase defined by [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook)) fails, it triggers a failure which can't be ignored if you use the package, or if you find out about it in a [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) report.
+- If the `versionCheckPhase` (the phase defined by [`versionCheckHook`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/hooks/versionCheckHook.section.md) (source section: versionCheckHook)) fails, it triggers a failure which can't be ignored if you use the package, or if you find out about it in a [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) report.
 - Sometimes packages become silently broken - meaning they fail to launch but their build passes because they don't perform any tests in the `checkPhase`. If you use this tool infrequently, such a silent breakage may rot in your system / profile configuration, and you will not notice the failure until you will want to use this package. Testing such basic functionality ensures you have to deal with the failure when you update your system / profile.
 - When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and nobody will be able to avoid these tests.
 

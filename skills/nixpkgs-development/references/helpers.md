@@ -1,6 +1,6 @@
 # Helpers
 
-Nixpkgs master snapshot `8f61efd04af9e890e0df64e03c244c62330c2788`; development series 26.11.
+Nixpkgs master snapshot `f7f73ce248a33fac06d2754ec43bd84c73ad9ed3`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -24,7 +24,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 - [`buildRustPackage`: Compiling Rust applications with Cargo](#compiling-rust-applications-with-cargo)
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers.md)
 
 
 # Build helpers
@@ -43,15 +43,15 @@ This is not to be confused with the [`builder` argument of the Nix `derivation` 
 Such a function is usually designed to abstract over a typical workflow for a given programming language or framework.
 This allows declaring a build recipe by setting a limited number of options relevant to the particular use case instead of using the `derivation` function directly.
 
-[`stdenv.mkDerivation`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv.md) (source section: Standard environment) is the most widely used build helper and serves as a basis for many others.
+[`stdenv.mkDerivation`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv.md) (source section: Standard environment) is the most widely used build helper and serves as a basis for many others.
 In addition, it offers various options to customize parts of the builds.
 
 There is no uniform interface for build helpers.
-[Trivial build helpers](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Trivial build helpers) and [fetchers](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Fetchers) have various input types for convenience.
-[Language- or framework-specific build helpers](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/index.md) (source section: Languages and frameworks) usually follow the style of `stdenv.mkDerivation`, which accepts an attribute set or a fixed-point function taking an attribute set.
+[Trivial build helpers](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Trivial build helpers) and [fetchers](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Fetchers) have various input types for convenience.
+[Language- or framework-specific build helpers](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/index.md) (source section: Languages and frameworks) usually follow the style of `stdenv.mkDerivation`, which accepts an attribute set or a fixed-point function taking an attribute set.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -80,13 +80,13 @@ This has the following implications that you should be aware of:
 
   A similar problem arises while testing changes to a fetcher's implementation.
   If the output of the derivation already exists in the Nix store, test failures can go undetected.
-  The [`invalidateFetcherByDrvHash`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/testers.chapter.md) (source section: `invalidateFetcherByDrvHash`) function helps prevent reusing cached derivations.
+  The [`invalidateFetcherByDrvHash`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/testers.chapter.md) (source section: `invalidateFetcherByDrvHash`) function helps prevent reusing cached derivations.
 
 **End note.**
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -202,7 +202,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -232,7 +232,7 @@ Here are security considerations for this scenario:
   In more concrete terms, if you use any other hash, the [`--insecure` flag](https://curl.se/docs/manpage.html#-k) will be passed to the underlying call to `curl` when downloading content.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -256,7 +256,7 @@ If neither `name` nor `pname` and `version` are specified when calling `fetchurl
 If `pname` and `version` are specified, `fetchurl` will use those values and will ignore `name`, even if it is also specified.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -289,7 +289,7 @@ Definition: The URL to download from.
 `urls` (List of String; _optional_)
 Definition: A list of URLs, specifying download locations for the same content.
   Each URL will be tried in order until one of them succeeds with some content or all of them fail.
-  See [Using `fetchurl` to download a file with multiple possible URLs](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchurl` to download a file with multiple possible URLs) to understand how this attribute affects the behaviour of `fetchurl`.
+  See [Using `fetchurl` to download a file with multiple possible URLs](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchurl` to download a file with multiple possible URLs) to understand how this attribute affects the behaviour of `fetchurl`.
 
 **Note**
 
@@ -427,14 +427,14 @@ Definition: If `true`, saves the downloaded file to a temporary location instead
   This is useful when used in conjunction with `postFetch` attribute, otherwise `fetchurl` will not produce any meaningful output.
 
   The location of the downloaded file will be set in the `$downloadedFile` variable, which should be used by the script in the `postFetch` attribute.
-  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how to work with this attribute.
+  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how to work with this attribute.
 
   _Default value:_ `false`.
 
 `postFetch` (String; _optional_)
 Definition: Script executed after the file has been downloaded successfully, and before `fetchurl` finishes running.
   Useful for post-processing, to check or transform the file in some way.
-  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how to work with this attribute.
+  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how to work with this attribute.
 
   _Default value:_ `""`.
 
@@ -492,13 +492,13 @@ Definition: If set to `true`, this will stop `fetchurl` from downloading anythin
   _Default value:_ `false`.
 
 `meta` (Attribute Set; _optional_)
-Definition: Specifies any [meta-attributes](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md) (source section: Meta-attributes) for the derivation returned by `fetchurl`.
+Definition: Specifies any [meta-attributes](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md) (source section: Meta-attributes) for the derivation returned by `fetchurl`.
 
   _Default value:_ `{}`.
 
 `passthru` (Attribute Set; _optional_)
-Definition: Specifies any extra [`passthru`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/passthru.chapter.md) (source section: Passthru-attributes) attributes for the derivation returned by `fetchurl`.
-  Note that `fetchurl` defines [`passthru` attributes of its own](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Passthru outputs).
+Definition: Specifies any extra [`passthru`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/passthru.chapter.md) (source section: Passthru-attributes) attributes for the derivation returned by `fetchurl`.
+  Note that `fetchurl` defines [`passthru` attributes of its own](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Passthru outputs).
   Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
 
   _Default value:_ `{}`.
@@ -512,13 +512,13 @@ Definition: This is the same attribute as [defined in the Nix manual](https://ni
 `nativeBuildInputs` (List of Attribute Set; _optional_)
 Definition: Additional packages needed to download the content.
   This is useful if you need extra packages for `postFetch` or `netrcPhase`, for example.
-  Has the same semantics as in [`nativeBuildInputs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `nativeBuildInputs`).
-  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how this can be used with `postFetch`.
+  Has the same semantics as in [`nativeBuildInputs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `nativeBuildInputs`).
+  See [Manipulating the content downloaded by `fetchurl`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Manipulating the content downloaded by `fetchurl`) to understand how this can be used with `postFetch`.
 
   _Default value:_ `[]`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -534,11 +534,11 @@ Definition: Additional packages needed to download the content.
 
 Returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
 
-Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: Tar files) by default.
-This can be extended by specifying additional attributes, see [Using `fetchzip` to decompress a `.rar` file](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchzip` to decompress a `.rar` file) to understand how to do that.
+Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: Tar files) by default.
+This can be extended by specifying additional attributes, see [Using `fetchzip` to decompress a `.rar` file](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchzip` to decompress a `.rar` file) to understand how to do that.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -585,7 +585,7 @@ Definition: If `true`, the decompressed contents are moved one level up the dire
   This is useful for archives that decompress into a single directory which commonly includes some values that change with time, such as version numbers.
   When this is the case (and `stripRoot` is `true`), `fetchzip` will remove this directory and make the decompressed contents available in the top-level directory.
 
-  [Using `fetchzip` to output contents directly](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchzip` to output contents directly) shows what this attribute does.
+  [Using `fetchzip` to output contents directly](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md) (source section: Using `fetchzip` to output contents directly) shows what this attribute does.
 
   This attribute is **not** passed through to `fetchurl`.
 
@@ -618,7 +618,7 @@ Definition: This attribute is deprecated.
   This attribute is **not** passed through to `fetchurl`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/fetchers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/fetchers.chapter.md)
 
 **Tip**
 
@@ -646,7 +646,7 @@ However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any 
 When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md)
 
 
 ## `runCommand` and `runCommandCC`
@@ -681,10 +681,10 @@ While the type signature(s) differ from [`runCommandWith`], individual arguments
 `name` (String)
 Definition: The derivation's name
 
-`derivationArgs` (Attribute set *or* [function from `finalAttrs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Arguments with finalAttrs))
+`derivationArgs` (Attribute set *or* [function from `finalAttrs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Arguments with finalAttrs))
 Definition: Additional parameters passed to [`mkDerivation`]
 
-`buildCommand` (String *or* [function from `finalAttrs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Arguments with finalAttrs))
+`buildCommand` (String *or* [function from `finalAttrs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md) (source section: Arguments with finalAttrs))
 Definition: The command(s) run to build the derivation.
 
 
@@ -737,7 +737,7 @@ runCommandWith { inherit name derivationArgs; } buildCommand
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md)
 
 **Note**
 
@@ -817,7 +817,7 @@ writeTextFile {
 ```
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/trivial-build-helpers.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/trivial-build-helpers.chapter.md)
 
 
 ## `writeShellApplication`
@@ -845,7 +845,7 @@ Definition: The shell script's text, not including a shebang.
 
 Definition: Inputs to add to the shell script's `$PATH` at runtime.
 
-  Each elements can either be a normal derivation, or a string containing a path, in which case it will be suffixed with `/bin` to create a `PATH` expression (see [`lib.strings.makeBinPath`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/lib/strings.nix) (source section: lib.strings.makeBinPath) for more information).
+  Each elements can either be a normal derivation, or a string containing a path, in which case it will be suffixed with `/bin` to create a `PATH` expression (see [`lib.strings.makeBinPath`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/lib/strings.nix) (source section: lib.strings.makeBinPath) for more information).
 
 `runtimeEnv` (Attribute set, _optional_)
 
@@ -887,15 +887,15 @@ Definition: Whether the script will inherit the PATH from its parent environment
 
 `meta` (Attribute set, _optional_)
 
-Definition: `stdenv.mkDerivation`'s [`meta`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/meta.chapter.md) (source section: Meta-attributes) argument
+Definition: `stdenv.mkDerivation`'s [`meta`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/meta.chapter.md) (source section: Meta-attributes) argument
 
 `passthru` (Attribute set, _optional_)
 
-Definition: `stdenv.mkDerivation`'s [`passthru`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/passthru.chapter.md) (source section: Passthru-attributes) argument
+Definition: `stdenv.mkDerivation`'s [`passthru`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/passthru.chapter.md) (source section: Passthru-attributes) argument
 
 `derivationArgs` (Attribute set, _optional_)
 
-Definition: Extra arguments to pass to [`stdenv.mkDerivation`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: The Standard Environment)
+Definition: Extra arguments to pass to [`stdenv.mkDerivation`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: The Standard Environment)
 
 **Caution**
 
@@ -931,7 +931,7 @@ writeShellApplication {
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/build-helpers/special/mkshell.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/build-helpers/special/mkshell.section.md)
 
 
 # pkgs.mkShell
@@ -992,7 +992,7 @@ every derivation, and its dependencies, build properly. Or when creating a GC
 root so that the build dependencies don't get garbage-collected.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/python.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/python.section.md)
 
 **Adaptation note:** The pinned upstream example repeats setuptools in its function arguments. Remove that duplicate when adapting the example; its source text is preserved below.
 
@@ -1076,22 +1076,22 @@ buildPythonPackage (finalAttrs: {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the [`buildPhase`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: The build phase), it calls `${python.pythonOnBuildForHost.interpreter} -m build --wheel` to
+* In the [`buildPhase`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: The build phase), it calls `${python.pythonOnBuildForHost.interpreter} -m build --wheel` to
   build a wheel binary zipfile.
 * In the [`installPhase`](packaging.md#ssec-install-phase), it installs the wheel file using `${python.pythonOnBuildForHost.interpreter} -m installer *.whl`.
-* In the [`postFixup`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `postFixup`) phase, the `wrapPythonPrograms` bash function is called to
+* In the [`postFixup`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `postFixup`) phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the [`installCheck`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: The installCheck phase) phase, `${python.interpreter} -m pytest` is run.
+* In the [`installCheck`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: The installCheck phase) phase, `${python.interpreter} -m pytest` is run.
 
 By default tests are run because [`doCheck = true`](packaging.md#var-stdenv-doCheck). Test dependencies, like
-e.g. the test runner, should be added to [`nativeCheckInputs`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/stdenv/stdenv.chapter.md) (source section: `nativeCheckInputs`).
+e.g. the test runner, should be added to [`nativeCheckInputs`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/stdenv/stdenv.chapter.md) (source section: `nativeCheckInputs`).
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/python.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/python.section.md)
 
 
 #### `buildPythonApplication` function
@@ -1101,7 +1101,7 @@ as the interpreter unless overridden otherwise.
 The [`buildPythonApplication`](helpers.md#buildpythonapplication-function) function is practically the same as
 [`buildPythonPackage`](helpers.md#buildpythonpackage-function). The main purpose of this function is to build a Python
 package where one is interested only in the executables, and not importable
-modules. For that reason, when adding this package to a [`python.buildEnv`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/python.section.md) (source section: `python.buildEnv` function), the
+modules. For that reason, when adding this package to a [`python.buildEnv`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/python.section.md) (source section: `python.buildEnv` function), the
 modules won't be made available.
 
 Another difference is that [`buildPythonPackage`](helpers.md#buildpythonpackage-function) by default prefixes the names of
@@ -1148,7 +1148,7 @@ Since the package is an application, a consumer doesn't need to care about
 Python versions or modules, which is why they don't go in `python3Packages`.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/javascript.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/javascript.section.md)
 
 
 ### buildNpmPackage
@@ -1199,7 +1199,7 @@ Additionally, the `bin` and `man` keys in the source's `package.json` are used t
 If these are not defined, `npm pack` may miss some files, and no binaries are produced.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/go.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/go.section.md)
 
 
 ## Building Go modules with `buildGoModule`
@@ -1243,7 +1243,7 @@ The following is an example expression using `buildGoModule`:
 ```
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/rust.section.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/rust.section.md)
 
 
 ## `buildRustPackage`: Compiling Rust applications with Cargo
@@ -1300,7 +1300,7 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 ```
 
 If this method does not work, you can resort to copying the `Cargo.lock` file into Nixpkgs
-and importing it as described in the [next section](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/languages-frameworks/rust.section.md) (source section: Importing a `Cargo.lock` file).
+and importing it as described in the [next section](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/languages-frameworks/rust.section.md) (source section: Importing a `Cargo.lock` file).
 
 Both types of hashes are permitted when contributing to Nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
