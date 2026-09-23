@@ -1,10 +1,10 @@
-Upstream source: [doc/src/declaring.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/declaring.md)
+Upstream source: [doc/src/declaring.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/declaring.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
 # Declaring NixOS MicroVMs
 
-![Demo](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/demo.gif)
+![Demo](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/demo.gif)
 
 microvm.nix creates virtual machine disk images and runner script
 packages for the entries of the `nixosConfigurations` section of a

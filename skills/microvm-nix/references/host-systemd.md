@@ -1,4 +1,4 @@
-Upstream source: [doc/src/host-systemd.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/host-systemd.md)
+Upstream source: [doc/src/host-systemd.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/host-systemd.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -11,14 +11,14 @@ from a package.
 ## `install-microvm-${name}.service`
 
 Creates and prepares a subdirectory under `/var/lib/microvms` for
-[declarative MicroVMs](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/declarative.md) according to the
+[declarative MicroVMs](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/declarative.md) according to the
 `microvm.vms` option.
 
 If the MicroVM subdirectory under `/var/lib/microvms` already exists,
 **and** the MicroVM is configured to be built from a flake's
 `nixosConfigurations`, this systemd unit will be skipped. The reason
 for this behavior is that it is easier to update with the [`microvm`
-command](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/microvm-command.md) instead of restarting all virtual
+command](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/microvm-command.md) instead of restarting all virtual
 machines on a host when doing `nixos-rebuild switch`.
 
 ## `microvm-tap-interfaces@.service`

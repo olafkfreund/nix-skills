@@ -1,4 +1,4 @@
-Upstream source: [doc/src/options.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/options.md)
+Upstream source: [doc/src/options.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/options.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 

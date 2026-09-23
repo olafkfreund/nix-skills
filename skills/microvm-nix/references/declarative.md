@@ -1,14 +1,14 @@
-Upstream source: [doc/src/declarative.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/declarative.md)
+Upstream source: [doc/src/declarative.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/declarative.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
 # Declarative MicroVMs
 
-Provided your NixOS host [includes the host nixosModule](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/host.md),
+Provided your NixOS host [includes the host nixosModule](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/host.md),
 options are declared to build a MicroVM together with the host.
 You can choose whether your MicroVMs should be managed in a fully-declarative
 way, or whether your only want the initial deployment be declarative (with subsequent
-imperative updates using the [microvm command](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/microvm-command.md)).
+imperative updates using the [microvm command](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/microvm-command.md)).
 
 microvm.nix distinguishes between fully-declarative configurations
 and declarative deployment by allowing you to specify either
@@ -59,7 +59,7 @@ Why *deployed*? The per-MicroVM subdirectory under `/var/lib/microvms`
 is only created if it did not exist before. This behavior is
 intended to ensure existence of MicroVMs that are critical to
 operation. To update them later you will have to use the [imperative microvm
-command](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/microvm-command.md).
+command](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/microvm-command.md).
 
 ```nix
 microvm.vms = {

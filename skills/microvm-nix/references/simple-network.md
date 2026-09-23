@@ -1,4 +1,4 @@
-Upstream source: [doc/src/simple-network.md](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/simple-network.md)
+Upstream source: [doc/src/simple-network.md](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/simple-network.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -10,7 +10,7 @@ machine with internet access.
 
 Use this for your local LAN where IP addresses are free and
 plentiful. If not, head over to the
-[advanced networking](https://github.com/microvm-nix/microvm.nix/blob/187b0a390ee054028106a674e7b01b1cb940cbba/doc/src/advanced-network.md) page.
+[advanced networking](https://github.com/microvm-nix/microvm.nix/blob/b2fd8eb40192c4fefd16c26b979954f7d354d1aa/doc/src/advanced-network.md) page.
 
 Because we already use systemd for MicroVM startup, let's pick
 `systemd-networkd`:
