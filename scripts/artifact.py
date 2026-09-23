@@ -68,7 +68,7 @@ def accept(skill, directory):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('mode', choices=['pack', 'accept'])
-    parser.add_argument('--skill', choices=['nix-language', 'devenv-project', 'nixpkgs-development', 'nixos-wiki', 'home-manager', 'microvm-nix'], required=True)
+    parser.add_argument('--skill', choices=['nix-language', 'devenv-project', 'nixpkgs-development', 'nixos-wiki', 'home-manager', 'microvm-nix', 'nix-darwin'], required=True)
     parser.add_argument('directory', type=Path)
     args = parser.parse_args()
     if args.mode == 'pack':

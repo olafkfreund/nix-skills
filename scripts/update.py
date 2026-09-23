@@ -344,12 +344,15 @@ def generated_files(skill):
     if skill == "microvm-nix":
         from microvm import generated_files as microvm_files
         return microvm_files()
+    if skill == "nix-darwin":
+        from nix_darwin import generated_files as nix_darwin_files
+        return nix_darwin_files()
     raise ValueError("Unknown skill")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix"], default="nix-language")
+    parser.add_argument("--skill", choices=["nix-language", "devenv-project", "nixpkgs-development", "nixos-wiki", "home-manager", "microvm-nix", "nix-darwin"], default="nix-language")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--release")
     mode.add_argument("--revision")
@@ -380,6 +383,11 @@ def main():
             parser.error("microvm.nix uses --revision or --latest")
         from microvm import main as microvm_main
         return microvm_main(args)
+    if args.skill == "nix-darwin":
+        if args.release or args.dump or args.sha256:
+            parser.error("nix-darwin uses --revision or --latest")
+        from nix_darwin import main as nix_darwin_main
+        return nix_darwin_main(args)
     if args.revision:
         parser.error("--revision is only supported for nixpkgs-development")
     if args.skill == "devenv-project":
