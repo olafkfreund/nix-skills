@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 26
 intent: intent/2026-09-23-26-nixpkgs-contributor-docs.md
 ---
