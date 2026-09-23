@@ -51,6 +51,28 @@ class UpdateTests(unittest.TestCase):
         expected = '# PAGE\n````md\n```nix\n## Inside\n```\n````\n\n## B\nTEXT\n'
         self.assertEqual(update.prose(source, str.upper), expected)
 
+    def test_github_json_token_is_optional_and_not_redirected(self):
+        response = unittest.mock.MagicMock()
+        response.__enter__.return_value = response
+        response.read.return_value = b'{"ok": true}'
+        url = 'https://api.github.com/repos/o/r'
+        with patch.dict(update.os.environ, {'GITHUB_TOKEN': ''}), \
+             patch.object(update, 'urlopen', return_value=response) as opener:
+            self.assertEqual(update.github_json(url), {'ok': True})
+            request = opener.call_args[0][0]
+            self.assertNotIn('Authorization', dict(request.header_items()))
+        with patch.dict(update.os.environ, {'GITHUB_TOKEN': 'secret'}), \
+             patch.object(update, 'urlopen', return_value=response) as opener:
+            update.github_json(url)
+            request = opener.call_args[0][0]
+            self.assertEqual(request.unredirected_hdrs, {'Authorization': 'Bearer secret'})
+            self.assertNotIn('Authorization', request.headers)
+            with self.assertRaises(ValueError):
+                update.github_json('https://example.com/repos/o/r')
+            with self.assertRaises(ValueError):
+                update.github_json('https://api.github.com.evil.example/x')
+            self.assertEqual(opener.call_count, 1)
+
     def test_render_links_without_changing_examples(self):
         source = ('# Example\n[other][target] and [target].\n'
                   '[target]: ../glossary.md#term\n'

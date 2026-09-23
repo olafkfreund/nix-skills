@@ -39,6 +39,18 @@ def encoded(value):
     return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
 
 
+def github_json(url):
+    """GitHub API JSON; an optional GITHUB_TOKEN is never forwarded on redirects."""
+    if not url.startswith("https://api.github.com/"):
+        raise ValueError(f"Not a GitHub API URL: {url}")
+    request = Request(url, headers={"User-Agent": "nix-skills"})
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        request.add_unredirected_header("Authorization", "Bearer " + token)
+    with urlopen(request, timeout=30) as response:
+        return json.load(response)
+
+
 def tags():
     result = {}
     lines = run("git", "ls-remote", "--tags", UPSTREAM + ".git").splitlines()
