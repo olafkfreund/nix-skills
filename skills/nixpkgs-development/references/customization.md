@@ -1,6 +1,6 @@
 # Customization
 
-Nixpkgs master snapshot `8f61efd04af9e890e0df64e03c244c62330c2788`; development series 26.11.
+Nixpkgs master snapshot `f7f73ce248a33fac06d2754ec43bd84c73ad9ed3`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -17,7 +17,7 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 - [`config`](#module-system-lib-evalModules-return-value-config)
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overrides.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overrides.chapter.md)
 
 
 ## &lt;pkg&gt;.override
@@ -73,7 +73,7 @@ If you find that something doesn't work, please submit a fix, ideally with a reg
 If you want to ensure that things keep working, consider [becoming a maintainer](https://github.com/NixOS/nixpkgs/tree/master/maintainers) for the package.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overrides.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overrides.chapter.md)
 
 
 ## &lt;pkg&gt;.overrideAttrs
@@ -116,7 +116,7 @@ Note that `separateDebugInfo` is processed only by the `stdenv.mkDerivation` fun
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overrides.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overrides.chapter.md)
 
 
 ## &lt;pkg&gt;.overrideDerivation
@@ -166,21 +166,21 @@ A package's attributes are evaluated *before* being modified by the `overrideDer
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overlays.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overlays.chapter.md)
 
 
 ### Set overlays in NixOS or Nix expressions
 
 <a id="sec-overlays-argument"></a>
 
-On a NixOS system the value of the `nixpkgs.overlays` option, if present, is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overlays.chapter.md) (source section: Install overlays via configuration lookup) independently.
+On a NixOS system the value of the `nixpkgs.overlays` option, if present, is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overlays.chapter.md) (source section: Install overlays via configuration lookup) independently.
 
 The list of overlays can be passed explicitly when importing nixpkgs, for example `import <nixpkgs> { overlays = [ overlay1 overlay2 ]; }`.
 
 NOTE: DO NOT USE THIS in nixpkgs. Further overlays can be added by calling the `pkgs.extend` or `pkgs.appendOverlays`, although it is often preferable to avoid these functions, because they recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/overlays.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/overlays.chapter.md)
 
 
 ## Defining overlays
@@ -204,10 +204,10 @@ The second argument (`prev`, `super`) corresponds to the result of the evaluatio
 
 The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
 
-Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [Modify packages via `packageOverrides`](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/using/configuration.chapter.md) (source section: Modify packages via `packageOverrides`). Indeed, `packageOverrides` acts as an overlay with only the `prev` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
+Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [Modify packages via `packageOverrides`](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/using/configuration.chapter.md) (source section: Modify packages via `packageOverrides`). Indeed, `packageOverrides` acts as an overlay with only the `prev` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 ## Introduction
@@ -230,7 +230,7 @@ See also:
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 ## `lib.evalModules`
@@ -240,7 +240,7 @@ See also:
 Evaluate a set of modules. This function is typically only used once per application (e.g. once in NixOS, once in Home Manager, ...).
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 #### `modules`
@@ -251,7 +251,7 @@ A list of modules. These are merged together to form the final configuration.
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 #### `specialArgs`
@@ -275,7 +275,7 @@ This clarifies their origin and avoids incompatibilities.
 
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 #### `options`
@@ -285,7 +285,7 @@ This clarifies their origin and avoids incompatibilities.
 The nested attribute set of all option declarations.
 
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/8f61efd04af9e890e0df64e03c244c62330c2788/doc/module-system/module-system.chapter.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/f7f73ce248a33fac06d2754ec43bd84c73ad9ed3/doc/module-system/module-system.chapter.md)
 
 
 #### `config`
