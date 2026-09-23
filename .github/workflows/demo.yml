@@ -1,0 +1,41 @@
+name: Demo VM
+# Boots the demo VM test (demo/test.nix). Not a required check: it needs KVM,
+# which hosted runners occasionally lack, so it must never block unrelated PRs.
+on:
+  pull_request:
+    paths: ['demo/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+  push:
+    branches: [main]
+    paths: ['demo/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+  schedule:
+    - cron: '41 7 * * 3'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: demo-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  vm-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+        with:
+          extra_nix_config: |
+            extra-substituters = https://cache.numtide.com
+            extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
+            system-features = nixos-test benchmark big-parallel kvm
+      - name: Enable KVM
+        run: |
+          if [ ! -e /dev/kvm ]; then
+            echo '::error::/dev/kvm is not available on this runner; re-run the job.'
+            exit 1
+          fi
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - run: nix build ./demo#checks.x86_64-linux.vm-test -L --no-update-lock-file
+      - run: nix build ./demo#vm --no-update-lock-file
