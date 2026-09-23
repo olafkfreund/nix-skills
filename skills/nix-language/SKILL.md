@@ -29,6 +29,7 @@ Read only the relevant section of [the language reference](references/language.m
 Consult [selected built-ins](references/builtins.md) for exact argument behaviour and availability notices.
 For built-ins or topics outside the selection, follow the versioned upstream manual links in the references.
 Do not assume a function exists just because an unrelated library provides a similarly named function.
+For idioms and reproducibility practice (`rec`, `with`, lookup paths, pinning, source paths), read nix.dev's [best practices](https://nix.dev/guides/best-practices); it is not bundled here.
 
 ## Verification
 
