@@ -140,7 +140,7 @@ Fork contributions use GitHub's normal approval model. Never run submitted code
 in a write-enabled job or privileged artifact consumer. Scheduled publication
 retains its existing trusted validation, stale-base rejection and per-provider
 branches/artifacts. Bot PRs may require a manual Check dispatch as documented in
-[README.md](README.md#automatic-updates).
+[Automatic updates](https://olafkfreund.github.io/nix-skills/maintain/automatic-updates.html).
 
 Maintainers should configure branch protection/rulesets to require
 `collection-check`, current PR checks, review and code-owner review, and prevent

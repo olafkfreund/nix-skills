@@ -51,6 +51,17 @@ class NixStyleTests(unittest.TestCase):
             self.assertEqual(generated_findings(root), {"quoted-name": 1})
 
 
+class ReadmeSkillTableTests(unittest.TestCase):
+    def test_table_must_match_registry(self):
+        from check_collection import check_skill_table
+        row = lambda n: f"| [{n}](skills/{n}/SKILL.md) | Purpose | Source |"
+        table = lambda ns: "# Title\n\n| Skill | Purpose | Source and licence |\n| --- | --- | --- |\n" + "\n".join(map(row, ns)) + "\n\nMore text.\n"
+        check_skill_table(table(["a-skill", "b-skill"]), ["a-skill", "b-skill"])
+        for text in (table(["a-skill"]), table(["a-skill", "b-skill", "c-skill"]), "# Title\n\nNo table here.\n"):
+            with self.subTest(text=text[:40]), self.assertRaises(ValueError):
+                check_skill_table(text, ["a-skill", "b-skill"])
+
+
 class CollectionTests(unittest.TestCase):
     def test_required_job_results(self):
         good = {name: {"result": "success"} for name in ("check", "collection", "distribution")}

@@ -1,78 +1,43 @@
 # nix-skills
 
-Portable skills for AI coding agents, maintained from pinned upstream sources, plus authored workflow guidance.
+Portable skills that give AI coding agents current, source-backed knowledge of Nix, NixOS and their ecosystem.
 
 **Documentation:** <https://olafkfreund.github.io/nix-skills/>
 
-## Getting started
+## What this is
 
-### What this is for
+AI coding agents often give Nix advice that is out of date, meant for another distribution, or imperative.
+These skills give Claude Code, Codex, OpenCode and Antigravity pinned, version-checked guidance for Nix,
+NixOS, Home Manager, nix-darwin, devenv, Nixpkgs and running coding agents on NixOS, so they propose
+declarative, reversible changes. The collection installs **skills, not agents**.
 
-AI coding agents often give Nix advice that is out of date, meant for another
-distribution, or imperative: `nix-env -i`, editing generated files, `curl | sh`.
-These skills give your agent current, source-backed guidance for Nix, NixOS,
-Home Manager, nix-darwin, devenv, Nixpkgs and running AI coding agents on
-NixOS. Each skill is pinned and version-checked, so the agent proposes
-declarative, reversible changes instead of guesses. The collection installs
-skills, not agents.
+## Get started
 
-### 1. Install the skills for your agent
+**Try it without changing your system**, in a disposable NixOS VM with agents and skills ready
+([guide](https://olafkfreund.github.io/nix-skills/tutorials/demo-vm.html)):
 
-**Recommended: declaratively, on NixOS with Home Manager as a NixOS module.**
-Add the input to your system flake and commit the lock file:
+```sh
+nix run github:olafkfreund/nix-skills?dir=demo
+```
+
+**Set up your own NixOS machine** with agents and skills, by importing `nixosModules.agentic` or starting
+from the template ([guide](https://olafkfreund.github.io/nix-skills/how-to/own-machine.html)):
+
+```sh
+nix flake init -t github:olafkfreund/nix-skills#agentic-nixos
+```
+
+**Install only the skills** for the agents you already have, with the Home Manager module
+([guide](https://olafkfreund.github.io/nix-skills/how-to/install.html)):
 
 ```nix
 inputs.nix-skills.url = "github:olafkfreund/nix-skills";
+# in home-manager.users.<you>:
+imports = [ inputs.nix-skills.homeManagerModules.default ];
+programs.nix-skills = { enable = true; agents = [ "claude" ]; };
 ```
 
-Enable the module for your user (replace `alice`; `inputs` must be in scope),
-choosing your agents:
-
-```nix
-home-manager.users.alice = {
-  imports = [ inputs.nix-skills.homeManagerModules.default ];
-  programs.nix-skills = {
-    enable = true;
-    agents = [ "claude" ];
-  };
-};
-```
-
-Rebuild through NixOS (`nixos-rebuild`), never `home-manager switch`.
-
-| Agent | `agents` value | Skill directory | Call a skill | List skills |
-| --- | --- | --- | --- | --- |
-| [Claude Code](https://code.claude.com/docs/en/skills) | `"claude"` | `~/.claude/skills` | `/nixos-coding-agents` | `/skills` |
-| [Codex](https://learn.chatgpt.com/docs/build-skills) | `"codex"` | `~/.agents/skills` | `$nixos-coding-agents` | `/skills` |
-| [OpenCode](https://opencode.ai/docs/skills) | `"opencode"` | `~/.config/opencode/skills` | Name the skill in your prompt | Ask the agent |
-| [Antigravity](https://www.antigravity.google/docs/migration/workflows-to-skills/) | `"antigravity"` | `~/.gemini/config/skills` | `/nixos-coding-agents` | Ask the agent |
-
-All four also pick a skill automatically when your request matches its
-description. Directories and syntax were checked against each agent's
-documentation on 2026-09-23.
-
-OpenCode also reads `~/.claude/skills` and `~/.agents/skills`, and needs skill
-names to be unique. If you already selected `"claude"` or `"codex"`, OpenCode
-sees the skills; do not add `"opencode"` as well.
-
-For a subset of skills, a custom directory or the plain data package, see
-[Declarative installation on NixOS](#declarative-installation-on-nixos).
-Without Home Manager, clone a reviewed commit and link the skill directories
-by hand, as in [Use](#use).
-
-### 2. Check that the agent sees them
-
-```sh
-ls ~/.claude/skills   # or your agent's directory from the table
-```
-
-Then, in the agent, run `/skills` (Claude Code, Codex) or ask "Which skills do
-you have available?" (OpenCode, Antigravity). The module installs each skill
-as a link into `/nix/store`. Claude Code and Codex document support for
-linked skill directories; OpenCode and Antigravity do not. If a skill is
-missing there, [open an issue](https://github.com/olafkfreund/nix-skills/issues).
-
-### 3. Start with this prompt
+## First prompt
 
 Open your agent in your system configuration repository and paste:
 
@@ -83,523 +48,39 @@ and propose changes as a diff. Do not rebuild, install or run containers
 until I approve.
 ```
 
-To call a skill explicitly, use the "Call a skill" column above, for example
-`/nixos-coding-agents` in Claude Code or `$nixos-coding-agents` in Codex.
+## Skills
 
-### Examples
-
-| You ask | Skill |
-| --- | --- |
-| "My rebuild fails with 'The option … does not exist'. What changed?" | `nixos-operations`, `nixos-wiki` |
-| "Add a devenv shell with Python 3.12 and Postgres to this repo." | `devenv-project` |
-| "Which package provides `libssl.so`, and how do I reference it?" | `nix-workflow` |
-| "Move my shell and git config into Home Manager." | `home-manager` |
-| "Package this Go CLI with `buildGoModule`." | `nixpkgs-development` |
-| "Run Claude Code on this repo so it cannot read `~/.ssh`." | `nixos-coding-agents` |
-
-### User story: start coding with agents on NixOS
-
-As a NixOS user with no AI agent yet, I want a coding agent set up
-declaratively, and optionally sandboxed, so that I can start agentic coding
-without breaking my system or exposing my secrets.
-
-1. **Run an agent once, without installing it.**
-
-   ```sh
-   nix run github:numtide/llm-agents.nix#claude-code   # or #codex, #opencode, #antigravity-cli
-   ```
-
-   **Check:** it starts, and nothing is installed.
-2. **Install the skills** for that agent, as in step 1 above, and rebuild.
-   **Check:** as in step 2 above.
-3. **Give the start prompt** from your system configuration repository.
-   **Check:** the agent reads your configuration and proposes a diff without
-   applying it. Typically the diff adds the llm-agents.nix input and your
-   agent, the Numtide binary cache, and optionally
-   `virtualisation.podman.enable` for sandboxing.
-4. **Review the diff, then build and switch yourself:** `nixos-rebuild build`,
-   then `nixos-rebuild switch`. **Check:** the agent is on your `PATH` without
-   `nix run`. **Undo:** roll back to the previous generation.
-5. **Per project.** In a code repository, ask for a devenv shell
-   (`devenv-project`). For repositories you do not trust, ask to run the agent
-   in a container or an agent-box worktree (`nixos-coding-agents`).
-   **Check:** the devenv shell activates, and the sandbox check from
-   [`nixos-coding-agents` stories 3 and 4](skills/nixos-coding-agents/references/user-stories.md)
-   passes.
-
-| Skill | Purpose | Initial reference |
+| Skill | Purpose | Source and licence |
 | --- | --- | --- |
-| [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv v2.3.1 |
-| [home-manager](skills/home-manager/SKILL.md) | Configure Home Manager user environments and NixOS integration | Home Manager master snapshot |
-| [microvm-nix](skills/microvm-nix/SKILL.md) | Configure declarative microVMs with microvm.nix | microvm.nix main snapshot |
-| [nix-darwin](skills/nix-darwin/SKILL.md) | Configure nix-darwin macOS systems and darwin-rebuild generations | nix-darwin master snapshot |
-| [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix 2.35.2 |
-| [nix-workflow](skills/nix-workflow/SKILL.md) | Choose Nix commands, find packages and files, use dev shells, debug builds, and navigate the ecosystem | Authored guidance; ecosystem status checked 2026-09-23 |
-| [nixos-coding-agents](skills/nixos-coding-agents/SKILL.md) | Choose, install and sandbox AI coding agents with llm-agents.nix, agent-images and agent-box | Authored guidance linking upstream; checked 2026-09-23 |
-| [nixos-operations](skills/nixos-operations/SKILL.md) | Operate NixOS: rebuild modes, generations and rollback, upgrades, store cleaning, boot and services | NixOS manual chapters from the Nixpkgs master snapshot |
-| [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | master snapshot; development series 26.11 |
-| [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | 17 curated topics from the 2026-09-22 dump |
-
-Each package records its upstream snapshot identity, curated selection, and
-input/output hashes in its own `sources.json`. References cover selected topics,
-not every upstream feature. Agents must check the project's actual versions.
-The Nix skill does not supply NixOS options or replace Nixpkgs API documentation.
-The portable `devenv-project` skill is distinct from a machine-specific `devenv`
-policy skill and upstream's `devenv-setup`; their behavior is not interchangeable.
-Each skill can be installed independently.
-
-## Use
-
-Clone this repository and check out a reviewed commit, rather than following a moving branch:
-
-```sh
-git clone https://github.com/olafkfreund/nix-skills.git
-cd nix-skills
-git checkout --detach <reviewed-commit-sha>
-```
-
-Copy or link the **whole** desired skill directory into your agent's supported skill directory.
-Keep `references/`, `sources.json`, and its license (`COPYING` for Nix/Nixpkgs/wiki, `LICENSE` for devenv/Home Manager/microvm.nix) with `SKILL.md`.
-
-This is the manual route for any agent; use the agent's skill directory from the table in [Getting started](#1-install-the-skills-for-your-agent).
-The example uses Codex's `~/.agents/skills/`; Codex also reads a project's `.agents/skills/`, and symlinked skill directories are supported
-([Codex skill discovery documentation](https://learn.chatgpt.com/docs/build-skills)).
-From the clone, on a machine where this destination is not already managed declaratively:
-
-```sh
-mkdir -p ~/.agents/skills
-ln -s "$PWD/skills/nix-language" ~/.agents/skills/nix-language
-ln -s "$PWD/skills/nix-workflow" ~/.agents/skills/nix-workflow
-ln -s "$PWD/skills/devenv-project" ~/.agents/skills/devenv-project
-ln -s "$PWD/skills/home-manager" ~/.agents/skills/home-manager
-ln -s "$PWD/skills/microvm-nix" ~/.agents/skills/microvm-nix
-ln -s "$PWD/skills/nix-darwin" ~/.agents/skills/nix-darwin
-ln -s "$PWD/skills/nixos-coding-agents" ~/.agents/skills/nixos-coding-agents
-ln -s "$PWD/skills/nixos-operations" ~/.agents/skills/nixos-operations
-ln -s "$PWD/skills/nixpkgs-development" ~/.agents/skills/nixpkgs-development
-ln -s "$PWD/skills/nixos-wiki" ~/.agents/skills/nixos-wiki
-```
-
-If your configuration manages agent files declaratively, declare that link or copy in your configuration instead.
-No installation is performed by this repository's checks or update workflow.
-
-Invoke `$home-manager`, `$microvm-nix`, `$nix-darwin`, `$nix-language`, `$nix-workflow`, `$devenv-project`, `$nixos-coding-agents`, `$nixos-operations`, `$nixpkgs-development`, or `$nixos-wiki` in Codex or let the agent select it from its description.
-Other agents use the same folders; see the "Call a skill" column in [Getting started](#1-install-the-skills-for-your-agent).
-For an agent without native skill discovery, explicitly ask it to read the chosen `SKILL.md` and the relevant linked references before the task.
-Portability of the files does not imply native discovery has been tested in every agent.
-
-To update, select a newly reviewed repository commit, check it out, and replace the complete copied directory (or retain the link to that pinned checkout).
-To roll back, repeat with the previous commit.
-
-### Declarative installation on NixOS
-
-Add the input to your existing system flake, then commit its lock file:
-
-```nix
-inputs.nix-skills.url = "github:olafkfreund/nix-skills";
-```
-
-Within your existing Home Manager-as-NixOS module configuration, import the
-module for the chosen user (replace `alice`; `inputs` must be in scope):
-
-```nix
-home-manager.users.alice = {
-  imports = [ inputs.nix-skills.homeManagerModules.default ];
-  programs.nix-skills = {
-    enable = true;
-    skills = [ "home-manager" "microvm-nix" "nix-darwin" "nix-language" "nix-workflow" "devenv-project" "nixos-coding-agents" "nixos-operations" "nixpkgs-development" "nixos-wiki" ];
-    # Omitting skills selects the complete registered collection.
-    directory = ".agents/skills";
-  };
-};
-```
-
-This links complete immutable skill directories, including resources and
-licenses, under the user's home. Existing files retain Home Manager's normal
-collision protection; links are never forced. Disabling the module adds no
-installation effects. Unknown or duplicate names and absolute/traversing
-destinations are rejected. The module builds data with your existing `pkgs`;
-it does not replace your host's Nixpkgs input or install an agent.
-
-To install the complete collection for all supported agents, select their
-native user skill directories:
-
-```nix
-programs.nix-skills = {
-  enable = true;
-  agents = [ "claude" "codex" "opencode" "antigravity" ];
-};
-```
-
-The agent destinations are `.claude/skills`, `.agents/skills`,
-`.config/opencode/skills`, and `.gemini/config/skills`, respectively. Set
-`skills` alongside `agents` to install only a subset. The existing `directory`
-option remains the compatibility path for one shared or custom destination;
-do not combine a custom `directory` with `agents`. This installs skill bundles,
-not the agents themselves or their plugin configuration.
-
-Validate and rebuild through your existing **NixOS** workflow. Do not run
-`home-manager switch` when Home Manager is a NixOS module. The default path and
-symlink support follow [Codex's documented discovery locations](https://learn.chatgpt.com/docs/build-skills).
-For another agent, select its documented relative directory; native discovery
-in other agents is not claimed by package/module checks.
-
-Without Home Manager, the collection is also a data package:
-
-```nix
-environment.systemPackages = [
-  inputs.nix-skills.packages.${pkgs.stdenv.hostPlatform.system}.nix-skills
-];
-```
-
-This exposes `share/nix-skills/<name>` in the package; it does not create user
-discovery links. Declare those separately in your own configuration. Individual
-outputs, for example `packages.x86_64-linux.nix-language`, contain the same
-complete directory. `default` contains all registered skills. Packages are
-exported for x86_64-linux and aarch64-linux; our validation distinguishes native
-x86_64 builds from aarch64 evaluation.
-
-Review updates to the consumer's locked `nix-skills` input before rebuilding.
-Roll back by restoring the previous lock and rebuilding, or using your system's
-previous generation. Repository builds and checks never activate a home or host.
-
-## Maintain
-
-For a new skill, bug fix or development setup, start with
-[CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
-`skills.json` registers portable packages; it does not enroll source updaters.
-Read-only PR checks validate the collection, package/module builds and explicit
-maintained providers. A reviewed merge makes a contribution available to users
-who choose to update their pin.
-
-### Development environment
-
-The root Devenv environment supplies Python, Git, GitHub CLI, Zstandard,
-actionlint and Nix, plus two commands:
-
-```sh
-devenv info
-devenv shell check-fast
-devenv shell check-providers
-nix flake check
-```
-
-`check-fast` runs offline collection validation, unit tests and workflow lint;
-`check-providers` also runs all six explicit maintained-source checks, including
-network-dependent regeneration. Entering the environment does not run either
-command, regenerate sources, install skills or start services. The environment
-was validated with Devenv 2.3.1 and the committed module/input pins.
-
-`devenv.lock` owns project tooling; `flake.lock` owns distribution/test inputs.
-Update them deliberately and separately. The provider fixture under
-`tests/devenv/` has its own lock and remains independent.
-
-Reading the skill needs only a Markdown-capable agent.
-Offline validation needs Python 3.10 or newer; regeneration additionally needs Git, Nix with `nix-command` and `flakes`, and network access to upstream Git tags, source/build caches, and the versioned manual.
-Nix may build the pinned executable if a substitute is unavailable; no global package installation is required.
-
-Run from the repository root:
-
-```sh
-python3 scripts/check.py
-python3 -m unittest discover -s tests -p 'test_*.py'
-python3 scripts/update.py --check
-```
-
-`--check` obtains Nix from the manifest's exact upstream revision, regenerates in temporary storage, checks published manual pages/anchors, evaluates `tests/language.nix` with that executable, and compares bytes without modifying the package.
-The host Nix is only the bootstrap tool; it is not the documentation generator.
-Network failures are failures, not skipped checks.
-
-Explicitly update on a task branch with either:
-
-```sh
-python3 scripts/update.py --release 2.35.2
-python3 scripts/update.py --latest
-```
-
-`--latest` selects the highest numeric stable upstream tag and verifies that the source declares `officialRelease = true` before generating a changed version.
-Upstream currently publishes tags rather than GitHub Release objects, so the updater does not rely on `/releases/latest`.
-A moved/deleted pinned tag fails for investigation.
-An unchanged latest revision is a no-op; use `--check` to force regeneration of the current pin.
-Generation validates links before replacing files and restores previous bytes if replacement fails.
-Normal process failures are covered; filesystem/power-loss durability is not a database transaction.
-
-Curated paths, headings, built-in names, and any missing upstream link definitions live under `selection` in `sources.json`.
-Selection edits require review; the bot cannot change them.
-The initial derivation selection supplies the upstream page's missing `system` configuration-option link definition.
-Upstream source sections retain their wording; reference links, anchors, and incidental prose whitespace are adapted, while fenced code examples are preserved.
-Only the selected subset is bundled; linked manual pages follow the upstream major/minor documentation series, which may receive later patch-level updates.
-Exact copied-source provenance remains pinned to a full commit SHA.
-
-### devenv maintenance
-
-The same commands accept `--skill devenv-project`; omitting `--skill` retains
-all existing Nix behavior:
-
-```sh
-python3 scripts/check.py --skill devenv-project
-python3 scripts/update.py --skill devenv-project --check
-python3 scripts/update.py --skill devenv-project --release v2.3.1
-python3 scripts/update.py --skill devenv-project --latest
-```
-
-Devenv updates use stable GitHub Releases, not unreleased `main`. The updater
-converts selected Markdown/MDX sections, preserving tab labels, version notices,
-warning meaning, and fenced executable text. Unsupported forms or renamed paths
-fail for review. It reads the committed options JSON at the same revision and
-records generator/template provenance; it does not rebuild the full website or
-option catalogue. Declaration links into devenv are checked and pinned; foreign
-links retain their distinct origin. Public devenv.sh links are checked but follow
-the moving site, while exact source citations and hashes remain revision-pinned.
-
-`--check` obtains the matching CLI from the pinned upstream flake and evaluates
-matching modules in a disposable project using the reviewed auxiliary pins in
-`tests/devenv/devenv.lock`. It compares representative defaults against upstream
-option data and runs harmless shell/script/task/`enterTest` assertions. Language
-and service enablement is evaluated without starting services. The test does not
-run `devenv allow` or modify user trust. A candidate update changes only the
-module pin in its temporary fixture; unrelated input changes fail for review.
-Local builds can use configured substitutes; CI explicitly uses upstream's
-published devenv/Cachix cache keys. There is no fallback to the host CLI.
-
-### Home Manager maintenance
-
-```sh
-python3 scripts/check.py --skill home-manager
-python3 scripts/update.py --skill home-manager --check
-python3 scripts/update.py --skill home-manager --revision <full-commit-sha>
-python3 scripts/update.py --skill home-manager --latest
-```
-
-Home Manager tracks the `master` branch by full commit revision. The package
-contains selected manual pages for NixOS-module integration, configuration,
-dotfiles, modular services, and writing modules. It does not mirror the full
-option catalogue. Relative source links are pinned to the selected commit,
-fenced examples are preserved, and the authored `SKILL.md` is never replaced.
-An upstream path or license change fails for review rather than changing the
-curated selection automatically.
-
-### microvm.nix maintenance
-
-```sh
-python3 scripts/check.py --skill microvm-nix
-python3 scripts/update.py --skill microvm-nix --check
-python3 scripts/update.py --skill microvm-nix --revision <full-commit-sha>
-python3 scripts/update.py --skill microvm-nix --latest
-```
-
-microvm.nix tracks the `main` branch by full commit revision. The package
-contains selected documentation for VM declarations, declarative deployment,
-host integration, options, networking, and shares. Generated references pin
-relative source links and preserve fenced examples; authored instructions and
-the reviewed selection remain immutable to automation.
-
-### NixOS operations maintenance
-
-```sh
-python3 scripts/check.py --skill nixos-operations
-python3 scripts/update.py --skill nixos-operations --check
-python3 scripts/update.py --skill nixos-operations --revision <full-commit-sha>
-python3 scripts/update.py --skill nixos-operations --latest
-```
-
-NixOS operations follows Nixpkgs `master` by full commit revision, with its own
-manifest and the same pinned Nix toolchain and master-ancestry check as
-`nixpkgs-development`. It bundles selected NixOS manual chapters (changing the
-configuration, upgrading, rollback, store cleaning, boot problems and service
-management). Links to NixOS options come from a reviewed map of option names,
-and resolve to each option's declaring file, found by evaluating the NixOS
-options at the pinned revision. An unmapped, missing or unused option link
-fails the update for review. The provider reuses the `nixpkgs-development`
-manual converter unchanged. Its excerpts are covered by the Nixpkgs
-[COPYING](skills/nixos-operations/COPYING).
-
-### nix-darwin maintenance
-
-```sh
-python3 scripts/check.py --skill nix-darwin
-python3 scripts/update.py --skill nix-darwin --check
-python3 scripts/update.py --skill nix-darwin --revision <full-commit-sha>
-python3 scripts/update.py --skill nix-darwin --latest
-```
-
-nix-darwin tracks the `master` branch by full commit revision. The package
-contains nix-darwin's README, its only prose documentation; options are
-generated upstream and are not bundled. `darwin-rebuild` guidance in the
-authored SKILL.md was checked against `pkgs/nix-tools/darwin-rebuild.sh` at the
-initial revision and should be re-checked when that script changes.
-
-### Nixpkgs maintenance
-
-```sh
-python3 scripts/check.py --skill nixpkgs-development
-python3 scripts/update.py --skill nixpkgs-development --check
-python3 scripts/update.py --skill nixpkgs-development --revision 7561e7e3e12a06677b1525a12bcccb0b4e4c601d
-python3 scripts/update.py --skill nixpkgs-development --latest
-```
-
-Nixpkgs tracks **master snapshots**, not releases or channel promotions. The
-`.version` value is development-series metadata. `--latest` resolves master once,
-requires descendant ancestry from the previous snapshot, and regenerates/tests
-any advanced SHA, even when only provenance changed. An identical SHA is a no-op.
-Rewinds, divergence, unavailable inputs and unverifiable ancestry fail for review.
-Explicit full-SHA repinning is reviewed work; `--release` is rejected for Nixpkgs.
-
-The updater copies selected `doc/` sections and builds the pinned source's
-`nixpkgs-manual.lib-docs` derivation for twelve curated library APIs. It does not
-rebuild the whole website. Its independently pinned Nix 2.35.2 evaluator cannot
-change through automated updates. If substitutes are unavailable, Nix may build
-that evaluator, nixdoc and their dependencies; network/cache access and disk space
-are needed. Authored instructions, selection, branch and evaluator policy remain
-reviewed files. The snapshot records consumed inputs, coverage, generated API
-records and outputs, including the upstream MIT license.
-
-`--check` verifies deterministic generation and runs a small pinned fixture for
-argument/attribute overrides, overlays, library/fileset results and generic module
-composition. It builds a local-source package to check phase hooks and installed
-output, and executes a small shell helper. Language helpers are evaluated for
-availability; their full ecosystems are not built. Checks have been exercised on
-x86_64-linux; this is not a claim of cross-platform or native-agent discovery tests.
-No services, host configuration, user trust or installed skills are changed.
-
-Custom manual anchors are resolved to bundled sections or pinned source files
-with named sections. Unsupported documentation syntax fails before replacement.
-Fenced code is preserved, including illustrative or historical upstream examples;
-the Python excerpt identifies an upstream duplicate argument needing adaptation.
-Consumers must use their own project's pin rather than assume master APIs exist
-in older Nixpkgs. Roll back by restoring the entire skill from a reviewed commit.
-
-### NixOS Wiki maintenance and lookup
-
-The wiki skill bundles 17 reviewed English topic pages, the copyright policy and
-latest template source, with one retained revision per page. It preserves raw
-wikitext, examples and notices; it does not render MediaWiki templates or mirror
-the whole wiki. Search excerpts can omit caveats, so read page notices and complete
-examples before use. Advice still needs checking against the consumer's actual pin.
-
-```sh
-python3 skills/nixos-wiki/scripts/wiki.py search 'rebuild'
-python3 skills/nixos-wiki/scripts/wiki.py show 'Nixos-rebuild'
-python3 skills/nixos-wiki/scripts/wiki.py show 'Garbage Collection' --follow
-python3 skills/nixos-wiki/scripts/wiki.py show 'Template:Warning'
-python3 scripts/check.py --skill nixos-wiki
-python3 scripts/update.py --skill nixos-wiki --check
-```
-
-Lookup and `--check` need only Python 3.10+, work offline, and never execute wiki
-examples. `show` limits each original-text window to 200 lines / 16 KiB and gives
-continuation arguments (`--start`, `--offset`); `--lines` can request a smaller
-window. Template search requires `--templates`. Missing redirect targets are
-labeled as live, unpinned links; revision citations do not pin templates used by
-the live website's renderer. Other agents may read individual JSON records instead.
-
-Ingestion additionally requires `zstd`; CI supplies it from a fixed Nixpkgs commit.
-No global installation is needed. On a task branch or disposable copy:
-
-```sh
-python3 scripts/update.py --skill nixos-wiki --latest
-python3 scripts/update.py --skill nixos-wiki --dump /path/to/wikidump.xml.zst --sha256 <expected-sha256>
-```
-
-The updater bounds download/decompression/XML processing, rejects DTD/entities,
-and verifies the compressed hash and decoder success. It rejects regressions,
-mutated revision identities, missing primary titles, broken primary redirects and
-copyright-policy changes. Same-dump and irrelevant-history/recompression changes
-are no-ops; advanced retained revisions with identical text are reported as
-provenance-only updates. Changes require review, including template changes.
-
-Retained JSON contains the exact consumed text and metadata, allowing offline
-reproduction after the moving dump URL changes. The compressed checksum identifies
-the original acquisition; the subset cannot reconstruct the full historical XML.
-No full dump, contributor identities/history or media are distributed. Source
-origin, selection, namespace/size/schema policy and copyright-policy identity are
-immutable to automation, as are SKILL.md and the package's lookup helper. Restore
-the complete package from a reviewed repository commit to roll back.
-
-## Automatic updates
-
-After the workflows reach the default branch, **Update references** runs each Monday at 06:17 UTC and on manual dispatch.
-Each skill generates and validates with read-only permissions, then passes an
-allowlisted artifact to a separate publication job. That job rejects stale bases,
-symlinks, traversal, invalid hashes, instruction/selection changes, Nixpkgs evaluator/branch-policy changes, and changes to
-the sibling skill. It updates `automation/nix-reference-update`,
-`automation/devenv-reference-update`, `automation/home-manager-reference-update`,
-`automation/microvm-nix-reference-update`, `automation/nix-darwin-reference-update`,
-`automation/nixos-operations-reference-update`,
-`automation/nixpkgs-reference-update`,
-or `automation/nixos-wiki-reference-update`,
-with at most one open PR per skill.
-Artifacts, branches, and job concurrency are separate for each skill. No-op
-artifacts are verified but produce no branch or PR.
-It never merges or installs the result.
-Reports identify changed selected inputs, coverage changes, and option/built-in metadata changes.
-Changes to upstream's devenv setup skill are review signals; authored instructions are never automatically replaced.
-
-Update branches are pushed, and update PRs opened, with the repository secret `UPDATE_PR_TOKEN`, so they get the same
-`push` and `pull_request` **Check** runs as any other branch, with no approval step.
-`main` is protected: a PR is required, `collection-check` from GitHub Actions must pass, and the rules include admins,
-so an update can only merge after **Check** passes.
-`GITHUB_TOKEN` stays read-only everywhere; the publication job only reads the repository with it.
-
-`UPDATE_PR_TOKEN` currently holds a classic token with account-wide scopes, an accepted risk. It is exposed only to the
-single publication step that pushes the branch and opens the PR, never to generation, artifact acceptance or **Check**,
-and it is not stored in the job's git configuration.
-To narrow it, replace the secret's value with a fine-grained token limited to this repository
-(Contents and Pull requests: read and write, with an expiry); no workflow change is needed:
-
-```sh
-gh secret set UPDATE_PR_TOKEN --repo olafkfreund/nix-skills
-```
-
-If the secret is missing or invalid, publication fails with an error naming it.
-
-Failed generation publishes no package. Failed PR creation leaves a validated update branch and an actionable workflow error.
-The initial Nix live updater passed as a no-op. After merging the devenv addition, validate the first live run too; a no-op does not prove changed-source PR publication.
-
-## Sources and licensing
-
-Home Manager references originate in [nix-community/home-manager](https://github.com/nix-community/home-manager)
-and retain its accompanying [LICENSE](skills/home-manager/LICENSE). microvm.nix
-references originate in [microvm-nix/microvm.nix](https://github.com/microvm-nix/microvm.nix)
-and retain its accompanying [LICENSE](skills/microvm-nix/LICENSE). nix-darwin
-references originate in [nix-darwin/nix-darwin](https://github.com/nix-darwin/nix-darwin)
-and retain its accompanying [LICENSE](skills/nix-darwin/LICENSE). These packages
-record the selected branch revision, source-file hashes, and generated-output
-hashes in `sources.json`; the repository does not relicense copied upstream
-material.
-
-Design history: [intent](intent/2026-09-22-14-home-manager-microvm.md),
-[spec](spec/2026-09-22-14-home-manager-microvm.md),
-[implementation plan](plan/2026-09-22-14-home-manager-microvm.md).
-
-The copied references originate in [Nix](https://github.com/NixOS/nix), whose upstream README identifies LGPL v2.1; the upstream licence accompanies the skill as [COPYING](skills/nix-language/COPYING).
-Generated references identify the Nix contributors and link to original files at the recorded revision.
-The repository does not relicense that material under MIT or another permissive licence.
-The manifest tracks source files, generator helpers, the full language dump, and generated hashes for reproduction.
-
-Design history: [intent](intent/2026-09-22-1-nix-language-skill.md), [spec](spec/2026-09-22-1-nix-language-skill.md), [implementation plan](plan/2026-09-22-1-nix-language-skill.md).
-
-Devenv references originate in [cachix/devenv](https://github.com/cachix/devenv),
-under its accompanying [Apache-2.0 LICENSE](skills/devenv-project/LICENSE).
-The manifest hashes selected narrative pages, committed generated data,
-generators/templates, the upstream setup skill, and the documentation coverage.
-Modified excerpts retain source attribution. The repository does not relicense
-Nix material under devenv's license.
-
-Devenv design history: [intent](intent/2026-09-22-3-devenv-skill.md),
-[spec](spec/2026-09-22-3-devenv-skill.md),
-[implementation plan](plan/2026-09-22-3-devenv-skill.md).
-
-Nixpkgs references originate in [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs),
-under its accompanying [MIT COPYING](skills/nixpkgs-development/COPYING).
-The license of the nixdoc generator does not replace the upstream source license.
-Nixpkgs design history: [intent](intent/2026-09-22-5-nixpkgs-skill.md),
-[spec](spec/2026-09-22-5-nixpkgs-skill.md),
-[implementation plan](plan/2026-09-22-5-nixpkgs-skill.md).
-
-Wiki text is from the [official NixOS Wiki](https://wiki.nixos.org/), under the
-retained [MIT COPYING](skills/nixos-wiki/COPYING) from copyright-policy revision
-22887. Media can have other terms and is excluded. Wiki design history:
-[intent](intent/2026-09-22-8-nixos-wiki-skill.md),
-[spec](spec/2026-09-22-8-nixos-wiki-skill.md),
-[plan](plan/2026-09-22-8-nixos-wiki-skill.md).
+| [devenv-project](skills/devenv-project/SKILL.md) | Configure and troubleshoot devenv project environments | devenv, [Apache-2.0](skills/devenv-project/LICENSE) |
+| [home-manager](skills/home-manager/SKILL.md) | Configure Home Manager user environments and NixOS integration | Home Manager, [MIT](skills/home-manager/LICENSE) |
+| [microvm-nix](skills/microvm-nix/SKILL.md) | Configure declarative microVMs with microvm.nix | microvm.nix, [MIT](skills/microvm-nix/LICENSE) |
+| [nix-darwin](skills/nix-darwin/SKILL.md) | Configure nix-darwin macOS systems and darwin-rebuild generations | nix-darwin, [MIT](skills/nix-darwin/LICENSE) |
+| [nix-language](skills/nix-language/SKILL.md) | Write, explain, debug, and review Nix expressions | Nix manual, [LGPL-2.1](skills/nix-language/COPYING) |
+| [nix-workflow](skills/nix-workflow/SKILL.md) | Choose Nix commands, find packages and files, use dev shells, debug builds, and navigate the ecosystem | Hand-written, repository licence |
+| [nixos-coding-agents](skills/nixos-coding-agents/SKILL.md) | Choose, install and sandbox AI coding agents with llm-agents.nix, agent-images and agent-box | Hand-written, repository licence |
+| [nixos-operations](skills/nixos-operations/SKILL.md) | Operate NixOS: rebuild modes, generations and rollback, upgrades, store cleaning, boot and services | NixOS manual, [MIT](skills/nixos-operations/COPYING) |
+| [nixpkgs-development](skills/nixpkgs-development/SKILL.md) | Package software and use Nixpkgs helpers, overlays, and library APIs | Nixpkgs manual, [MIT](skills/nixpkgs-development/COPYING) |
+| [nixos-wiki](skills/nixos-wiki/SKILL.md) | Find retained NixOS configuration and troubleshooting guidance | NixOS Wiki, [MIT](skills/nixos-wiki/COPYING) |
+
+Pinned upstream revisions, update schedule and details are in the generated
+[skill catalog](https://olafkfreund.github.io/nix-skills/reference/catalog.html).
+
+## Documentation
+
+- [Tutorials](https://olafkfreund.github.io/nix-skills/tutorials/getting-started.html): getting started, the demo VM
+- [How-to guides](https://olafkfreund.github.io/nix-skills/how-to/install.html): install, your own machine, update and roll back, fix discovery, contribute
+- [Reference](https://olafkfreund.github.io/nix-skills/reference/catalog.html): skill catalog, module options, update schedule, Nix style rules
+- [Explanation](https://olafkfreund.github.io/nix-skills/explanation/why-skills.html): why skills, sources and licences, how updates work, security model
+- [Maintain](https://olafkfreund.github.io/nix-skills/maintain/index.html): development environment, automatic updates, per-skill maintenance
+
+## Contributing
+
+Start with [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md): every change goes through an issue,
+reviewed intent, spec and plan documents, and a pull request that passes the checks.
+
+## Licence
+
+The repository is [MIT](LICENSE) licensed. Copied upstream material keeps its upstream licence, shipped with
+each skill, and is not relicensed; see
+[per-skill sources and licences](https://olafkfreund.github.io/nix-skills/explanation/authored-and-generated.html#per-skill-sources-and-licences).

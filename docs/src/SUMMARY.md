@@ -29,3 +29,15 @@
 - [Hand-written and generated references](explanation/authored-and-generated.md)
 - [How updates work](explanation/updates.md)
 - [Security model](explanation/security.md)
+
+# Maintain
+
+- [Maintain the collection](maintain/index.md)
+- [Automatic updates](maintain/automatic-updates.md)
+- [devenv](maintain/devenv-project.md)
+- [Home Manager](maintain/home-manager.md)
+- [microvm.nix](maintain/microvm-nix.md)
+- [nix-darwin](maintain/nix-darwin.md)
+- [NixOS operations](maintain/nixos-operations.md)
+- [NixOS Wiki](maintain/nixos-wiki.md)
+- [Nixpkgs](maintain/nixpkgs-development.md)

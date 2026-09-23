@@ -45,6 +45,9 @@ same checks as a human change.
 - **Reviewable.** One pull request per skill, with a report, keeps each
   upstream change small and easy to judge or revert.
 
+Maintainer detail (branches, reports, the token and failure behaviour) is in
+[Automatic updates](../maintain/automatic-updates.md).
+
 Design history for this pipeline is in the repository's
 [`intent/`](https://github.com/olafkfreund/nix-skills/tree/main/intent),
 [`spec/`](https://github.com/olafkfreund/nix-skills/tree/main/spec) and
