@@ -83,17 +83,25 @@ def pinned_tools(revision, release):
     return source, nix
 
 
+def fence_state(line, fence):
+    """Return (is_marker, fence); only a same-character, at-least-as-long marker closes a fence."""
+    marker = re.match(r"^[ >\t]*(`{3,}|~{3,})", line)
+    if not marker:
+        return False, fence
+    token = marker[1]
+    if fence is None:
+        return True, token
+    if token[0] == fence[0] and len(token) >= len(fence):
+        return True, None
+    return True, fence
+
+
 def prose(text, transform):
     """Transform prose only, leaving fenced examples unchanged (including blockquotes)."""
     result, fence = [], None
     for line in text.splitlines(keepends=True):
-        marker = re.match(r"^[ >\t]*(`{3,}|~{3,})", line)
+        marker, fence = fence_state(line, fence)
         if marker:
-            token = marker[1]
-            if fence is None:
-                fence = token
-            elif token[0] == fence[0] and len(token) >= len(fence):
-                fence = None
             result.append(line)
         else:
             result.append(line if fence else transform(line))
@@ -107,10 +115,9 @@ def section(text, heading):
     # Search original offsets, but ignore headings inside fenced examples.
     headings = []
     offset = 0
-    fence = False
+    fence = None
     for line in text.splitlines(keepends=True):
-        if re.match(r"^[ >\t]*(`{3,}|~{3,})", line):
-            fence = not fence
+        _, fence = fence_state(line, fence)
         match = re.match(r"^(#{1,6}) (.+?)\s*$", line)
         if match and not fence:
             headings.append((offset, len(match[1]), match[2]))

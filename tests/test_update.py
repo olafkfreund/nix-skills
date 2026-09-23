@@ -43,6 +43,14 @@ class UpdateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             update.section(source + '\n## Chosen\nagain\n', 'Chosen')
 
+    def test_nested_fences_hide_only_their_contents(self):
+        source = '# Page\n````md\n```nix\n## Inside\n```\n````\n\n## B\ntext\n'
+        self.assertEqual(update.section(source, 'B'), '## B\ntext\n')
+        with self.assertRaises(ValueError):
+            update.section(source, 'Inside')
+        expected = '# PAGE\n````md\n```nix\n## Inside\n```\n````\n\n## B\nTEXT\n'
+        self.assertEqual(update.prose(source, str.upper), expected)
+
     def test_render_links_without_changing_examples(self):
         source = ('# Example\n[other][target] and [target].\n'
                   '[target]: ../glossary.md#term\n'
