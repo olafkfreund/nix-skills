@@ -540,9 +540,11 @@ No personal access token is required or configured.
 See [GitHub's repository workflow permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository).
 
 After opening or updating an update PR, the publication job starts **Check** on that PR's exact head commit
-(`gh workflow run check.yml --ref <update-branch> -f ref=<head-sha>`), so its results appear on the PR.
-GitHub also creates an approval-required `pull_request` run for PRs opened with the Actions token; a maintainer may approve it or leave it, because the started **Check** is the validation.
-Before merging, confirm that the **Check** results belong to the PR's current head commit.
+(`gh workflow run check.yml --ref <update-branch> -f ref=<head-sha>`), so every update is tested automatically.
+The results are attached to the head commit, not to the PR's check list: GitHub does not count a dispatched run in the
+PR's status, so `gh pr checks` and the merge box still show only an approval-required `pull_request` run.
+Read the result with `gh run list --workflow check.yml --commit <head-sha>`, or approve the pending run
+(**Approve workflows to run** in the merge box) to get the usual PR check as well.
 `main` has no branch protection, so never merge an update whose **Check** has not passed.
 To re-run it by hand, use the same command:
 

@@ -69,6 +69,29 @@ echo "Started Check for $UPDATE_BRANCH at $head"
   is replaced, because it does not attach checks to the PR head.
 - The "Failed generation…" and "The initial Nix live updater…" lines stay.
 
+### Deviation during implementation
+
+The live run (step 4, run 35872976967) opened #44, #45 and #46, and started
+**Check** runs 35873159037, 35873160335 and 35873160843. They ran as
+`workflow_dispatch` with actor `github-actions[bot]`, on the exact head
+commits `fa778c7`, `70cd489` and `052dcef`, and each passed 11 of 11 jobs.
+
+However, the PRs' `statusCheckRollup` is `null`, and `gh pr checks` reports
+"no checks". The head commit carries two check suites: the successful
+dispatched one, and the `pull_request` one in `ACTION_REQUIRED`. GitHub does
+not count a dispatched run in the PR's status. So the README sentence "so its
+results appear on the PR" was wrong.
+
+It is corrected to say:
+- the results are attached to the head commit;
+- how to read them (`gh run list --workflow check.yml --commit <sha>`);
+- that approving the pending run gives the usual PR check.
+
+The intent's "sees pass or fail on the PR like any other PR" is therefore
+only partly met: the tests always run automatically, but the merge box needs
+one approval click or a lookup by commit. The PR references #43 rather than
+closing it, pending the owner's decision on that gap.
+
 ## Steps
 
 1. **`.github/workflows/update.yml`.** Add `actions: write` to
