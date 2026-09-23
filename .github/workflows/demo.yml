@@ -3,10 +3,10 @@ name: Demo VM
 # which hosted runners occasionally lack, so it must never block unrelated PRs.
 on:
   pull_request:
-    paths: ['demo/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+    paths: ['demo/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
   push:
     branches: [main]
-    paths: ['demo/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+    paths: ['demo/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
   schedule:
     - cron: '41 7 * * 3'
   workflow_dispatch:
@@ -39,3 +39,16 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - run: nix build ./demo#checks.x86_64-linux.vm-test -L --no-update-lock-file
       - run: nix build ./demo#vm --no-update-lock-file
+      - name: Evaluate the agentic-nixos template against this commit
+        run: |
+          tmp=$(mktemp -d)
+          (cd "$tmp" && nix flake init -t "$GITHUB_WORKSPACE#agentic-nixos")
+          cat > "$tmp/hardware-configuration.nix" <<'NIX'
+          {
+            fileSystems."/" = { device = "/dev/disk/by-label/nixos"; fsType = "ext4"; };
+            boot.loader.grub.device = "nodev";
+            nixpkgs.hostPlatform = "x86_64-linux";
+          }
+          NIX
+          nix eval --raw "$tmp#nixosConfigurations.my-machine.config.system.build.toplevel.drvPath" \
+            --override-input agentic "path:$GITHUB_WORKSPACE?dir=demo"
