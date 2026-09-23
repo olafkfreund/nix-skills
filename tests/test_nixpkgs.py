@@ -14,6 +14,29 @@ import nixpkgs
 import update
 
 
+FIXTURE = {
+    'doc/test.md': '# Selected {#selected}\nPinned prose.\n',
+    'doc/function-catalog.json': '{"sources": []}',
+    'doc/manpage-urls.json': '{}', '.version': '26.11', 'COPYING': 'MIT',
+    'doc/README.md': '# Syntax\n', 'doc/nav.json': '{}',
+    'doc/doc-support/lib-function-docs.nix': '{}',
+    'doc/doc-support/package.nix': '{}',
+    'pkgs/by-name/ni/nixdoc/package.nix': '{}',
+    'pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py': '# renderer',
+    'lib/test.nix': 'x: x\n',
+}
+RECORD = dict(id='lib.test', attrPath='lib.test', description='Example', source=dict(file='lib/test.nix', line=1))
+LIBRARY = json.dumps(dict(schemaVersion=1, groups=[], entries=[RECORD])).encode()
+MANUAL = dict(reference='packaging', path='doc/test.md', anchor='selected', heading='Selected', children=False)
+
+
+def write_source(source, files):
+    for name, content in files.items():
+        path = source/name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+
+
 class NixpkgsTests(unittest.TestCase):
     def test_conversion_preserves_code_and_context(self):
         source = ('# Parent {#parent}\n::: {.warning}\nCompatibility caveat.\n:::\n'
@@ -119,21 +142,8 @@ class NixpkgsTests(unittest.TestCase):
                             document | {'entries': [record | {'source': dict(file='../escape', line=1)}]}]:
                 with self.assertRaises(ValueError):
                     nixpkgs.parse_library(json.dumps(invalid), source)
-            for name, content in {
-                    'doc/test.md': '# Selected {#selected}\nPinned prose.\n',
-                    'doc/function-catalog.json': '{"sources": []}',
-                    'doc/manpage-urls.json': '{}', '.version': '26.11', 'COPYING': 'MIT',
-                    'doc/README.md': '# Syntax\n', 'doc/nav.json': '{}',
-                    'doc/doc-support/lib-function-docs.nix': '{}',
-                    'doc/doc-support/package.nix': '{}',
-                    'pkgs/by-name/ni/nixdoc/package.nix': '{}',
-                    'pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/nixdoc.py': '# renderer',
-            }.items():
-                path = source/name
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_text(content)
-            old = dict(toolchain={}, selection=dict(apis=['lib.test'], sections=[dict(
-                reference='packaging', path='doc/test.md', anchor='selected', heading='Selected', children=False)]))
+            write_source(source, FIXTURE)
+            old = dict(toolchain={}, selection=dict(apis=['lib.test'], sections=[MANUAL]))
             generated = nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode())
             self.assertEqual(generated, nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode()))
             (source/'doc/test.md').write_text('# Selected {#selected}\nChanged prose.\n')
@@ -141,6 +151,83 @@ class NixpkgsTests(unittest.TestCase):
             old = dict(selection=dict(apis=['lib.missing'], sections=[]))
             with self.assertRaisesRegex(ValueError, 'Missing selected API'):
                 nixpkgs.generate(old, 'a'*40, source, json.dumps(document).encode())
+
+    def test_github_sections_and_links(self):
+        contributing = ('# Contributing\n\n## Overview\nSee [naming](#package-naming), [by-name](pkgs/by-name/README.md),\n'
+                        '[tests](/nixos/tests), [site](https://nixos.org), [ref][r] and [named][n].\n\n'
+                        '```md\n## Not a heading\n[raw](./left/alone)\n```\n\n'
+                        '## Package naming\nUse `[x](./kept)` literally.\n### Child\nchild\n'
+                        '## Later\nsecond\n\n[r]: CONTRIBUTING.md\n[n]: #package-naming\n')
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            write_source(source, FIXTURE | {'CONTRIBUTING.md': contributing, 'pkgs/by-name/README.md': '# By name\n',
+                                            'nixos/tests/x.nix': '{}'})
+            def item(heading, anchor, level=2, children=False, **extra):
+                return dict(format='github', reference='contributing', path='CONTRIBUTING.md',
+                            heading=heading, level=level, anchor=anchor, children=children) | extra
+            def run(*items):
+                old = dict(toolchain={}, selection=dict(apis=['lib.test'], sections=[MANUAL, *items]))
+                return nixpkgs.generate(old, 'a'*40, source, LIBRARY)[0]['references/contributing.md'].decode()
+            out = run(item('Package naming', 'contributing-naming', children=True),
+                      item('Overview', 'contributing-overview'))
+            self.assertIn('<a id="contributing-naming"></a>', out)
+            self.assertIn('[naming](#contributing-naming)', out)          # bundled slug link
+            self.assertIn(f'[by-name]({nixpkgs.UPSTREAM}/blob/{"a"*40}/pkgs/by-name/README.md)', out)
+            self.assertIn(f'[tests]({nixpkgs.UPSTREAM}/tree/{"a"*40}/nixos/tests)', out)  # root-relative directory
+            self.assertIn(f'[ref]({nixpkgs.UPSTREAM}/blob/{"a"*40}/CONTRIBUTING.md)', out)
+            self.assertIn('[named](#contributing-naming)', out)          # reference link to a bundled heading
+            self.assertIn('[raw](./left/alone)', out)                     # fenced code untouched
+            self.assertIn('`[x](./kept)`', out)                            # inline code untouched
+            self.assertIn('### Child', out)
+            self.assertNotIn('second', out)                                # excerpt ends at the next level-2 heading
+            # An unbundled slug points at the pinned upstream heading.
+            out = run(item('Overview', 'contributing-overview'))
+            self.assertIn(f'/blob/{"a"*40}/CONTRIBUTING.md#package-naming)', out)
+            for bad, error in [(item('Missing', 'x'), 'Missing or ambiguous'),
+                               (item('Overview', 'x', level=3), 'Missing or ambiguous'),
+                               (item('Overview', 'selected'), 'Duplicate packaged anchor')]:
+                with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
+                    run(bad)
+            for text, error in [('[x](#nope)', 'Unknown heading'), ('[x](../escape)', 'Missing/escaping'),
+                                ('[x](missing.md)', 'Missing/escaping'), ('[x](mailto:a@b)', 'Unsupported URL'),
+                                ('[x](./t "title")', 'Unconverted link'), ('[x][nope]', 'Missing link definition')]:
+                write_source(source, {'CONTRIBUTING.md': '## Overview\n' + text + '\n'})
+                with self.subTest(text=text), self.assertRaisesRegex(ValueError, error):
+                    run(item('Overview', 'contributing-overview'))
+            write_source(source, {'CONTRIBUTING.md': '## Overview\nSee [next](#old-name).\n## New name\nx\n'})
+            out = run(item('Overview', 'contributing-overview', anchor_fixes={'old-name': 'new-name'}))
+            self.assertIn(f'[next]({nixpkgs.UPSTREAM}/blob/{"a"*40}/CONTRIBUTING.md#new-name)', out)
+            for fixes, error in [({'old-name': 'missing'}, 'Invalid anchor fix'),
+                                 ({'overview': 'new-name'}, 'Invalid anchor fix'),
+                                 ({'old-name': 'new-name', 'spare': 'new-name'}, 'Unused anchor fix')]:
+                with self.subTest(fixes=fixes), self.assertRaisesRegex(ValueError, error):
+                    run(item('Overview', 'contributing-overview', anchor_fixes=fixes))
+            with self.assertRaisesRegex(ValueError, 'Unknown heading'):
+                run(item('Overview', 'contributing-overview'))
+            write_source(source, {'CONTRIBUTING.md': '## Overview\n' + 'x' * (nixpkgs.CONTRIBUTING_LIMIT + 1) + '\n'})
+            with self.assertRaisesRegex(ValueError, 'size limit'):
+                run(item('Overview', 'contributing-overview'))
+
+    def test_github_selection_schema(self):
+        old = json.loads((nixpkgs.PACKAGE / 'sources.json').read_text())
+        good = dict(format='github', reference='contributing', path='CONTRIBUTING.md',
+                    heading='Overview', level=2, anchor='contributing-schema-test', children=False)
+        manifest = copy.deepcopy(old)
+        manifest['selection']['sections'].append(good)
+        manifest['inputs']['CONTRIBUTING.md'] = 'a' * 64
+        nixpkgs.validate_manifest(manifest)
+        for bad in [good | {'path': 'README.md'}, good | {'reference': 'packaging'}, good | {'level': 7},
+                    {k: v for k, v in good.items() if k != 'level'}, good | {'format': 'html'},
+                    good | {'anchor': old['selection']['sections'][0]['anchor']},
+                    dict(old['selection']['sections'][0], reference='contributing'),
+                    dict(old['selection']['sections'][0], level=2),
+                    good | {'anchor_fixes': {'a': 'a'}}, good | {'anchor_fixes': {'a b': 'c'}},
+                    dict(old['selection']['sections'][0], anchor_fixes={'a': 'b'})]:
+            broken = copy.deepcopy(old)
+            broken['selection']['sections'].append(bad)
+            broken['inputs'][bad['path']] = 'a' * 64
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                nixpkgs.validate_manifest(broken)
 
     def test_noop_and_provenance_report(self):
         from argparse import Namespace
