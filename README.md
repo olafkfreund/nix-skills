@@ -535,19 +535,23 @@ Changes to upstream's devenv setup skill are review signals; authored instructio
 
 The repository must allow GitHub Actions to create PRs under **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 This setting is enabled for this repository; forks must configure it separately.
-Keep the default token permission read-only: only the publication job requests `contents: write` and `pull-requests: write`.
+Keep the default token permission read-only: only the publication job requests `contents: write`, `pull-requests: write` and `actions: write`, the last only to start **Check** on the update PR.
 No personal access token is required or configured.
 See [GitHub's repository workflow permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository).
 
-Token-created PRs may not launch another workflow run automatically.
-Validation runs before publication, and maintainers can explicitly run **Check** against the update branch or its exact SHA:
+After opening or updating an update PR, the publication job starts **Check** on that PR's exact head commit
+(`gh workflow run check.yml --ref <update-branch> -f ref=<head-sha>`), so every update is tested automatically.
+The results are attached to the head commit, not to the PR's check list: GitHub does not count a dispatched run in the
+PR's status, so `gh pr checks` and the merge box still show only an approval-required `pull_request` run.
+Read the result with `gh run list --workflow check.yml --commit <head-sha>`, or approve the pending run
+(**Approve workflows to run** in the merge box) to get the usual PR check as well.
+`main` has no branch protection, so never merge an update whose **Check** has not passed.
+To re-run it by hand, use the same command:
 
 ```sh
-gh workflow run check.yml --ref main -f ref=automation/nix-reference-update
+gh workflow run check.yml --ref automation/nix-reference-update -f ref=<head-sha>
 ```
 
-Inspect that run's checked-out SHA before merging; a manually dispatched run should not be assumed to satisfy branch-protection status requirements for the PR head.
-If required checks remain pending, use the repository's normal human-triggered PR workflow or keep the PR unmerged until the required checks pass.
 Failed generation publishes no package. Failed PR creation leaves a validated update branch and an actionable workflow error.
 The initial Nix live updater passed as a no-op. After merging the devenv addition, validate the first live run too; a no-op does not prove changed-source PR publication.
 
