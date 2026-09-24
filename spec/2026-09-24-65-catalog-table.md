@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 65
 intent: intent/2026-09-24-65-catalog-table.md
 ---
