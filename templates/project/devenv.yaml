@@ -1,0 +1,12 @@
+inputs:
+  nixpkgs:
+    url: github:cachix/devenv-nixpkgs/rolling
+  # The skills, linked into .claude/skills and .agents/skills by the module imported below.
+  nix-skills:
+    url: github:olafkfreund/nix-skills
+    flake: false
+  # Optional: coding agents to pin in this project's shell (see devenv.nix).
+  # llm-agents:
+  #   url: github:numtide/llm-agents.nix
+imports:
+  - nix-skills/devenv

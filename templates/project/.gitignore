@@ -1,0 +1,12 @@
+# Skill links managed by nix-skills (they point into /nix/store); one line per skill and directory.
+.claude/skills/nix-workflow
+.claude/skills/nix-language
+.claude/skills/devenv-project
+.agents/skills/nix-workflow
+.agents/skills/nix-language
+.agents/skills/devenv-project
+
+# devenv state
+.devenv*
+devenv.local.nix
+.direnv
