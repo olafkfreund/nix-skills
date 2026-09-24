@@ -2,11 +2,31 @@
 """Validate mdBook sources offline: relative links, anchors, Nix style, SUMMARY.md coverage."""
 
 import argparse
+import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from check import anchors, links
 from nix_style import findings
+
+MAX_COLUMNS, MAX_CELL = 4, 120  # wider tables overflow mdBook's 750 px content column
+
+
+def check_tables(page, text):
+    """Tables must stay narrow: at most MAX_COLUMNS columns and MAX_CELL visible characters per cell."""
+    fence = False
+    for line in text.splitlines():
+        if line.lstrip().startswith(("```", "~~~")):
+            fence = not fence
+        if fence or not line.lstrip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) > MAX_COLUMNS:
+            raise ValueError(f"Table too wide in {page}: {len(cells)} columns (max {MAX_COLUMNS})")
+        for cell in cells:
+            visible = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", cell).replace("`", "")
+            if len(visible) > MAX_CELL:
+                raise ValueError(f"Table too wide in {page}: cell of {len(visible)} characters (max {MAX_CELL}): {visible[:60]}")
 
 
 def validate(src):
@@ -29,6 +49,7 @@ def validate(src):
         text = path.read_text()
         for kind, line in findings(text):
             raise ValueError(f"Nix style ({kind}): {page}: {line}")
+        check_tables(page, text)
         for link in links(text):
             parsed = urlsplit(link)
             if parsed.scheme:

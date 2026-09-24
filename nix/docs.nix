@@ -13,6 +13,7 @@ let
       ../scripts
       ../skills
       ../skills.json
+      ../LICENSE
       ../.github/workflows/update.yml
     ];
   };

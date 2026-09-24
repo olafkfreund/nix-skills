@@ -68,7 +68,8 @@ Keep the entrypoint short and put detailed material in linked references.
 The documentation site lives in `docs/src/`; list every page in `docs/src/SUMMARY.md`.
 `nix build .#docs` (also a flake check) generates the skill catalog, module options and
 update schedule from repository data and fails on broken links, missing anchors or Nix
-style findings. Never edit the generated reference pages by hand.
+style findings. Never edit the generated reference pages by hand. Site tables may have at most four columns and
+120 visible characters per cell, so they fit the page; put longer content in a list or sections.
 
 `demo/` is a separate flake with its own lock. Update `demo/flake.lock` deliberately and on
 its own (lock-only bumps are exempt from intent/spec/plan), and confirm the **Demo VM**
