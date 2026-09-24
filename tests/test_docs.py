@@ -108,5 +108,15 @@ class CheckDocsTests(unittest.TestCase):
                     validate(tmp)
 
 
+    def test_table_shape(self):
+        from check_docs import check_tables
+        row = lambda n, w: "| " + " | ".join(["x" * w] * n) + " |"
+        check_tables("ok.md", "\n".join([row(4, 120), "| --- | --- | --- | --- |", row(4, 120)]))
+        check_tables("ok.md", "```\n" + row(6, 200) + "\n```\n")  # code blocks are not tables
+        for text in (row(5, 10), row(3, 121), "| [" + "x" * 121 + "](https://example.org) |"):
+            with self.subTest(text=text[:30]), self.assertRaises(ValueError):
+                check_tables("bad.md", text)
+        check_tables("ok.md", "| [" + "x" * 100 + "](https://example.org/" + "y" * 200 + ") |")
+
 if __name__ == "__main__":
     unittest.main()

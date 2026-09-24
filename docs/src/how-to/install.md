@@ -27,12 +27,15 @@ When Home Manager is a NixOS module, rebuild with `nixos-rebuild`. Never run
 
 ## Agents and directories
 
-| Agent | `agents` value | Skill directory | Call a skill | List skills |
-| --- | --- | --- | --- | --- |
-| [Claude Code](https://code.claude.com/docs/en/skills) | `"claude"` | `~/.claude/skills` | `/nixos-coding-agents` | `/skills` |
-| [Codex](https://learn.chatgpt.com/docs/build-skills) | `"codex"` | `~/.agents/skills` | `$nixos-coding-agents` | `/skills` |
-| [OpenCode](https://opencode.ai/docs/skills) | `"opencode"` | `~/.config/opencode/skills` | Name the skill in your prompt | Ask the agent |
-| [Antigravity](https://www.antigravity.google/docs/migration/workflows-to-skills/) | `"antigravity"` | `~/.gemini/config/skills` | `/nixos-coding-agents` | Ask the agent |
+| Agent | `agents` value | Skill directory | Call a skill |
+| --- | --- | --- | --- |
+| [Claude Code](https://code.claude.com/docs/en/skills) | `"claude"` | `~/.claude/skills` | `/nixos-coding-agents` |
+| [Codex](https://learn.chatgpt.com/docs/build-skills) | `"codex"` | `~/.agents/skills` | `$nixos-coding-agents` |
+| [OpenCode](https://opencode.ai/docs/skills) | `"opencode"` | `~/.config/opencode/skills` | Name the skill in your prompt |
+| [Antigravity](https://www.antigravity.google/docs/migration/workflows-to-skills/) | `"antigravity"` | `~/.gemini/config/skills` | `/nixos-coding-agents` |
+
+List the installed skills with `/skills` in Claude Code and Codex; in OpenCode
+and Antigravity, ask the agent which skills it has.
 
 All four also pick a skill automatically when a request matches its
 description. Directories and syntax were checked against each agent's

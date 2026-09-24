@@ -78,6 +78,15 @@ limits, and that a list or sections should be used for longer content.
   - licence counts Apache-2.0 ×1, LGPL-2.1 ×1, MIT ×6 and repository ×2;
   - no `/tree/` link on the `nixos-wiki` row.
 
+### Deviation during implementation
+
+- **The docs build needs the root `LICENSE`.** "Repository licence
+  (<name>)" is detected from the repository's own `LICENSE`, but
+  `nix/docs.nix` only copies a chosen set of files into the build, and
+  `LICENSE` was not among them. The first build failed with
+  `FileNotFoundError: LICENSE`. `../LICENSE` is added to that `fileset`;
+  nothing else changes.
+
 ## Steps
 
 1. **The generator rewrite, with its tests.**
