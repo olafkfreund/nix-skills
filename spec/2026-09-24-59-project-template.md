@@ -1,5 +1,5 @@
 ---
-status: draft
+status: approved
 issue: 59
 intent: intent/2026-09-24-59-project-template.md
 ---
