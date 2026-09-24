@@ -59,6 +59,21 @@
           Guide: https://olafkfreund.github.io/nix-skills/how-to/own-machine.html
         '';
       };
+      templates.project = {
+        path = ./templates/project;
+        description = "Project with nix-skills linked for its coding agents (devenv)";
+        welcomeText = ''
+          # Project with nix-skills for its coding agents
+
+          Next steps (see README.md):
+
+          1. `devenv shell` links the skills in `devenv.nix` into `.claude/skills` and `.agents/skills`.
+          2. Start your agent in this directory and check the skills with `/skills`.
+          3. Edit `nix-skills.skills` in `devenv.nix`; add a matching pair of lines to `.gitignore`.
+
+          Guide: https://olafkfreund.github.io/nix-skills/how-to/project.html
+        '';
+      };
       templates.default = self.templates.agentic-nixos;
       checks = forSystems (
         system:

@@ -59,6 +59,27 @@ in
     '') names}
     touch "$out"
   '';
+  devenv-module =
+    let
+      # Minimal stand-in for devenv's files and enterShell options.
+      stub = {
+        options.files = lib.mkOption {
+          type = lib.types.attrsOf (lib.types.submodule { options.source = lib.mkOption { }; });
+          default = { };
+        };
+        options.enterShell = lib.mkOption { type = lib.types.lines; default = ""; };
+      };
+      evaluate = settings: (lib.evalModules { modules = [ stub ../devenv/devenv.nix { nix-skills = settings; } ]; }).config;
+      defaults = evaluate { };
+      expected = lib.concatMap (dir: map (skill: "${dir}/${skill}") [ "nix-workflow" "nix-language" "devenv-project" ])
+        [ ".claude/skills" ".agents/skills" ];
+      sourcesMatch = lib.all (key: baseNameOf (toString defaults.files.${key}.source) == baseNameOf key) expected;
+      unknownFails = !(builtins.tryEval (builtins.deepSeq (evaluate { skills = [ "not-a-skill" ]; }).files true)).success;
+    in
+    assert lib.sort lib.lessThan (lib.attrNames defaults.files) == lib.sort lib.lessThan expected;
+    assert sourcesMatch;
+    assert unknownFails;
+    pkgs.runCommand "check-devenv-module" { } "touch $out";
   home-manager = assert valid; pkgs.runCommand "check-skill-home" { } ''
     test -e ${enabled.activationPackage}/activate
     ${lib.concatMapStringsSep "\n" (name: ''

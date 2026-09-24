@@ -11,6 +11,7 @@
 
 - [Install the skills](how-to/install.md)
 - [Set up your own machine](how-to/own-machine.md)
+- [Add agents and skills to a project](how-to/project.md)
 - [Update and roll back](how-to/update-and-rollback.md)
 - [Fix skill discovery](how-to/fix-discovery.md)
 - [Contribute a skill](how-to/contribute.md)

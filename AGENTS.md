@@ -31,8 +31,10 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing the collection.
 - `flake.nix`, `nix/`: data packages, the documentation site and opt-in Home Manager installation.
 - `demo/`: separate flake (own `flake.lock`) for the disposable demo VM and its offline
   VM test; `.github/workflows/demo.yml` runs it and is not a required check.
-- `templates/`: flake templates (`nix flake init -t .#agentic-nixos`); they use the demo
-  flake's `nixosModules.agentic`, and `demo.yml` checks that they evaluate.
+- `templates/`: flake templates: `agentic-nixos` uses the demo flake's `nixosModules.agentic`;
+  `project` uses the `devenv/` module. `demo.yml` checks both.
+- `devenv/`: devenv module (`imports: [ nix-skills/devenv ]`) linking skill folders into a
+  project; unrelated to the root `devenv.nix`, which is this repository's own environment.
 - `docs/`: mdBook site sources; `nix build .#docs` generates the catalog, options and
   update schedule pages and checks links and Nix style. Never edit generated pages.
 - Root `devenv.*`: contributor tools; `tests/devenv/` is a separate provider

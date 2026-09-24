@@ -74,7 +74,8 @@ style findings. Never edit the generated reference pages by hand. Site tables ma
 `demo/` is a separate flake with its own lock. Update `demo/flake.lock` deliberately and on
 its own (lock-only bumps are exempt from intent/spec/plan), and confirm the **Demo VM**
 workflow passes. It also checks that the `agentic-nixos` template still evaluates; keep
-`templates/` in step with `nixosModules.agentic` (`demo/agentic.nix`).
+`templates/` in step with `nixosModules.agentic` (`demo/agentic.nix`) and the `devenv/` module;
+the workflow also enters a project created from the `project` template.
 
 Document source URLs, exact versions/revisions, modifications, attribution and
 redistribution rights for copied material; include required license files.
