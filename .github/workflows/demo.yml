@@ -3,10 +3,10 @@ name: Demo VM
 # which hosted runners occasionally lack, so it must never block unrelated PRs.
 on:
   pull_request:
-    paths: ['demo/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+    paths: ['demo/**', 'devenv/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
   push:
     branches: [main]
-    paths: ['demo/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
+    paths: ['demo/**', 'devenv/**', 'templates/**', 'nix/**', 'skills/**', 'skills.json', 'flake.nix', 'flake.lock', '.github/workflows/demo.yml']
   schedule:
     - cron: '41 7 * * 3'
   workflow_dispatch:
@@ -52,3 +52,33 @@ jobs:
           NIX
           nix eval --raw "$tmp#nixosConfigurations.my-machine.config.system.build.toplevel.drvPath" \
             --override-input agentic "path:$GITHUB_WORKSPACE?dir=demo"
+  project-template:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - name: Link skills into a project from the template
+        run: |
+          tmp=$(mktemp -d)
+          cd "$tmp"
+          nix flake init -t "$GITHUB_WORKSPACE#project"
+          sed -i "s|url: github:olafkfreund/nix-skills|url: path:$GITHUB_WORKSPACE|" devenv.yaml
+          git init -q
+          git add -A
+          cat > check.sh <<'SH'
+          set -e
+          for dir in .claude/skills .agents/skills; do
+            for skill in nix-workflow nix-language devenv-project; do
+              test -f "$dir/$skill/SKILL.md"
+              git check-ignore -q "$dir/$skill"
+            done
+          done
+          echo "six skill links readable and git-ignored"
+          SH
+          nix run nixpkgs#devenv -- shell -- sh ./check.sh 2>&1 | tee shell.log
+          if grep -q 'nix-skills: add' shell.log; then
+            echo '::error::the template leaves a skill link un-ignored'
+            exit 1
+          fi
