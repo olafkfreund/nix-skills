@@ -2,7 +2,7 @@
 
 Curated raw wikitext; templates are retained, not expanded.
 
-Dump SHA-256: `0f7faeceaab57e43e4e8c8797a0c9feaa9da0320e219ed70914fea1910a171d0`.
+Dump SHA-256: `2e52cd0364547ab53da8e333bd0d2cf31756495b0de9894521a407b67aa3a28c`.
 
 Use `python3 scripts/wiki.py search QUERY` or `show TITLE` from this skill directory.
 Read page-level notices and complete relevant examples before applying advice.
@@ -14,9 +14,9 @@ Read page-level notices and complete relevant examples before applying advice.
 - [NixOS Installation Guide](https://wiki.nixos.org/w/index.php?oldid=30911) — revision 30911, 2026-03-22T08:56:47Z.
 - [Nixos-rebuild](https://wiki.nixos.org/w/index.php?oldid=32779) — revision 32779, 2026-06-30T12:37:40Z.
 - [Updating NixOS](https://wiki.nixos.org/w/index.php?oldid=32204) — revision 32204, 2026-05-31T00:44:23Z.
-- [Flakes](https://wiki.nixos.org/w/index.php?oldid=34641) — revision 34641, 2026-09-10T18:36:30Z.
-- [Home Manager](https://wiki.nixos.org/w/index.php?oldid=34102) — revision 34102, 2026-07-30T21:18:30Z.
-- [Bootloader](https://wiki.nixos.org/w/index.php?oldid=31987) — revision 31987, 2026-05-20T23:36:04Z.
+- [Flakes](https://wiki.nixos.org/w/index.php?oldid=34811) — revision 34811, 2026-09-28T20:34:36Z.
+- [Home Manager](https://wiki.nixos.org/w/index.php?oldid=34859) — revision 34859, 2026-10-04T17:09:16Z.
+- [Bootloader](https://wiki.nixos.org/w/index.php?oldid=34843) — revision 34843, 2026-10-02T22:19:05Z.
 - [Linux kernel](https://wiki.nixos.org/w/index.php?oldid=33605) — revision 33605, 2026-07-16T06:40:13Z.
 - [Storage optimization](https://wiki.nixos.org/w/index.php?oldid=32118) — revision 32118, 2026-05-29T08:18:44Z.
 - [Garbage Collection](https://wiki.nixos.org/w/index.php?oldid=22257) — revision 22257, 2025-06-06T15:20:13Z.
