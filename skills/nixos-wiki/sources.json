@@ -1,10 +1,10 @@
 {
   "inputs": {
-    "Bootloader": "a02dcfa80440e8feccd6f0a2999d7e8292ddd29843219a96460502152cfd3afe",
+    "Bootloader": "9f5c6268f5e46139b94a5d803ac66d123245b786b6cbc1cc26766532e2815fd3",
     "Firewall": "0fca9979c2fbf47b0b5388cc23d849110fd5560afd58045279c98926f30dd99b",
-    "Flakes": "fc2aaed3b6bf84f91dc10f68163ba21bafcddfc083c4d11c5b4c705c3f4fca95",
+    "Flakes": "f4b53d20566ded34f131520669e2b29ecb52db296ff84d17b7031db826126a8d",
     "Garbage Collection": "0bcb10045bcb01bfa443f93177ab197decc07b8936108f32d738936683f65f0a",
-    "Home Manager": "7d3553dbd3b551a20688f0f155cd33f9cda7c0bb4cb22a9722102d297d2551b6",
+    "Home Manager": "609e3c55dc27f74729c274f893d198564b71bd2af79df4c22d918e912e007867",
     "Linux kernel": "5ae01bfdc1afac830094366160a3ae8ef74952e5b26233e4b592b32ab6842ee5",
     "Networking": "272a56ce3891cd933a625ab323bc36525feed42df9ac533cef26afa9d07a6575",
     "NixOS": "240f294f538c379a35ec12b338d8540726c546e5516fea32d15a380e81e67bfa",
@@ -204,8 +204,8 @@
   },
   "outputs": {
     "COPYING": "198bd6132247ae13704b98c999a9b66341c98a2045f31bb7c91a189ce6380b6c",
-    "references/index.md": "b83d3b748425c3e08a128f4dcd018910643cf2cd65ff512a57161c3b17fb6d4a",
-    "references/pages.json": "114d7fad193d10c4afbac78df94ef884c157c2e8c3208eeded02d80d35606e0e",
+    "references/index.md": "23d816a4a8229241897f18b44ea060e93db7fe4099359606e4d80cdf239faba7",
+    "references/pages.json": "3e23519c72fb6c850c0bdc21dff823a81d1833e28fa1b8352659c8cda300b0b4",
     "references/templates.json": "37b376b8448d75bac6ea15bcb9d0a902a853727fac8da21284bfe8d1b0dafb74"
   },
   "policy": {
@@ -246,9 +246,9 @@
       "namespace": 0,
       "page_id": 327,
       "redirect": null,
-      "revision_id": 31987,
-      "sha256": "a00bfbbb4fbe39d698887d007376d6dae947ac57a6b1e1c687985cd08347be70",
-      "timestamp": "2026-05-20T23:36:04Z",
+      "revision_id": 34843,
+      "sha256": "b9ce9a287ab038c5a089a33fc921023a46bbf260742ef30df6446f3a7791a175",
+      "timestamp": "2026-10-02T22:19:05Z",
       "title": "Bootloader"
     },
     "Firewall": {
@@ -266,9 +266,9 @@
       "namespace": 0,
       "page_id": 643,
       "redirect": null,
-      "revision_id": 34641,
-      "sha256": "aae77e3ec2da25aacc11f333754ff91bceca8b7358d19fde43c93f8ee09c4c8e",
-      "timestamp": "2026-09-10T18:36:30Z",
+      "revision_id": 34811,
+      "sha256": "f3a6c48d54028d5c856158944c96ceb6f838ffe639131cf49cbc409048c27113",
+      "timestamp": "2026-09-28T20:34:36Z",
       "title": "Flakes"
     },
     "Garbage Collection": {
@@ -289,9 +289,9 @@
       "namespace": 0,
       "page_id": 322,
       "redirect": null,
-      "revision_id": 34102,
-      "sha256": "c2ccb1d0c5d9dc723b2680eeb687e111112c5a611e1d8dc52ce12d2fc078be35",
-      "timestamp": "2026-07-30T21:18:30Z",
+      "revision_id": 34859,
+      "sha256": "7961b0d884e16df36d73df9df182ab4db064e9d2fdd6e0eca1db26677c2a478c",
+      "timestamp": "2026-10-04T17:09:16Z",
       "title": "Home Manager"
     },
     "Linux kernel": {
@@ -2282,6 +2282,6 @@
       "title": "Updating NixOS"
     }
   },
-  "snapshot_sha256": "0f7faeceaab57e43e4e8c8797a0c9feaa9da0320e219ed70914fea1910a171d0",
+  "snapshot_sha256": "2e52cd0364547ab53da8e333bd0d2cf31756495b0de9894521a407b67aa3a28c",
   "upstream": "https://wiki.nixos.org/wikidump.xml.zst"
 }
