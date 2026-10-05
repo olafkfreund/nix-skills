@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/usage/dotfiles.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/dotfiles.md)
+Upstream source: [docs/manual/usage/dotfiles.md](https://github.com/nix-community/home-manager/blob/f53f3267f5d009dd8f99443505e609389d7ff267/docs/manual/usage/dotfiles.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -43,7 +43,7 @@ This error is about a file that Home Manager wants to manage as a
 symbolic link in your home directory. It is separate from package
 profile collisions, which usually mention `installPackages` or a
 `collision between .../bin/...` path. For package collisions, see
-[Why is there a collision error when switching generation?](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/faq/collision.md#_why_is_there_a_collision_error_when_switching_generation).
+[Why is there a collision error when switching generation?](https://github.com/nix-community/home-manager/blob/f53f3267f5d009dd8f99443505e609389d7ff267/docs/manual/faq/collision.md#_why_is_there_a_collision_error_when_switching_generation).
 
 ## Resolving file collisions {#sec-usage-dotfiles-collisions}
 
@@ -73,6 +73,25 @@ The command receives the colliding path as an argument and must move or
 remove that path. If both `-B` and `-b` are set, the custom command takes
 precedence; the command may still use the
 `HOME_MANAGER_BACKUP_EXT` environment variable set by `-b`.
+
+The `-b` and `-B` flags are only available through the `home-manager`
+command line tool. If your standalone configuration is instead built with
+{var}`home-manager.lib.homeManagerConfiguration` and activated some other
+way, for example by running the resulting `activate` script directly or
+through a tool such as `deploy-rs`, set
+{option}`home.backupFileExtension` or {option}`home.backupCommand`
+instead:
+
+``` nix
+{
+  home.backupFileExtension = "backup";
+}
+```
+
+These behave the same as their `home-manager.*` counterparts described
+below, including {option}`home.overwriteBackup`, and are ignored if the
+corresponding `HOME_MANAGER_BACKUP_EXT`, `HOME_MANAGER_BACKUP_COMMAND`, or
+`HOME_MANAGER_BACKUP_OVERWRITE` environment variable is already set.
 
 When Home Manager is used as a NixOS or nix-darwin module, configure the
 corresponding module options instead of passing standalone command line
