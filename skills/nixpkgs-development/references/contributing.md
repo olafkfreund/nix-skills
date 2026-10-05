@@ -1,6 +1,6 @@
 # Contributing
 
-Nixpkgs master snapshot `4593931c855e7cf2ab412b659dd2841030f753df`; development series 26.11.
+Nixpkgs master snapshot `5dd7e767c23e101e06e4b5eab39db0f9f9c861af`; development series 26.11.
 
 Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Source citations are pinned; public manual links may move.
 
@@ -22,29 +22,29 @@ Modified excerpts from the Nixpkgs contributors; see [COPYING](../COPYING). Sour
 
 <a id="contributing-overview"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ## Overview
 
 This file contains general contributing information.
 More specific information about individual parts of Nixpkgs can be found here:
-- [`doc`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/doc/README.md): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
-- [`lib`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/lib/README.md): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
-- [`maintainers`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/maintainers/README.md): Nixpkgs maintainer and team listings, maintainer scripts
-- [`nixos`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
-- [`pkgs`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
+- [`doc`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/doc/README.md): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
+- [`lib`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/lib/README.md): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
+- [`maintainers`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/maintainers/README.md): Nixpkgs maintainer and team listings, maintainer scripts
+- [`nixos`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
+- [`pkgs`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
 
 
 <a id="contributing-create-pull-requests"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ## How to create pull requests
 
 This section describes how changes can be proposed with a pull request (PR).
 
 > [!Note]
-> Be aware that contributing implies licensing those contributions under the terms of [COPYING](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/COPYING), an MIT-like license.
+> Be aware that contributing implies licensing those contributions under the terms of [COPYING](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/COPYING), an MIT-like license.
 
 0. Set up a local version of Nixpkgs to work with:
    1. [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) the [Nixpkgs repository](https://github.com/nixos/nixpkgs).
@@ -53,7 +53,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
 1. Select the appropriate [base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches#working-with-branches) for the change, as [described here](#contributing-branch-conventions).
    If in doubt, use `master`.
-   This can be changed later by [rebasing](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+   This can be changed later by [rebasing](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
 
 2. Create a new Git branch, ideally such that:
    - The name of the branch hints at your change, e.g. `update-hello`.
@@ -81,7 +81,7 @@ This section describes how changes can be proposed with a pull request (PR).
    ```
 
 3. Make your changes in the local Nixpkgs repository and:
-   - Adhere to both the [general code conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#code-conventions), and the relevant [specific code conventions](#contributing-overview).
+   - Adhere to both the [general code conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#code-conventions), and the relevant [specific code conventions](#contributing-overview).
    - Test the changes.
    - If necessary, document the changes.
 
@@ -107,12 +107,12 @@ This section describes how changes can be proposed with a pull request (PR).
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 1 as the PR's base branch.
-   Go through the [pull request template](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#pull-request-template).
+   Go through the [pull request template](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#pull-request-template).
 
 7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
    Always keep it in a mergeable state.
 
-   The non-technical side of this process is covered in [I opened a PR, how do I get it merged?](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#i-opened-a-pr-how-do-i-get-it-merged).
+   The non-technical side of this process is covered in [I opened a PR, how do I get it merged?](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#i-opened-a-pr-how-do-i-get-it-merged).
 
    The [ofborg](https://github.com/NixOS/ofborg) CI system will perform checks to ensure code quality.
    You can see the results at the bottom of the PR.
@@ -141,9 +141,9 @@ This section describes how changes can be proposed with a pull request (PR).
 
      Use the base branch from step 1 instead of `upstream/master`.
 
-   - If you need to change the base branch, [rebase](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+   - If you need to change the base branch, [rebase](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
 
-8. If your PR is merged and [acceptable for releases](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#changes-acceptable-for-releases), you may [backport](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#how-to-backport-pull-requests) it.
+8. If your PR is merged and [acceptable for releases](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#changes-acceptable-for-releases), you may [backport](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#how-to-backport-pull-requests) it.
 
 ### Pull request template
 
@@ -258,7 +258,7 @@ git push origin feature --force-with-lease
 
 <a id="contributing-review-pull-requests"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ## How to review pull requests
 
@@ -307,7 +307,7 @@ The main reviewers for a topic can be hard to find as there is no list, but chec
 
 <a id="contributing-branch-conventions"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ## Branch conventions
 <!-- This section is relevant to both contributors and reviewers -->
@@ -315,18 +315,18 @@ The main reviewers for a topic can be hard to find as there is no list, but chec
 Most changes should go to `master`, but sometimes other branches should be used instead.
 Use the following decision process to figure out the right branch:
 
-Is the change [acceptable for releases](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#changes-acceptable-for-releases) and do you wish to have the change in the release?
+Is the change [acceptable for releases](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#changes-acceptable-for-releases) and do you wish to have the change in the release?
 - No: Use the `master` branch, do not backport the pull request.
 - Yes: Can the change be implemented the same way on the `master` and release branches?
   For example, a package's major version might differ between the `master` and release branches, such that separate security patches are required.
-  - Yes: Use the `master` branch and [backport the pull request](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#how-to-backport-pull-requests).
+  - Yes: Use the `master` branch and [backport the pull request](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#how-to-backport-pull-requests).
   - No: Create separate pull requests to the `master` and `release-YY.MM` branches.
 
-If the change causes a [mass rebuild](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#changes-causing-mass-rebuilds), use the `staging` branch instead:
+If the change causes a [mass rebuild](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#changes-causing-mass-rebuilds), use the `staging` branch instead:
 - Mass rebuilds to `master` should go to `staging` instead.
 - Mass rebuilds to `release-YY.MM` should go to `staging-YY.MM` instead.
 
-See [this section](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#staging) for how such changes propagate between the branches.
+See [this section](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#staging) for how such changes propagate between the branches.
 
 ### Changes acceptable for releases
 
@@ -356,7 +356,7 @@ As a rule of thumb, if the number of rebuilds is **500 or more**, consider targe
 See [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged) to get a sense for what changes are considered mass rebuilds.
 
 Please note that changes to the Linux kernel are an exception to this rule.
-These PRs go to `staging-nixos`, see [the next section for more context](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#changes-rebuilding-all-nixos-tests).
+These PRs go to `staging-nixos`, see [the next section for more context](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#changes-rebuilding-all-nixos-tests).
 
 ### Changes rebuilding all NixOS tests
 
@@ -377,7 +377,7 @@ The relevant PRs from this branch must be backported manually.
 
 <a id="contributing-commit-conventions"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ## Commit conventions
 
@@ -391,14 +391,14 @@ The relevant PRs from this branch must be backported manually.
 
 - When adding yourself to `maintainer-list.nix`, make a separate commit with the message `maintainers: add <handle>`.
   Add the commit before those making changes to the package or module.
-  See [Nixpkgs Maintainers](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/maintainers/README.md) for details.
+  See [Nixpkgs Maintainers](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/maintainers/README.md) for details.
 
 - Make sure you read about any commit conventions specific to the area you're touching.
   See:
-  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/doc/README.md#commit-conventions) for changes to `doc`, the Nixpkgs manual.
-  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/lib/README.md#commit-conventions) for changes to `lib`.
-  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/nixos/README.md#commit-conventions) for changes to `nixos`.
-  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md#commit-conventions) for changes to `pkgs`.
+  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/doc/README.md#commit-conventions) for changes to `doc`, the Nixpkgs manual.
+  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/lib/README.md#commit-conventions) for changes to `lib`.
+  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/nixos/README.md#commit-conventions) for changes to `nixos`.
+  - [Commit conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md#commit-conventions) for changes to `pkgs`.
 
 ### Writing good commit messages
 
@@ -411,7 +411,7 @@ Package upgrades with more extensive changes require more verbose commit message
 
 <a id="contributing-file-naming"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ### File naming and organisation
 
@@ -421,11 +421,11 @@ For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPack
 
 <a id="contributing-formatting"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md)
 
 ### Formatting
 
-CI [enforces](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/.github/workflows/lint.yml) all Nix files to be formatted using the [official Nix formatter](https://github.com/NixOS/nixfmt).
+CI [enforces](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/.github/workflows/lint.yml) all Nix files to be formatted using the [official Nix formatter](https://github.com/NixOS/nixfmt).
 
 You can ensure this locally using either of these commands:
 ```
@@ -441,7 +441,7 @@ If you have any problems with formatting, please ping the [formatting team](http
 
 <a id="pkgs-readme-quick-start"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Quick Start to Adding a Package
 
@@ -469,6 +469,11 @@ Before adding a new package, please consider the following questions:
   * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
+
+> [!NOTE]
+> Many upstream developers submit their own projects for inclusion in Nixpkgs.
+> While these PRs are welcomed, this is often a sign that the package doesn't yet meet the userbase requirements.
+> Consider waiting for another user of your project to submit it instead.
 
 Special care has to be taken with security-critical software components.
 Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
@@ -516,7 +521,7 @@ To add a package to Nixpkgs:
    $ mkdir -p pkgs/by-name/so/some-package
    ```
 
-   For more detailed information, see [here](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md).
+   For more detailed information, see [here](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md).
 
 3. Create a `package.nix` file in the package directory, containing a Nix expression — a piece of code that describes how to build the package.
    In this case, it should be a _function_ that is called with the package dependencies as arguments, and returns a build of the package in the Nix store.
@@ -528,36 +533,36 @@ To add a package to Nixpkgs:
 
    If the package is written in a language other than C, you should use [the corresponding language framework](https://nixos.org/manual/nixpkgs/stable/#chap-language-support).
 
-   You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md#category-hierarchy).
+   You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md#category-hierarchy).
    Here are some good ones:
 
-   - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/he/hello/package.nix).
+   - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/he/hello/package.nix).
      Trivial package, which specifies some `meta` attributes which is good practice.
 
-   - GNU cpio: [`pkgs/by-name/cp/cpio/package.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/cp/cpio/package.nix).
+   - GNU cpio: [`pkgs/by-name/cp/cpio/package.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/cp/cpio/package.nix).
      Also a simple package.
      The generic builder in `stdenv` does everything for you.
      It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](https://github.com/NixOS/nixpkgs/tree/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/development/libraries/gmp).
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](https://github.com/NixOS/nixpkgs/tree/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/development/libraries/gmp).
      Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/pa/pan/package.nix).
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/pa/pan/package.nix).
      Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/servers/http/apache-httpd/2.4.nix).
+   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/servers/http/apache-httpd/2.4.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
-   - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/build-support/build-mozilla-mach/default.nix).
+   - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/build-support/build-mozilla-mach/default.nix).
      A reusable build function for Firefox, Thunderbird and Librewolf.
 
-   - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/jd/jdiskreport/package.nix).
+   - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/jd/jdiskreport/package.nix).
      Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 
-   - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/top-level/perl-packages.nix) (search for the `XMLSimple` attribute).
+   - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/top-level/perl-packages.nix) (search for the `XMLSimple` attribute).
      Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Discord Game SDK: [`pkgs/by-name/di/discord-gamesdk/package.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/di/discord-gamesdk/package.nix).
+   - Discord Game SDK: [`pkgs/by-name/di/discord-gamesdk/package.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/di/discord-gamesdk/package.nix).
      Shows how binary-only packages can be supported.
      In particular, the `autoPatchelfHook` is used to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
@@ -565,7 +570,7 @@ To add a package to Nixpkgs:
 
    - Add yourself as the maintainer of the package.
 
-     - If this is your first time contributing (welcome!), [add yourself to the maintainers list](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/maintainers/README.md#how-to-become-a-maintainer) in a separate commit.
+     - If this is your first time contributing (welcome!), [add yourself to the maintainers list](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/maintainers/README.md#how-to-become-a-maintainer) in a separate commit.
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
@@ -592,11 +597,11 @@ To add a package to Nixpkgs:
 
 <a id="pkgs-readme-commit-conventions"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Commit conventions
 
-- Make sure you read about the [commit conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+- Make sure you read about the [commit conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
 
 - Format the commit messages in the following way:
 
@@ -645,7 +650,7 @@ For PRs with multiple commits, the PR title should be a general summary of these
 
 <a id="pkgs-readme-package-naming"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Package naming
 
@@ -654,7 +659,7 @@ In Nixpkgs, there are generally three different names associated with a package:
 - The `pname` attribute of the derivation.
   This is what most users see, in particular when using `nix-env`.
 
-- The attribute name used for the package in the [`pkgs/by-name` structure](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md) or in [`all-packages.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
+- The attribute name used for the package in the [`pkgs/by-name` structure](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md) or in [`all-packages.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
@@ -699,7 +704,7 @@ Follow these guidelines:
 
 <a id="pkgs-readme-versioning"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Versioning
 
@@ -731,7 +736,7 @@ See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/N
 
 <a id="pkgs-readme-patches"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Patches
 
@@ -818,26 +823,26 @@ If you do need to create this sort of patch file, one way to do so is with git:
 
 <a id="pkgs-readme-automatic-updates"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md)
 
 ## Automatic package updates
 
-The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
-`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+The [community bot `r-ryantm`](https://github.com/NixOS/infra/blob/main/non-critical-infra/modules/nixpkgs-update/README.md), periodically tries to update all packages in Nixpkgs.
+It runs the program [`nixpkgs-update`](https://nixos.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nixos.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
 However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
 
 <a id="by-name-directories"></a>
 
-[Upstream source](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md)
+[Upstream source](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md)
 
 # Name-based package directories
 
 The structure of this directory maps almost directly to top-level package attributes.
-Add new top-level packages to Nixpkgs using this mechanism [whenever possible](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md#limitations).
+Add new top-level packages to Nixpkgs using this mechanism [whenever possible](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md#limitations).
 
-Packages found in the name-based structure are automatically included, without needing to be added to `all-packages.nix`. However if the implicit attribute defaults need to be changed for a package, this [must still be declared in `all-packages.nix`](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md#changing-implicit-attribute-defaults).
+Packages found in the name-based structure are automatically included, without needing to be added to `all-packages.nix`. However if the implicit attribute defaults need to be changed for a package, this [must still be declared in `all-packages.nix`](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md#changing-implicit-attribute-defaults).
 
 ## Example
 
@@ -882,7 +887,7 @@ Once defined, the package can be built from the Nixpkgs root directory using:
 nix-build -A some-package
 ```
 
-See the [general package conventions](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md#conventions) for more information on package definitions.
+See the [general package conventions](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md#conventions) for more information on package definitions.
 
 ### Changing implicit attribute defaults
 
@@ -905,14 +910,14 @@ This is comparable to a merge conflict in git: It's much better to be forced to 
 
 ## Manual migration guidelines
 
-Most packages are still defined in `all-packages.nix` and the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md#category-hierarchy).
+Most packages are still defined in `all-packages.nix` and the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md#category-hierarchy).
 Since it would take a lot of contributor and reviewer time to migrate all packages manually,
 an [automated migration is planned](https://github.com/NixOS/nixpkgs/pull/211832),
 though it is expected to still take some time to get done.
 If you're interested in helping out with this effort,
 please see [this ticket](https://github.com/NixOS/nixpkgs-vet/issues/56).
 
-Since [only PRs to packages in `pkgs/by-name` can be automatically merged](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/CONTRIBUTING.md#how-to-merge-pull-requests-yourself),
+Since [only PRs to packages in `pkgs/by-name` can be automatically merged](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/CONTRIBUTING.md#how-to-merge-pull-requests-yourself),
 if package maintainers would like to use this feature, they are welcome to migrate their packages to `pkgs/by-name`.
 To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
 though this is not required and must not be expected.
@@ -920,7 +925,7 @@ though this is not required and must not be expected.
 Note that `callPackage` definitions in `all-packages.nix` with custom arguments should not be removed.
 That is a backwards-incompatible change because it changes the `.override` interface.
 Such packages may still be moved to `pkgs/by-name` however, in order to avoid the slightly superficial choice of directory / category in which the `default.nix` file was placed, but please keep the definition in `all-packages.nix` using `callPackage`.
-See also [changing implicit attribute defaults](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/by-name/README.md#changing-implicit-attribute-defaults).
+See also [changing implicit attribute defaults](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/by-name/README.md#changing-implicit-attribute-defaults).
 
 Definitions like the following however, _can_ be transitioned:
 
@@ -947,7 +952,7 @@ There are some limitations as to which packages can be defined using this struct
 
   Instead:
   - Either change the package definition to work with `pkgs.callPackage`.
-  - Or use the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/4593931c855e7cf2ab412b659dd2841030f753df/pkgs/README.md#category-hierarchy).
+  - Or use the [category hierarchy](https://github.com/NixOS/nixpkgs/blob/5dd7e767c23e101e06e4b5eab39db0f9f9c861af/pkgs/README.md#category-hierarchy).
 
 - Only top-level packages.
   This excludes packages for other package sets like `pkgs.pythonPackages.*`.
