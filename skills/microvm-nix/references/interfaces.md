@@ -1,4 +1,4 @@
-Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/interfaces.md)
+Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/3f1540f254fe73ac907281b7de7d396bb3d54850/doc/src/interfaces.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
