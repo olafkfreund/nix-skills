@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/writing-modules.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/writing-modules.md)
+Upstream source: [docs/manual/writing-modules.md](https://github.com/nix-community/home-manager/blob/f53f3267f5d009dd8f99443505e609389d7ff267/docs/manual/writing-modules.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
