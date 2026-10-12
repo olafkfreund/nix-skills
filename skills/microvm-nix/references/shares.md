@@ -1,4 +1,4 @@
-Upstream source: [doc/src/shares.md](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/shares.md)
+Upstream source: [doc/src/shares.md](https://github.com/microvm-nix/microvm.nix/blob/f13928fe9900e91709d7ce581eefa47eaafa79e1/doc/src/shares.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
