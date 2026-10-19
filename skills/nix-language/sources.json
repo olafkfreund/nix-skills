@@ -1,6 +1,6 @@
 {
   "inputs": {
-    ".version": "50127cb5ee9245bea0dd7ed92aa228611a5f4b0e9d39ec26e2da186a16c95e4e",
+    ".version": "5d5428dbbd353a63099cc16db2a0778c7d0529654106a6c67a8ca746f26d8275",
     "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
     "doc/manual/generate-builtins.nix": "f2fa55f7d940609f0e75c01a69e893fbe446848e90326b3a5bc62462780a2443",
     "doc/manual/source/language/derivations.md": "ffa79995a45066a581e89e374049be2ad4b308656e2daff16142b6d3258242ca",
@@ -38,14 +38,14 @@
     "doc/manual/source/language/values.md": "412ec5722be681b8dfccb8008ca378ac446187a9c58b0bb9a3ccd346afa07bc6",
     "doc/manual/source/language/variables.md": "b38fefa325170abf97c5313af9300b32cfc85578d9dfb9c1d060c315c48d145e"
   },
-  "nix_version": "2.35.2",
+  "nix_version": "2.35.3",
   "outputs": {
     "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
-    "references/builtins.md": "2a52e0bf223694f6c56cfaffc61443f1cfd6f3aca5916a508a3805b833f4ad67",
-    "references/language.md": "7fc744dc1ffea46789d8a84428b4badb3b1829fc083ba122f5f1db97e82131ea"
+    "references/builtins.md": "4a2ef925baed0a8560e936b6222c713ab9d3073c38b848cc5de4448cccf331dc",
+    "references/language.md": "ed1a936e1322a93ff7257177f9ba503f8f833e0763a02542b0ff68a302115789"
   },
-  "release": "2.35.2",
-  "revision": "2c73b59da29606068c0c98db015dd3a66955525d",
+  "release": "2.35.3",
+  "revision": "8624d7c74eaee2638d2aff9b1e30455a74baba8c",
   "selection": {
     "builtins": [
       "attrNames",

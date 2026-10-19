@@ -1,6 +1,6 @@
 # Language reference
 
-Nix 2.35.2; upstream revision `2c73b59da29606068c0c98db015dd3a66955525d`.
+Nix 2.35.3; upstream revision `8624d7c74eaee2638d2aff9b1e30455a74baba8c`.
 
 Selected upstream excerpts, with links adapted for this package. Copyright the Nix contributors; see [COPYING](../COPYING).
 
@@ -27,7 +27,7 @@ Selected upstream excerpts, with links adapted for this package. Copyright the N
 
 <a id="section-1"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/types.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/types.md)
 
 # Data Types
 
@@ -46,7 +46,7 @@ Every value in the Nix language has one of the following types:
 
 <a id="section-2"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/types.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/types.md)
 
 ### Path <a id="type-path"></a>
 
@@ -79,7 +79,7 @@ The function [`builtins.isPath`](https://nix.dev/manual/nix/2.35/language/builti
 
 <a id="section-3"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## List <a id="list-literal"></a>
 
@@ -107,7 +107,7 @@ Elements in a list can be accessed using [`builtins.elemAt`](https://nix.dev/man
 
 <a id="section-4"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## Attribute Set <a id="attrs-literal"></a>
 
@@ -259,7 +259,7 @@ of object-oriented programming, for example.
 
 <a id="section-5"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## Recursive sets
 
@@ -298,7 +298,7 @@ will crash with an `infinite recursion encountered` error message.
 
 <a id="section-6"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## Let-expressions
 
@@ -340,7 +340,7 @@ This evaluates to "baz".
 
 <a id="section-7"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## Functions
 
@@ -503,7 +503,7 @@ in concat { x = "foo"; y = "bar"; }
 
 <a id="section-8"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/syntax.md)
 
 ## With-expressions
 
@@ -557,7 +557,7 @@ Does evaluate to `"inner"`.
 
 <a id="section-9"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/operators.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/operators.md)
 
 # Operators
 
@@ -595,7 +595,7 @@ Does evaluate to `"inner"`.
 
 <a id="section-10"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/operators.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/operators.md)
 
 ## Update
 
@@ -614,7 +614,7 @@ That means that both arguments are evaluated to [weak head normal form](https://
 
 <a id="section-11"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/scope.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/scope.md)
 
 # Scoping rules
 
@@ -647,7 +647,7 @@ the value of a variable is determined only by the variable's enclosing scope, an
 
 <a id="section-12"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/evaluation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/evaluation.md)
 
 ## Laziness and thunks <a id="laziness"></a>
 
@@ -661,7 +661,7 @@ As a user of the language, you generally don't have to think about thunks, as th
 
 <a id="section-13"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/evaluation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/evaluation.md)
 
 ## Strictness
 
@@ -704,7 +704,7 @@ in f { x = throw "error"; y = throw "error"; }
 
 <a id="section-14"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-literals.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/string-literals.md)
 
 # String literals
 
@@ -913,7 +913,7 @@ is*, without quotes. For instance, the string
 
 <a id="section-15"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-interpolation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/string-interpolation.md)
 
 # Interpolated expression
 
@@ -1023,7 +1023,7 @@ If neither is present, an error is thrown.
 
 <a id="section-16"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/string-context.md)
 
 # String context
 
@@ -1125,7 +1125,7 @@ String context elements come in different forms:
 
 <a id="section-17"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/string-context.md)
 
 ## Inspecting string contexts
 
@@ -1137,7 +1137,7 @@ It creates an [attribute set](https://nix.dev/manual/nix/2.35/language/types.htm
 
 <a id="section-18"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/string-context.md)
 
 ## Clearing string contexts
 
@@ -1148,7 +1148,7 @@ The "unsafe" marker is only there to remind that Nix normally guarantees that de
 
 <a id="section-19"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/derivations.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/derivations.md)
 
 # Derivations
 
@@ -1162,7 +1162,7 @@ It outputs an attribute set, and produces a [store derivation](https://nix.dev/m
 
 <a id="section-20"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/derivations.md)
+[Upstream source](https://github.com/NixOS/nix/blob/8624d7c74eaee2638d2aff9b1e30455a74baba8c/doc/manual/source/language/derivations.md)
 
 ### Required
 
