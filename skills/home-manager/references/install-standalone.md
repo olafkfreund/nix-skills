@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/installation/standalone.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/installation/standalone.md)
+Upstream source: [docs/manual/installation/standalone.md](https://github.com/nix-community/home-manager/blob/640725978b99076e18e069f6e7d2959124584f8f/docs/manual/installation/standalone.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -72,8 +72,8 @@ Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
 If instead of using channels you want to run Home Manager from a Git
 checkout of the repository then you can use the
-[home-manager.path](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/installation/standalone.md#opt-programs.home-manager.path) option to specify the absolute
+[home-manager.path](https://github.com/nix-community/home-manager/blob/640725978b99076e18e069f6e7d2959124584f8f/docs/manual/installation/standalone.md#opt-programs.home-manager.path) option to specify the absolute
 path to the repository.
 
-Once installed you can see [Using Home Manager](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage.md#ch-usage) for a more detailed
+Once installed you can see [Using Home Manager](https://github.com/nix-community/home-manager/blob/640725978b99076e18e069f6e7d2959124584f8f/docs/manual/usage.md#ch-usage) for a more detailed
 description of Home Manager and how to use it.

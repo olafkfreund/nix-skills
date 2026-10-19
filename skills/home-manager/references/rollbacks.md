@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/usage/rollbacks.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/rollbacks.md)
+Upstream source: [docs/manual/usage/rollbacks.md](https://github.com/nix-community/home-manager/blob/640725978b99076e18e069f6e7d2959124584f8f/docs/manual/usage/rollbacks.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
