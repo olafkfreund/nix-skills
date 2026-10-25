@@ -1,6 +1,6 @@
 # Workflows
 
-devenv v2.3.1; upstream revision `2418e1b43797c44de5166176622c8d8fa0149871`.
+devenv v2.4.0; upstream revision `b904dcb51fe48c30db250038241507f60752f222`.
 
 Modified excerpts from the devenv contributors; see [LICENSE](../LICENSE). Source citations are pinned; devenv.sh links follow the moving public site.
 
@@ -14,26 +14,21 @@ Modified excerpts from the devenv contributors; see [LICENSE](../LICENSE). Sourc
 - [scripts.md: Scripts](#section-8)
 - [scripts.md: Aliases & args](#section-9)
 - [scripts.md: Runtime packages](#section-10)
-- [tasks.md: Defining tasks](#section-11)
-- [tasks.md: Dependencies between tasks](#section-12)
-- [tasks.md: enterShell / enterTest](#section-13)
-- [processes.md: Basic Example](#section-14)
-- [processes.md: Using Pre-built Services](#section-15)
-- [tests.md: Tests](#section-16)
-- [tests.md: Writing your first test](#section-17)
+- [tasks.mdx: Defining tasks](#section-11)
+- [tasks.mdx: Dependencies between tasks](#section-12)
+- [tasks.mdx: enterShell / enterTest](#section-13)
+- [processes.mdx: Basic Example](#section-14)
+- [processes.mdx: Using Pre-built Services](#section-15)
+- [tests.mdx: Tests](#section-16)
+- [tests.mdx: Writing your first test](#section-17)
 - [git-hooks.md: Git Hooks](#section-18)
 - [git-hooks.md: Managing the `.pre-commit-config.yaml` file](#section-19)
 
 <a id="section-1"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/auto-activation.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/auto-activation.mdx)
 
-**Tip: New in version 2.1**
-
-
-[Read more about auto activation in the v2.1 release post](https://devenv.sh/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty/)
-
-**End tip.**
+**New in version 2.1.**
 
 
 ## Setup
@@ -88,7 +83,7 @@ devenv hook nu | save --force ($nu.default-config-dir | path join autoload/deven
 ### Passing arguments to `devenv shell`
 
 
-**Tip: New in version 2.3**
+**New in version 2.3.**
 
 
 Place arguments for the auto-activated `devenv shell` after `--`. For example,
@@ -111,19 +106,11 @@ File: `~/.bashrc`
 eval "$(devenv hook bash -- --no-tui)"
 ```
 
-
-**End tip.**
-
 <a id="section-2"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/auto-activation.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/auto-activation.mdx)
 
-**Tip: New in version 2.1**
-
-
-[Read more about auto activation in the v2.1 release post](https://devenv.sh/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty/)
-
-**End tip.**
+**New in version 2.1.**
 
 
 ## Trusting a project
@@ -159,14 +146,9 @@ $ cd ~/myproject
 
 <a id="section-3"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/auto-activation.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/auto-activation.mdx)
 
-**Tip: New in version 2.1**
-
-
-[Read more about auto activation in the v2.1 release post](https://devenv.sh/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty/)
-
-**End tip.**
+**New in version 2.1.**
 
 
 ## Revoking trust
@@ -181,14 +163,9 @@ devenv: revoked /home/user/myproject
 
 <a id="section-4"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/auto-activation.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/auto-activation.mdx)
 
-**Tip: New in version 2.1**
-
-
-[Read more about auto activation in the v2.1 release post](https://devenv.sh/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty/)
-
-**End tip.**
+**New in version 2.1.**
 
 
 ## How it works
@@ -214,14 +191,9 @@ Before version 2.2, it looked for `devenv.yaml` instead, so projects with only `
 
 <a id="section-5"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/auto-activation.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/auto-activation.mdx)
 
-**Tip: New in version 2.1**
-
-
-[Read more about auto activation in the v2.1 release post](https://devenv.sh/blog/2026/05/07/devenv-21-nix-with-zsh-fish-and-nushell-via-libghostty/)
-
-**End tip.**
+**New in version 2.1.**
 
 
 ## Comparison with direnv
@@ -238,7 +210,7 @@ Use `devenv hook` for a simple, dependency free setup. Use [direnv](https://deve
 
 <a id="section-6"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/integrations/direnv.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/integrations/direnv.mdx)
 
 ## Configure shell activation
 
@@ -286,15 +258,14 @@ This file configures direnv to use devenv for shell activation.
 
 
 
-**Tip: New in version 2.2**
+**New in version 2.2.**
+
 
 Use `devenv init --include-envrc` to include an `.envrc` file. On earlier versions, create it manually using the snippet above.
 
-**End tip.**
-
 <a id="section-7"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/integrations/direnv.mdx)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/integrations/direnv.mdx)
 
 ## Approving and loading the shell
 
@@ -319,7 +290,7 @@ Entering shell ...
 
 <a id="section-8"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/scripts.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/scripts.md)
 
 # Scripts
 
@@ -360,7 +331,7 @@ Entering shell ...
 
 <a id="section-9"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/scripts.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/scripts.md)
 
 ### Aliases & args
 Here's an example that shows how to define an alias & forward arguments:
@@ -372,7 +343,7 @@ scripts.foo.exec = ''
 
 <a id="section-10"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/scripts.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/scripts.md)
 
 ## Runtime packages
 
@@ -400,9 +371,10 @@ The `packages` attribute ensures these tools are available in the script's PATH 
 
 <a id="section-11"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/tasks.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/tasks.mdx)
 
-**Added in version 1.2.**
+**New in version 1.2.**
+
 
 ## Defining tasks
 
@@ -426,7 +398,9 @@ Succeeded         myapp:hello         9ms
 1 Succeeded                           10.14ms
 ```
 
-**Added in version 1.7.**
+
+**New in version 1.7.**
+
 
 You can also run all tasks in a namespace by providing just the namespace prefix:
 
@@ -441,9 +415,10 @@ Succeeded         myapp:test          350ms
 
 <a id="section-12"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/tasks.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/tasks.mdx)
 
-**Added in version 1.2.**
+**New in version 1.2.**
+
 
 ## Dependencies between tasks
 
@@ -469,13 +444,37 @@ File: `devenv.nix`
 }
 ```
 
+### Selecting tasks with `wantedBy`
+
+
+**New in version 2.3.2.**
+
+
+`before` and `after` both order tasks and choose which tasks run. Running a task pulls in the tasks it runs after, and in `after` and `all` [modes](https://devenv.sh/tasks/#execution-modes) also the tasks that run after it.
+
+Set `wantedBy` to choose explicitly which tasks select yours, like systemd's `wantedBy`. The listed tasks then select it in every mode except `single`, and `before`/`after` only order it:
+
+
+File: `devenv.nix`
+
+```nix
+{
+  tasks."myapp:migrate" = {
+    exec = "myapp migrate";
+    after = [ "devenv:processes:db" ];     # order: wait until db is ready
+    wantedBy = [ "devenv:processes:db" ];  # select: run whenever db starts
+  };
+}
+```
+
+`wantedBy` does not order tasks, so pair it with `after` or `before`.
+A task with `wantedBy = [ ]` runs only when named directly or when a selected task runs after it.
+`devenv:enterTest` uses this, so entering a shell does not run test setup.
+
 ### Dependency states
 
 
-**Tip: New in version 2.0**
-
-
-**End tip.**
+**New in version 2.0.**
 
 
 
@@ -506,9 +505,10 @@ File: `devenv.nix`
 
 <a id="section-13"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/tasks.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/tasks.mdx)
 
-**Added in version 1.2.**
+**New in version 1.2.**
+
 
 ## enterShell / enterTest
 
@@ -517,6 +517,10 @@ File: `devenv.nix`
 - **`devenv:enterShell`** runs before the shell is entered (`devenv shell`) and before processes start (`devenv up`).
 - **`devenv:enterTest`** runs before tests execute (`devenv test`).
   It depends on `devenv:enterShell`, so all shell setup tasks run first automatically.
+
+`devenv tasks run` starts from the requested task and its dependencies, so it does not run `devenv:enterShell` automatically.
+If a task needs shell setup, add an `after` dependency on the setup task so its environment exports reach your task.
+For an example, see [using a Python virtual environment in tasks](https://devenv.sh/languages/python/#using-the-virtual-environment-in-tasks).
 
 To hook into these events, use `before` to declare that your task should run before the event completes:
 
@@ -556,7 +560,7 @@ For example, enabling git hooks registers `devenv:git-hooks:install` as a depend
 
 <a id="section-14"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/processes.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/processes.mdx)
 
 ## Basic Example
 
@@ -591,13 +595,10 @@ $ devenv down
 ```
 
 
-**Tip: New in devenv 2.2**
+**New in version 2.2.**
 
 
 `devenv down` is a shorthand for `devenv processes down`.
-
-**End tip.**
-
 
 
 With the native process manager, wait for all processes to become ready (useful in CI):
@@ -610,7 +611,7 @@ The default timeout is 120 seconds.
 
 <a id="section-15"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/processes.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/processes.mdx)
 
 ## Using Pre-built Services
 
@@ -626,9 +627,10 @@ These services come with sensible defaults, health checks, and proper initializa
 
 <a id="section-16"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/tests.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/tests.mdx)
 
 # Tests
+
 
 Tests are a way to ensure that your development environment is working as expected.
 
@@ -645,7 +647,7 @@ For more complex test setups with dependencies and better control, consider usin
 
 <a id="section-17"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/tests.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/tests.mdx)
 
 ## Writing your first test
 
@@ -679,7 +681,7 @@ By default, the `enterTest` detects if `.test.sh` file exists and runs it.
 
 <a id="section-18"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/git-hooks.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/git-hooks.md)
 
 # Git Hooks
 
@@ -698,7 +700,7 @@ inputs:
 
 <a id="section-19"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/git-hooks.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/git-hooks.md)
 
 ## Managing the `.pre-commit-config.yaml` file
 

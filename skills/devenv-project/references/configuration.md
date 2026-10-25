@@ -1,30 +1,30 @@
 # Configuration
 
-devenv v2.3.1; upstream revision `2418e1b43797c44de5166176622c8d8fa0149871`.
+devenv v2.4.0; upstream revision `b904dcb51fe48c30db250038241507f60752f222`.
 
 Modified excerpts from the devenv contributors; see [LICENSE](../LICENSE). Source citations are pinned; devenv.sh links follow the moving public site.
 
 - [basics.md: Basics](#section-1)
 - [basics.md: Environment Summary](#section-2)
-- [files-and-variables.md: Files](#section-3)
+- [files-and-variables.mdx: Files](#section-3)
 - [inputs.md: Following inputs](#section-4)
 - [inputs.md: Locking and updating inputs](#section-5)
 - [pinning.md: How it works](#section-6)
 - [pinning.md: Pinning a nixpkgs revision](#section-7)
 - [pinning.md: Updating pins](#section-8)
 - [pinning.md: Commit the lockfile](#section-9)
-- [packages.md: Packages](#section-10)
-- [packages.md: Searching](#section-11)
-- [composing-using-imports.md: Composing using imports](#section-12)
-- [profiles.md: Basics](#section-13)
-- [profiles.md: Referencing `config` in profiles](#section-14)
-- [profiles.md: Profile priorities](#section-15)
-- [reference/yaml-options.md: imports](#section-16)
-- [reference/yaml-options.md: require_version](#section-17)
+- [packages.mdx: Packages](#section-10)
+- [packages.mdx: Searching](#section-11)
+- [composing-using-imports.mdx: Composing using imports](#section-12)
+- [profiles.mdx: Basics](#section-13)
+- [profiles.mdx: Referencing `config` in profiles](#section-14)
+- [profiles.mdx: Profile priorities](#section-15)
+- [reference/yaml-options.mdx: imports](#section-16)
+- [reference/yaml-options.mdx: require_version](#section-17)
 
 <a id="section-1"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/basics.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/basics.md)
 
 # Basics
 
@@ -82,7 +82,7 @@ that will allow you to read any Nix file.
 
 <a id="section-2"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/basics.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/basics.md)
 
 ## Environment Summary
 
@@ -109,7 +109,7 @@ $ devenv info
 
 <a id="section-3"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/files-and-variables.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/files-and-variables.mdx)
 
 ## Files
 
@@ -125,7 +125,9 @@ Same as `devenv.nix`, but not meant to be committed into the Git repository so
 that developers can override some things for their local use case.
 
 ### devenv.local.yaml
-**Added in version 1.10.**
+
+**New in version 1.10.**
+
 
 Same as `devenv.yaml`, but not meant to be committed into the Git repository so
 that developers can override some things for their local use case.
@@ -163,7 +165,7 @@ to automatically activate the developer environment when you `cd` into it.
 
 <a id="section-4"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/inputs.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/inputs.md)
 
 ## Following inputs
 
@@ -201,7 +203,7 @@ inputs:
 
 <a id="section-5"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/inputs.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/inputs.md)
 
 ## Locking and updating inputs
 
@@ -211,7 +213,7 @@ To update an input to a newer commit, run `devenv update` or read the [devenv.ya
 
 <a id="section-6"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/pinning.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/pinning.md)
 
 ## How it works
 
@@ -232,7 +234,7 @@ You do not need a separate “create lock” step. The lock is created or update
 
 <a id="section-7"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/pinning.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/pinning.md)
 
 ## Pinning a nixpkgs revision
 
@@ -262,7 +264,7 @@ With `?rev=…`, that commit is fixed in the declaration. With only a branch or 
 
 <a id="section-8"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/pinning.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/pinning.md)
 
 ## Updating pins
 
@@ -284,7 +286,7 @@ That re-resolves the input from its URL and rewrites `devenv.lock` if the result
 
 <a id="section-9"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/pinning.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/pinning.md)
 
 ## Commit the lockfile
 
@@ -294,9 +296,10 @@ If the lockfile is missing, devenv creates one by resolving inputs. Without a sh
 
 <a id="section-10"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/packages.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/packages.mdx)
 
 # Packages
+
 
 Packages allow you to add executables and libraries/headers to your environment.
 
@@ -337,9 +340,16 @@ jq-1.6
 
 <a id="section-11"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/packages.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/packages.mdx)
 
 ## Searching
+
+Use the site search (Ctrl+K, or Cmd+K on macOS) to search **Docs**,
+**Options**, and **Packages** together with one query. Results are grouped by
+source and load independently. Options and packages come from the public
+`mcp.devenv.sh` catalog, with a suggested match followed by other results.
+Package versions in that catalog may differ from your project's pinned input.
+Use the command below to search your project's exact Nixpkgs version.
 
 To search for available packages, use ``devenv search <NAME>``:
 
@@ -361,9 +371,10 @@ This will search [available packages](https://search.nixos.org/packages?channel=
 
 <a id="section-12"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/composing-using-imports.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/composing-using-imports.mdx)
 
 # Composing using imports
+
 
 You can compose environments either locally or by referencing [inputs](https://devenv.sh/inputs/).
 
@@ -393,19 +404,18 @@ If you enter the top-level project, the environment is combined with what's defi
 For example, ``devenv up`` will start both the frontend and backend processes.
 
 
-**Note: Added in 1.10**
+**New in version 1.10.**
 
 
 Composing ``devenv.yaml`` files is now supported for local files (relative and absolute paths).
 Remote inputs are not yet supported for ``devenv.yaml`` imports.
 
-**End note.**
-
 <a id="section-13"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/profiles.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/profiles.mdx)
 
-**Added in version 1.9.**
+**New in version 1.9.**
+
 
 ### Basics
 
@@ -448,9 +458,10 @@ When multiple profiles are active, devenv wraps every profile module in a determ
 
 <a id="section-14"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/profiles.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/profiles.mdx)
 
-**Added in version 1.9.**
+**New in version 1.9.**
+
 
 ### Referencing `config` in profiles
 
@@ -495,9 +506,10 @@ Profiles that only set static values, or that only read from the top-level confi
 
 <a id="section-15"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/profiles.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/profiles.mdx)
 
-**Added in version 1.9.**
+**New in version 1.9.**
+
 
 ### Profile priorities
 
@@ -536,7 +548,7 @@ When Alice runs on `dev-server`, the hostname profile enables the database, her 
 
 <a id="section-16"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/reference/yaml-options.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/reference/yaml-options.mdx)
 
 ## imports
 
@@ -547,11 +559,13 @@ See [Composing using imports](https://devenv.sh/composing-using-imports/).
 
 <a id="section-17"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/reference/yaml-options.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/reference/yaml-options.mdx)
 
 ## require_version
 
-**Added in version 2.1.**
+
+**New in version 2.1.**
+
 
 Version requirement for the devenv CLI.
 Set to `true` to enforce that the CLI version matches the modules version

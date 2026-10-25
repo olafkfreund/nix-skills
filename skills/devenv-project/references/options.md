@@ -1,6 +1,6 @@
 # Options
 
-devenv v2.3.1; upstream revision `2418e1b43797c44de5166176622c8d8fa0149871`.
+devenv v2.4.0; upstream revision `b904dcb51fe48c30db250038241507f60752f222`.
 
 Modified excerpts from the devenv contributors; see [LICENSE](../LICENSE). Source citations are pinned; devenv.sh links follow the moving public site.
 
@@ -14,7 +14,7 @@ Modified excerpts from the devenv contributors; see [LICENSE](../LICENSE). Sourc
 
 <a id="section-1"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/languages/python.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/languages/python.md)
 
 ## Getting started
 
@@ -30,7 +30,7 @@ This gives you `python3` and [pip](https://pip.pypa.io/) in your shell, using th
 
 <a id="section-2"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/languages/python.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/languages/python.md)
 
 ## Virtual environments
 
@@ -48,6 +48,28 @@ devenv can create and manage one for you:
 
 The virtual environment is stored in `$DEVENV_STATE/venv` and is activated automatically every time you enter the shell.
 If the Python interpreter changes (for example, after updating `version`), the virtual environment is recreated.
+
+### Using the virtual environment in tasks
+
+`devenv tasks run` does not automatically run the shell entry tasks that initialize the virtual environment.
+If a task needs the virtual environment, make it depend on `devenv:python:virtualenv`:
+
+```nix
+{
+  languages.python = {
+    enable = true;
+    venv.enable = true;
+  };
+
+  tasks."myapp:check" = {
+    after = [ "devenv:python:virtualenv" ];
+    exec = ''python -c "import sys; print(sys.executable)"'';
+  };
+}
+```
+
+This runs the setup task first and passes its `PATH` and `VIRTUAL_ENV` exports to `myapp:check`.
+If you use `uv.sync.enable`, depend on `devenv:python:uv` instead.
 
 ### Installing packages from requirements
 
@@ -77,7 +99,7 @@ Set `venv.quiet = true` to suppress pip output during installation.
 
 <a id="section-3"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/languages/rust.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/languages/rust.md)
 
 ## Getting started
 
@@ -93,7 +115,7 @@ This will provide a complete Rust development environment with `rustc`, `cargo`,
 
 <a id="section-4"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/languages/javascript.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/languages/javascript.md)
 
 ### languages.javascript.enable
 
@@ -123,11 +145,11 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/javascript.nix](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/javascript.nix)
+ - [https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/javascript.nix](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/javascript.nix)
 
 <a id="section-5"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/languages/go.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/languages/go.md)
 
 ### languages.go.enable
 
@@ -157,11 +179,11 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/go.nix](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/go.nix)
+ - [https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/go.nix](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/go.nix)
 
 <a id="section-6"></a>
 
-[Upstream source](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/content/docs/services/postgres.md)
+[Upstream source](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/content/docs/services/postgres.md)
 
 ### services.postgres.enable
 
@@ -192,7 +214,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/services/postgres.nix](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/services/postgres.nix)
+ - [https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/services/postgres.nix](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/services/postgres.nix)
 
 
 <a id="selected-options"></a>
@@ -211,7 +233,7 @@ Minimal enablement examples (choose those needed by the project):
 }
 ```
 
-[Committed upstream data](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/docs/src/data/options.json). Rendered from this artifact, not rebuilt. Foreign declaration links retain their origin and may move independently.
+[Committed upstream data](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/docs/src/data/options.json). Rendered from this artifact, not rebuilt. Foreign declaration links retain their origin and may move independently.
 
 - [`env`](#option-1)
 - [`packages`](#option-2)
@@ -245,7 +267,7 @@ Default:
 { }
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/top-level.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/top-level.nix)
 
 
 <a id="option-2"></a>
@@ -262,7 +284,7 @@ Default:
 [ ]
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/top-level.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/top-level.nix)
 
 
 <a id="option-3"></a>
@@ -279,7 +301,7 @@ Default:
 ""
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/top-level.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/top-level.nix)
 
 
 <a id="option-4"></a>
@@ -290,7 +312,7 @@ Bash code to execute to run the test.
 
 Type: `strings concatenated with "\n"`
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/tests.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/tests.nix)
 
 
 <a id="option-5"></a>
@@ -301,7 +323,7 @@ Shell code to execute when the script is run, or path to a script file.
 
 Type: `string or absolute path`
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/scripts.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/scripts.nix)
 
 
 <a id="option-6"></a>
@@ -318,7 +340,7 @@ Default:
 null
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/tasks.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/tasks.nix)
 
 
 <a id="option-7"></a>
@@ -343,7 +365,7 @@ Default:
 [ ]
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/tasks.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/tasks.nix)
 
 
 <a id="option-8"></a>
@@ -371,7 +393,7 @@ Default:
 [ ]
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/tasks.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/tasks.nix)
 
 
 <a id="option-9"></a>
@@ -388,7 +410,7 @@ Default:
 null
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/tasks.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/tasks.nix)
 
 
 <a id="option-10"></a>
@@ -399,7 +421,7 @@ Bash code to run the process.
 
 Type: `string`
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/processes.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/processes.nix)
 
 
 <a id="option-11"></a>
@@ -422,7 +444,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/python)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/python)
 
 
 <a id="option-12"></a>
@@ -445,7 +467,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/python)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/python)
 
 
 <a id="option-13"></a>
@@ -468,7 +490,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/javascript.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/javascript.nix)
 
 
 <a id="option-14"></a>
@@ -491,7 +513,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/javascript.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/javascript.nix)
 
 
 <a id="option-15"></a>
@@ -514,7 +536,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/rust.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/rust.nix)
 
 
 <a id="option-16"></a>
@@ -537,7 +559,7 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/languages/go.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/languages/go.nix)
 
 
 <a id="option-17"></a>
@@ -561,4 +583,4 @@ Example:
 true
 ```
 
-[Declaration](https://github.com/cachix/devenv/blob/2418e1b43797c44de5166176622c8d8fa0149871/src/modules/services/postgres.nix)
+[Declaration](https://github.com/cachix/devenv/blob/b904dcb51fe48c30db250038241507f60752f222/src/modules/services/postgres.nix)

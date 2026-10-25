@@ -14,12 +14,21 @@ SETUP = 'docs/public/.well-known/agent-skills/devenv-setup/SKILL.md'
 GENERATED = {'references/configuration.md', 'references/workflows.md',
              'references/options.md', 'sources.json', 'LICENSE'}
 RELEASE = re.compile(r'v[0-9]+\.[0-9]+(?:\.[0-9]+)?')
+VERSION_TAG = re.compile(r'<VersionCompatibility version="([\d.]+)"(?: kind="([a-z]+)")?\s*(/?)>')
+NOTICES = {'new': 'New in version {0}.', 'changed': 'Changed in version {0}.'}
 
 
 def version(release):
     if not RELEASE.fullmatch(release):
         raise ValueError('Unsupported stable release tag')
     return release[1:] + ('.0' if release.count('.') == 1 else '')
+
+
+def version_notice(version, kind=None):
+    phrase = NOTICES.get(kind or 'new')
+    if phrase is None:
+        raise ValueError('Unsupported VersionCompatibility kind: ' + kind)
+    return '**' + phrase.format(version) + '**'
 
 
 def api(path):
@@ -127,13 +136,19 @@ def excerpt(text, heading):
         introduction = text[headings[i][0]:headings[i + 1][0]]
         def notice(line):
             if re.match(r'\s*(?:<small class="added-in">|<VersionCompatibility\b|:::(?:tip|note)\[(?:New in|Added in))', line):
-                # Keep the complete admonition, including its version context.
+                # Keep the complete admonition or component, including its version context.
                 if line.lstrip().startswith(':::'):
                     start = introduction.index(line)
                     end = introduction.find('\n:::', start + len(line))
                     if end < 0:
                         raise ValueError('Unclosed inherited version notice')
                     notices.append(introduction[start:end + 5])
+                elif line.lstrip().startswith('<VersionCompatibility') and not line.rstrip().endswith('/>'):
+                    start = introduction.index(line)
+                    end = introduction.find('</VersionCompatibility>', start + len(line))
+                    if end < 0:
+                        raise ValueError('Unclosed inherited version notice')
+                    notices.append(introduction[start:end + len('</VersionCompatibility>')])
                 else:
                     notices.append(line)
             return line
@@ -147,6 +162,7 @@ def convert(text, path):
     fence = None
     tab = False
     tabs = False
+    version = False
     base = 'https://devenv.sh/' + re.sub(r'\.mdx?$', '/', path)
     for raw in text.splitlines(keepends=True):
         line = raw
@@ -196,6 +212,19 @@ def convert(text, path):
                 raise ValueError('Unmatched Tabs')
             tabs = False
             continue
+        match = VERSION_TAG.fullmatch(stripped)
+        if match:
+            if not match[3]:
+                if version:
+                    raise ValueError('Nested VersionCompatibility')
+                version = True
+            output.append('\n' + version_notice(match[1], match[2]) + '\n\n')
+            continue
+        if stripped == '</VersionCompatibility>':
+            if not version:
+                raise ValueError('Unmatched VersionCompatibility')
+            version = False
+            continue
         match = re.fullmatch(r':::(note|tip|caution|danger)(?:\[([^\]]+)\])?', stripped)
         if match:
             label = {'caution': 'Warning', 'danger': 'Danger', 'note': 'Note', 'tip': 'Tip'}[match[1]]
@@ -209,10 +238,11 @@ def convert(text, path):
             continue
         line = re.sub(r'<small class="added-in">Added in <code>([\d.]+)</code></small>',
                       r'**Added in version \1.**', line)
-        # Support only the explicit single-version form; other props need review.
         line = re.sub(r'<VersionCompatibility version="([\d.]+)"\s*/>',
-                      r'**Requires version \1 or later.**', line)
+                      lambda match: version_notice(match[1]), line)
         if re.fullmatch(r'\s*<!--[^\n]*-->\s*', line):
+            continue
+        if re.fullmatch(r'\s*\{/\*.*\*/\}\s*', line):
             continue
         protected = re.sub(r'(`+).*?\1', '', line)
         protected = re.sub(r'\]\([^\s)]+\)', '', protected)
@@ -235,7 +265,7 @@ def convert(text, path):
         line = ''.join(part if i % 2 else re.sub(r'\]\(([^\s)]+)\)', link, part)
                        for i, part in enumerate(parts))
         output.append(line.rstrip() + '\n')
-    if fence or stack or tab or tabs:
+    if fence or stack or tab or tabs or version:
         raise ValueError('Unclosed MDX wrapper or code fence')
     return ''.join(output).strip() + '\n'
 

@@ -38,12 +38,27 @@ class DevenvTests(unittest.TestCase):
         self.assertIn('Warning: Careful', result)
         self.assertIn('End note.', result)
         self.assertNotIn('9.0', result)
-        self.assertIn('Requires version 2.1', devenv.convert('<VersionCompatibility version="2.1" />', 'x'))
+        self.assertIn('New in version 2.1', devenv.convert('<VersionCompatibility version="2.1" />', 'x'))
+
+    def test_version_compatibility_wrappers_and_comments(self):
+        source = ('---\ntitle: Page\n---\n## Parent\n'
+                  '<VersionCompatibility version="2.2" kind="changed">\n'
+                  'Local inputs now reload.\n</VersionCompatibility>\n'
+                  '### Selected\n'
+                  '{/* Hidden maintainer note. */}\nKept text.\n')
+        result = devenv.convert(devenv.excerpt(source, 'Selected'), 'test.md')
+        self.assertIn('Changed in version 2.2', result)
+        self.assertIn('Local inputs now reload.', result)
+        self.assertNotIn('Hidden maintainer note', result)
+        self.assertIn('Kept text.', result)
+        self.assertIn('New in version 1.9', devenv.convert('<VersionCompatibility version="1.9" kind="new" />', 'x'))
 
     def test_bad_sources_fail_closed(self):
         for source in ['<Unknown />', '<Tabs><TabItem label="x">', '</Tabs>',
                        'import X from "evil";', '{runCode()}', ':::unknown', '```nix\n{}',
-                       '<VersionCompatibility mystery="2" />', ':::note\nunclosed', '[x](//host/)']:
+                       '<VersionCompatibility mystery="2" />', ':::note\nunclosed', '[x](//host/)',
+                       '<VersionCompatibility version="2.2" kind="removed">\n', '</VersionCompatibility>',
+                       '<VersionCompatibility version="2.2">\n<VersionCompatibility version="2.2">']:
             with self.subTest(source=source), self.assertRaises(ValueError):
                 devenv.convert(source, 'x.mdx')
         for source in ['---\ntitle: T\n---\n## Other\n',
