@@ -1,4 +1,4 @@
-Upstream source: [README.md](https://github.com/nix-darwin/nix-darwin/blob/4cff07de74b50e64bdd68cd4e722ab5b6b35ee48/README.md)
+Upstream source: [README.md](https://github.com/nix-darwin/nix-darwin/blob/bb0b90dbd54e207100de72b5dcbe3188c98a4b69/README.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -129,7 +129,7 @@ nix-darwin.lib.darwinSystem {
 
 ### Step 1. Creating `configuration.nix`
 
-Copy the [simple](https://github.com/nix-darwin/nix-darwin/blob/4cff07de74b50e64bdd68cd4e722ab5b6b35ee48/modules/examples/simple.nix) example to `/etc/nix-darwin/configuration.nix`.
+Copy the [simple](https://github.com/nix-darwin/nix-darwin/blob/bb0b90dbd54e207100de72b5dcbe3188c98a4b69/modules/examples/simple.nix) example to `/etc/nix-darwin/configuration.nix`.
 
 ### Step 2. Adding `nix-darwin` channel
 
