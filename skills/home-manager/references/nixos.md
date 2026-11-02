@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/nix-flakes/nixos.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/nix-flakes/nixos.md)
+Upstream source: [docs/manual/nix-flakes/nixos.md](https://github.com/nix-community/home-manager/blob/095fef2f265c3c0da4fe315efba8f8a04495ab34/docs/manual/nix-flakes/nixos.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
