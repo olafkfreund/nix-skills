@@ -1,4 +1,4 @@
-Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/interfaces.md)
+Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/b7bd556974fa8a171b5b639200e81d52244dfde4/doc/src/interfaces.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -73,6 +73,25 @@ improvement is significant for workloads with many concurrent connections
 or high bandwidth requirements.
 
 **Note:** Currently only supported with the `qemu` hypervisor.
+
+### Network offloads (cloud-hypervisor)
+
+cloud-hypervisor v54 turns the virtio-net checksum and segmentation
+offloads off by default, because of CVE-2026-99999 in the host kernel.
+On a host kernel with the fix, enable them per interface:
+
+```nix
+{
+  microvm.interfaces = [ {
+    type = "tap";
+    id = "vm-a1";
+    mac = "02:00:00:00:00:01";
+    offload = true;
+  } ];
+}
+```
+
+**Note:** Currently only supported with the `cloud-hypervisor` hypervisor.
 
 Extend the generated script in the guest configuration like this:
 
