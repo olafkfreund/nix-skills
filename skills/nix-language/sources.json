@@ -1,6 +1,6 @@
 {
   "inputs": {
-    ".version": "50127cb5ee9245bea0dd7ed92aa228611a5f4b0e9d39ec26e2da186a16c95e4e",
+    ".version": "ddf31ec84197a74fdaf3dbb87b2a278e81c7c74bc278bc363893722b6a756d0c",
     "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
     "doc/manual/generate-builtins.nix": "f2fa55f7d940609f0e75c01a69e893fbe446848e90326b3a5bc62462780a2443",
     "doc/manual/source/language/derivations.md": "ffa79995a45066a581e89e374049be2ad4b308656e2daff16142b6d3258242ca",
@@ -13,7 +13,7 @@
     "doc/manual/source/language/syntax.md": "4eab376987dc24490d37917abc0ca5a42362ec864378ef304f875434245d87fb",
     "doc/manual/source/language/types.md": "eb9dbe73db9844a279a7a91c22a04b49338d51f27727732a223fbf1b5554c3ab",
     "doc/manual/utils.nix": "b2136a0c094e0d7ff0417aa0a911420aadd21d5691cfee54b578b11eed0bb256",
-    "flake.lock": "1ec27d32a6fdc525f0bd17d5fb2beeb801bd7488d4c632e69346eec0c02bcd9e",
+    "flake.lock": "92198e2d67b3f64abff0d961c89025c3d97a480ca6ac8d164363ac4826a242dc",
     "flake.nix": "ad78689c022b7bea4225bb485ddedfe8ca140108a336f2ac74a564953dd3a7df",
     "generated:language.json": "368c92920a50dae0a4744d23a379e3b2c1e1a26f4626848f8eac59fc892ef301"
   },
@@ -38,14 +38,14 @@
     "doc/manual/source/language/values.md": "412ec5722be681b8dfccb8008ca378ac446187a9c58b0bb9a3ccd346afa07bc6",
     "doc/manual/source/language/variables.md": "b38fefa325170abf97c5313af9300b32cfc85578d9dfb9c1d060c315c48d145e"
   },
-  "nix_version": "2.35.2",
+  "nix_version": "2.35.5",
   "outputs": {
     "COPYING": "20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95",
-    "references/builtins.md": "2a52e0bf223694f6c56cfaffc61443f1cfd6f3aca5916a508a3805b833f4ad67",
-    "references/language.md": "7fc744dc1ffea46789d8a84428b4badb3b1829fc083ba122f5f1db97e82131ea"
+    "references/builtins.md": "56b78e1b957345cdab0e8a309b93984c74c053f621bd3ddbd0ab0ab077833aaa",
+    "references/language.md": "6ab788d1fb63dbe7fa3c8df0dbf43ea6798c17da8f09e616ef9db1f9717bfb8d"
   },
-  "release": "2.35.2",
-  "revision": "2c73b59da29606068c0c98db015dd3a66955525d",
+  "release": "2.35.5",
+  "revision": "96b080768718bd3bd20a367fc2d564197b161bbb",
   "selection": {
     "builtins": [
       "attrNames",

@@ -1,6 +1,6 @@
 # Built-in reference
 
-Nix 2.35.2; upstream revision `2c73b59da29606068c0c98db015dd3a66955525d`.
+Nix 2.35.5; upstream revision `96b080768718bd3bd20a367fc2d564197b161bbb`.
 
 Selected upstream excerpts, with links adapted for this package. Copyright the Nix contributors; see [COPYING](../COPYING).
 
@@ -25,7 +25,7 @@ Selected upstream excerpts, with links adapted for this package. Copyright the N
 - [tryEval](#builtins-tryEval)
 - [typeOf](#builtins-typeOf)
 
-[Upstream generator](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/generate-builtins.nix)
+[Upstream generator](https://github.com/NixOS/nix/blob/96b080768718bd3bd20a367fc2d564197b161bbb/doc/manual/generate-builtins.nix)
 
 <dl>
 <dt id="builtins-attrNames">
