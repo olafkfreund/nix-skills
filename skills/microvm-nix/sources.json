@@ -6,7 +6,7 @@
     "doc/src/declaring.md": "a96dabf4948341e11fc7b4daa433a10c6f325e83f83a73d1de17bf1955e8cdfe",
     "doc/src/host-systemd.md": "4add0e99ac5eebd66acd10d78cd29ef3578fde95e93a8067c3582914f4abb9a0",
     "doc/src/host.md": "8c072f4a3cb14b596e9198b24b8c5d300bb75e925f2c4c2c32011867b13103d8",
-    "doc/src/interfaces.md": "bb3c8da19737b8293477a2600f96fa28f119f56ef017a9fb0d614e1352577c0f",
+    "doc/src/interfaces.md": "b65a71655cd19a91198e28a60fa8a45d402cb8191e4360ecca0064c7ca0a23e7",
     "doc/src/intro.md": "522fba7ddf30d6fe7ed1f17040589eb91692c44ae525b6cd8b7b64ab3bdfe602",
     "doc/src/options.md": "c510966c3b1aaa5ee2e23344313bee26419d42a0fab1923422925d1f1add9c7b",
     "doc/src/routed-network.md": "8882852f36fb9c15bc4bfddb2cd1dcc2907498b364a2f8bd0cdfb79b4a0cbf4f",
@@ -15,18 +15,18 @@
   },
   "outputs": {
     "LICENSE": "bd26a011e61210fa79f5bd5632758773c9dae8a1c26bbfaedcbb88d6300d5609",
-    "references/declarative.md": "b539779e3ee53c3426b5508c9a2e7583beec38a0725c4f7871f83b8421f68123",
-    "references/declaring.md": "6a52331db79b9fb300d1f06eb3d2f4efbb14a447f5876cbdf7f09ed285a05fa5",
-    "references/host-systemd.md": "485c76254c27f729b5b116f808fa5c8d8242c26ba4ad704d7622e86c68e5d9cb",
-    "references/host.md": "1a63cf53bec0368b8c0b0edd3597dd058525096150600693f3a8bbd0d2e26d42",
-    "references/interfaces.md": "86cacf18c57c602122061309bf089604b3b6f385cee445bb00391bb97137d0d1",
-    "references/intro.md": "333be13f7edc283283b8ca9f822de831e97f2f0b3742c644d252ba5a7f2e576a",
-    "references/options.md": "4c14905c64ce62e331d62f6f061295300f3a163c681546e14781c022d4b571d3",
-    "references/routed-network.md": "37089ef7035c7e3ab017c8b6e08122133f588723147b34a52a4392593822639b",
-    "references/shares.md": "85e18eefded475014ad717eb9cb66229964554368acd59823e33f9eebb3d2432",
-    "references/simple-network.md": "1bd69fd89fc055af0a4278e3b173abc39dea6d95178d697e14f083413ded2105"
+    "references/declarative.md": "3141a31105f7a4e3672d4ba392499f457f019fc511d807d3b973e27465adcfbe",
+    "references/declaring.md": "6d3f76bb61a37d5d91a28e24229b86eaa811993a67b5a1022a7663daae35b6af",
+    "references/host-systemd.md": "bdf2e35fff0c3e15414cfc18bc40900c4f64ade604064d08006aa6055b9b2cd4",
+    "references/host.md": "62d90b468bb4e90be15b4b142acf0235529be24311aa370be3f6e885682e23ed",
+    "references/interfaces.md": "bcf43a87f05e2fb723e5484b30916585363c85ab4605d404d031a5ae11b208dc",
+    "references/intro.md": "4c43a35a350581c87da4558696d24e091f044ca7c3e5558604644bc5d18ef124",
+    "references/options.md": "6914c8c6e84c810e9e309cb26a432cb6123e2c05e1493470fda77db65c37798e",
+    "references/routed-network.md": "97ea6baac67027eafd32c253997ff2cd940d4fed04dc613afd7268f170501a18",
+    "references/shares.md": "47c8ae984ac2e78bf388efdab71b978e5839e6b2817013682be750fbd0e9467a",
+    "references/simple-network.md": "ab808f91a51689958bde510095c82604c3fd335aa4ceec1d941b382f32c78f71"
   },
-  "revision": "f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82",
+  "revision": "194a254693f49af939a2b53d04982bd4b276fdb3",
   "selection": [
     {
       "output": "references/intro.md",
