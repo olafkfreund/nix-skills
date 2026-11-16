@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/usage/updating.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/updating.md)
+Upstream source: [docs/manual/usage/updating.md](https://github.com/nix-community/home-manager/blob/a1293da7dd8e497e08d26173f97e2976b36a31ea/docs/manual/usage/updating.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -12,7 +12,7 @@ without changing release branches.
 If you want to move from one release branch to another, such as
 `release-25.05` to `release-25.11`, or between a release branch and
 `master`, see
-[Upgrading to a new Home Manager release](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/usage/upgrading.md#sec-upgrade-release).
+[Upgrading to a new Home Manager release](https://github.com/nix-community/home-manager/blob/a1293da7dd8e497e08d26173f97e2976b36a31ea/docs/manual/usage/upgrading.md#sec-upgrade-release).
 
 ## Flake-Based Configurations {#sec-updating-flakes}
 
