@@ -1,4 +1,4 @@
-Upstream source: [docs/manual/nix-flakes/nix-darwin.md](https://github.com/nix-community/home-manager/blob/0b2f1129177f70c5f0f5d88bb53c49ca47d0bfc0/docs/manual/nix-flakes/nix-darwin.md)
+Upstream source: [docs/manual/nix-flakes/nix-darwin.md](https://github.com/nix-community/home-manager/blob/a1293da7dd8e497e08d26173f97e2976b36a31ea/docs/manual/nix-flakes/nix-darwin.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
