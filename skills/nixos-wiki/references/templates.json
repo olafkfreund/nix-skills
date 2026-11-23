@@ -621,10 +621,10 @@
     "namespace": 10,
     "page_id": 152,
     "redirect": null,
-    "revision_id": 22497,
-    "sha256": "f6388e26df835f6b16cab04a3eb806684513671ba4b2885aff9a34cc3e002905",
-    "text": "<includeonly>{{Notice\n  |color=var(--color-base)\n  |background=var(--background-color-neutral-subtle)\n  |iconColor=var(--color-progressive)\n  |icon=\u2636\n  |'''This {{{scope|article or section}}} needs to be expanded.''' {{{reason|}}} Further information may be found in [{{fullurl:{{{talk|{{{2|{{TALKPAGENAME}}#{{{section|}}}}}}}}}}} the related discussion page]. Please consult the [[:Category:Pedias|pedia article metapage]] for guidelines on contributing.\n}}{{#ifeq:{{{category|yes}}}|yes|[[Category:Pages or sections flagged with Template:Expansion]][[Category:Articles to be expanded]][[Category:Articles with issues]]|}}</includeonly><noinclude>{{Documentation}}</noinclude>",
-    "timestamp": "2025-06-07T23:38:32Z",
+    "revision_id": 35152,
+    "sha256": "c3917d0217425b1df001349fb9c5bc1375cc9f760286e3fa2863010d616d6fc2",
+    "text": "<includeonly>{{Notice\n  |color=var(--color-base)\n  |background=var(--background-color-neutral-subtle)\n  |iconColor=var(--color-progressive)\n  |icon=\u2636\n  |'''This {{{scope|article or section}}} needs to be expanded.''' {{{reason|}}} {{#ifexist:{{{talk|{{{2|{{TALKPAGENAME}}}}}}}}|Further information may be found in [{{fullurl:{{{talk|{{{2|{{TALKPAGENAME}}#{{{section|}}}}}}}}}}} the related discussion page].|}} Please consult the [[:Category:Pedias|pedia article metapage]] for guidelines on contributing.\n}}{{#ifeq:{{{category|yes}}}|yes|[[Category:Pages or sections flagged with Template:Expansion]][[Category:Articles to be expanded]][[Category:Articles with issues]]|}}</includeonly><noinclude>{{Documentation}}</noinclude>",
+    "timestamp": "2026-10-17T14:57:07Z",
     "title": "Template:Expand"
   },
   "Template:Expand/Doc": {
