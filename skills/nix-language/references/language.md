@@ -1,6 +1,6 @@
 # Language reference
 
-Nix 2.35.2; upstream revision `2c73b59da29606068c0c98db015dd3a66955525d`.
+Nix 2.36.0; upstream revision `88907193c54fcd5184cf59d14b693188e2875168`.
 
 Selected upstream excerpts, with links adapted for this package. Copyright the Nix contributors; see [COPYING](../COPYING).
 
@@ -27,26 +27,26 @@ Selected upstream excerpts, with links adapted for this package. Copyright the N
 
 <a id="section-1"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/types.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/types.md)
 
 # Data Types
 
 Every value in the Nix language has one of the following types:
 
-* [Integer](https://nix.dev/manual/nix/2.35/language/types.html#type-int)
-* [Float](https://nix.dev/manual/nix/2.35/language/types.html#type-float)
-* [Boolean](https://nix.dev/manual/nix/2.35/language/types.html#type-bool)
-* [String](https://nix.dev/manual/nix/2.35/language/types.html#type-string)
-* [Path](https://nix.dev/manual/nix/2.35/language/types.html#type-path)
-* [Null](https://nix.dev/manual/nix/2.35/language/types.html#type-null)
-* [Attribute set](https://nix.dev/manual/nix/2.35/language/types.html#type-attrs)
-* [List](https://nix.dev/manual/nix/2.35/language/types.html#type-list)
-* [Function](https://nix.dev/manual/nix/2.35/language/types.html#type-function)
-* [External](https://nix.dev/manual/nix/2.35/language/types.html#type-external)
+* [Integer](https://nix.dev/manual/nix/2.36/language/types.html#type-int)
+* [Float](https://nix.dev/manual/nix/2.36/language/types.html#type-float)
+* [Boolean](https://nix.dev/manual/nix/2.36/language/types.html#type-bool)
+* [String](https://nix.dev/manual/nix/2.36/language/types.html#type-string)
+* [Path](https://nix.dev/manual/nix/2.36/language/types.html#type-path)
+* [Null](https://nix.dev/manual/nix/2.36/language/types.html#type-null)
+* [Attribute set](https://nix.dev/manual/nix/2.36/language/types.html#type-attrs)
+* [List](https://nix.dev/manual/nix/2.36/language/types.html#type-list)
+* [Function](https://nix.dev/manual/nix/2.36/language/types.html#type-function)
+* [External](https://nix.dev/manual/nix/2.36/language/types.html#type-external)
 
 <a id="section-2"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/types.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/types.md)
 
 ### Path <a id="type-path"></a>
 
@@ -57,29 +57,29 @@ Operations that produce paths will simplify the result as the standard C functio
 
 Paths are suitable for referring to local files, and are often preferable over strings.
 - Path values do not contain trailing or duplicate slashes, `.`, or `..`.
-- Relative path literals are automatically resolved relative to their [base directory](https://nix.dev/manual/nix/2.35/glossary.html#gloss-base-directory).
+- Relative path literals are automatically resolved relative to their [base directory](https://nix.dev/manual/nix/2.36/glossary.html#gloss-base-directory).
 - Tooling can recognize path literals and provide additional features, such as autocompletion, refactoring automation and jump-to-file.
 
 
-A file is not required to exist at a given path in order for that path value to be valid, but a path that is converted to a string with [string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html#interpolated-expression) or [string-and-path concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#string-and-path-concatenation) must resolve to a readable file or directory which will be copied into the Nix store.
+A file is not required to exist at a given path in order for that path value to be valid, but a path that is converted to a string with [string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html#interpolated-expression) or [string-and-path concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#string-and-path-concatenation) must resolve to a readable file or directory which will be copied into the Nix store.
 For instance, evaluating `"${./foo.txt}"` will cause `foo.txt` from the same directory to be copied into the Nix store and result in the string `"/nix/store/<hash>-foo.txt"`.
-Operations such as [`import`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-import) can also expect a path to resolve to a readable file or directory.
+Operations such as [`import`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-import) can also expect a path to resolve to a readable file or directory.
 
 
 > **Note**
 >
 > The Nix language assumes that all input files will remain _unchanged_ while evaluating a Nix expression.
 > For example, assume you used a file path in an interpolated string during a `nix repl` session.
-> Later in the same session, after having changed the file contents, evaluating the interpolated string with the file path again might not return a new [store path](https://nix.dev/manual/nix/2.35/store/store-path.html), since Nix might not re-read the file contents.
+> Later in the same session, after having changed the file contents, evaluating the interpolated string with the file path again might not return a new [store path](https://nix.dev/manual/nix/2.36/store/store-path.html), since Nix might not re-read the file contents.
 > Use `:r` to reset the repl as needed.
 
 
-Path values can be expressed as [path literals](https://nix.dev/manual/nix/2.35/language/syntax.html#path-literal).
-The function [`builtins.isPath`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-isPath) can be used to determine if a value is a path.
+Path values can be expressed as [path literals](https://nix.dev/manual/nix/2.36/language/syntax.html#path-literal).
+The function [`builtins.isPath`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-isPath) can be used to determine if a value is a path.
 
 <a id="section-3"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## List <a id="list-literal"></a>
 
@@ -103,11 +103,11 @@ function and the fifth being a set.
 
 Note that lists are only lazy in values, and they are strict in length.
 
-Elements in a list can be accessed using [`builtins.elemAt`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-elemAt).
+Elements in a list can be accessed using [`builtins.elemAt`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-elemAt).
 
 <a id="section-4"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## Attribute Set <a id="attrs-literal"></a>
 
@@ -117,7 +117,7 @@ Attribute sets are written enclosed in curly brackets (`{ }`).
 Attribute names and attribute values are separated by an equal sign (`=`).
 Each value can be an arbitrary expression, terminated by a semicolon (`;`)
 
-An attribute name is a string without context, and is denoted by a [name](https://nix.dev/manual/nix/2.35/language/identifiers.html#names) (an [identifier](https://nix.dev/manual/nix/2.35/language/identifiers.html#identifiers) or [string literal](https://nix.dev/manual/nix/2.35/language/string-literals.html)).
+An attribute name is a string without context, and is denoted by a [name](https://nix.dev/manual/nix/2.36/language/identifiers.html#names) (an [identifier](https://nix.dev/manual/nix/2.36/language/identifiers.html#identifiers) or [string literal](https://nix.dev/manual/nix/2.36/language/string-literals.html)).
 
 
 > **Syntax**
@@ -148,7 +148,8 @@ Attributes in nested attribute sets can be written using *attribute paths*.
 >
 > *attrset* → `{` { *attrpath* `=` *expr* `;` } `}`
 
-An attribute path is a dot-separated list of [names](https://nix.dev/manual/nix/2.35/language/identifiers.html#names).
+<div id="attrpath-literal"></div>
+An attribute path is a dot-separated list of [names](https://nix.dev/manual/nix/2.36/language/identifiers.html#names).
 
 > **Syntax**
 >
@@ -171,7 +172,7 @@ An attribute path is a dot-separated list of [names](https://nix.dev/manual/nix/
 >       };
 >     }
 
-Attribute names can also be set implicitly by using the [`inherit` keyword](https://nix.dev/manual/nix/2.35/language/syntax.html#inheriting-attributes).
+Attribute names can also be set implicitly by using the [`inherit` keyword](https://nix.dev/manual/nix/2.36/language/syntax.html#inheriting-attributes).
 
 > **Example**
 >
@@ -181,7 +182,7 @@ Attribute names can also be set implicitly by using the [`inherit` keyword](http
 >
 >     { true = true; }
 
-Attributes can be accessed with the [`.` operator](https://nix.dev/manual/nix/2.35/language/operators.html#attribute-selection).
+Attributes can be accessed with the [`.` operator](https://nix.dev/manual/nix/2.36/language/operators.html#attribute-selection).
 
 Example:
 
@@ -218,7 +219,7 @@ let bar = "bar"; in
 
 Both will evaluate to `123`.
 
-Attribute names support [string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html):
+Attribute names support [string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html):
 
 ```nix
 let bar = "foo"; in
@@ -259,11 +260,11 @@ of object-oriented programming, for example.
 
 <a id="section-5"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## Recursive sets
 
-Recursive sets are like normal [attribute sets](https://nix.dev/manual/nix/2.35/language/types.html#type-attrs), but the attributes can refer to each other.
+Recursive sets are like normal [attribute sets](https://nix.dev/manual/nix/2.36/language/types.html#type-attrs), but the attributes can refer to each other.
 
 > *rec-attrset* = `rec {` [ *name* `=` *expr* `;` `]`... `}`
 
@@ -298,7 +299,7 @@ will crash with an `infinite recursion encountered` error message.
 
 <a id="section-6"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## Let-expressions
 
@@ -340,7 +341,7 @@ This evaluates to "baz".
 
 <a id="section-7"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## Functions
 
@@ -503,7 +504,7 @@ in concat { x = "foo"; y = "bar"; }
 
 <a id="section-8"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/syntax.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/syntax.md)
 
 ## With-expressions
 
@@ -557,45 +558,45 @@ Does evaluate to `"inner"`.
 
 <a id="section-9"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/operators.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/operators.md)
 
 # Operators
 
 | Name                                   | Syntax                                     | Associativity | Precedence |
 |----------------------------------------|--------------------------------------------|---------------|------------|
-| [Attribute selection](https://nix.dev/manual/nix/2.35/language/operators.html#attribute-selection)                  | *attrset* `.` *attrpath* \[ `or` *expr* \] | none          | 1          |
-| [Function application](https://nix.dev/manual/nix/2.35/language/operators.html#function-application)                 | *func* *expr*                              | left          | 2          |
-| [Arithmetic negation](https://nix.dev/manual/nix/2.35/language/operators.html#arithmetic)      | `-` *number*                               | none          | 3          |
-| [Has attribute](https://nix.dev/manual/nix/2.35/language/operators.html#has-attribute)                        | *attrset* `?` *attrpath*                   | none          | 4          |
+| [Attribute selection](https://nix.dev/manual/nix/2.36/language/operators.html#attribute-selection)                  | *attrset* `.` *attrpath* \[ `or` *expr* \] | none          | 1          |
+| [Function application](https://nix.dev/manual/nix/2.36/language/operators.html#function-application)                 | *func* *expr*                              | left          | 2          |
+| [Arithmetic negation](https://nix.dev/manual/nix/2.36/language/operators.html#arithmetic)      | `-` *number*                               | none          | 3          |
+| [Has attribute](https://nix.dev/manual/nix/2.36/language/operators.html#has-attribute)                        | *expr* `?` *attrpath*                      | none          | 4          |
 | List concatenation                     | *list* `++` *list*                         | right         | 5          |
-| [Multiplication](https://nix.dev/manual/nix/2.35/language/operators.html#arithmetic)           | *number* `*` *number*                      | left          | 6          |
-| [Division](https://nix.dev/manual/nix/2.35/language/operators.html#arithmetic)                 | *number* `/` *number*                      | left          | 6          |
-| [Subtraction](https://nix.dev/manual/nix/2.35/language/operators.html#arithmetic)              | *number* `-` *number*                      | left          | 7          |
-| [Addition](https://nix.dev/manual/nix/2.35/language/operators.html#arithmetic)                 | *number* `+` *number*                      | left          | 7          |
-| [String concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#string-concatenation)                 | *string* `+` *string*                      | left          | 7          |
-| [Path concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#path-concatenation)                   | *path* `+` *path*                          | left          | 7          |
-| [Path and string concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#path-and-string-concatenation)        | *path* `+` *string*                        | left          | 7          |
-| [String and path concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#string-and-path-concatenation)        | *string* `+` *path*                        | left          | 7          |
+| [Multiplication](https://nix.dev/manual/nix/2.36/language/operators.html#arithmetic)           | *number* `*` *number*                      | left          | 6          |
+| [Division](https://nix.dev/manual/nix/2.36/language/operators.html#arithmetic)                 | *number* `/` *number*                      | left          | 6          |
+| [Subtraction](https://nix.dev/manual/nix/2.36/language/operators.html#arithmetic)              | *number* `-` *number*                      | left          | 7          |
+| [Addition](https://nix.dev/manual/nix/2.36/language/operators.html#arithmetic)                 | *number* `+` *number*                      | left          | 7          |
+| [String concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#string-concatenation)                 | *string* `+` *string*                      | left          | 7          |
+| [Path concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#path-concatenation)                   | *path* `+` *path*                          | left          | 7          |
+| [Path and string concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#path-and-string-concatenation)        | *path* `+` *string*                        | left          | 7          |
+| [String and path concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#string-and-path-concatenation)        | *string* `+` *path*                        | left          | 7          |
 | Logical negation (`NOT`)               | `!` *bool*                                 | none          | 8          |
-| [Update](https://nix.dev/manual/nix/2.35/language/operators.html#update)                               | *attrset* `//` *attrset*                   | right         | 9          |
-| [Less than](https://nix.dev/manual/nix/2.35/language/operators.html#comparison)                | *expr* `<` *expr*                          | none          | 10         |
-| [Less than or equal to](https://nix.dev/manual/nix/2.35/language/operators.html#comparison)    | *expr* `<=` *expr*                         | none          | 10         |
-| [Greater than](https://nix.dev/manual/nix/2.35/language/operators.html#comparison)             | *expr* `>` *expr*                          | none          | 10         |
-| [Greater than or equal to](https://nix.dev/manual/nix/2.35/language/operators.html#comparison) | *expr* `>=` *expr*                         | none          | 10         |
-| [Equality](https://nix.dev/manual/nix/2.35/language/operators.html#equality)                             | *expr* `==` *expr*                         | none          | 11         |
+| [Update](https://nix.dev/manual/nix/2.36/language/operators.html#update)                               | *attrset* `//` *attrset*                   | right         | 9          |
+| [Less than](https://nix.dev/manual/nix/2.36/language/operators.html#comparison)                | *expr* `<` *expr*                          | none          | 10         |
+| [Less than or equal to](https://nix.dev/manual/nix/2.36/language/operators.html#comparison)    | *expr* `<=` *expr*                         | none          | 10         |
+| [Greater than](https://nix.dev/manual/nix/2.36/language/operators.html#comparison)             | *expr* `>` *expr*                          | none          | 10         |
+| [Greater than or equal to](https://nix.dev/manual/nix/2.36/language/operators.html#comparison) | *expr* `>=` *expr*                         | none          | 10         |
+| [Equality](https://nix.dev/manual/nix/2.36/language/operators.html#equality)                             | *expr* `==` *expr*                         | none          | 11         |
 | Inequality                             | *expr* `!=` *expr*                         | none          | 11         |
-| [Logical conjunction](https://nix.dev/manual/nix/2.35/language/operators.html#logical-conjunction) (`AND`)          | *bool* `&&` *bool*                         | left          | [12](https://nix.dev/manual/nix/2.35/language/operators.html#precedence-and-disjunctive-normal-form)         |
-| [Logical disjunction](https://nix.dev/manual/nix/2.35/language/operators.html#logical-disjunction) (`OR`)           | *bool* <code>\|\|</code> *bool*            | left          | [13](https://nix.dev/manual/nix/2.35/language/operators.html#precedence-and-disjunctive-normal-form)         |
-| [Logical implication](https://nix.dev/manual/nix/2.35/language/operators.html#logical-implication)                  | *bool* `->` *bool*                         | right         | 14         |
-| [Pipe operator](https://nix.dev/manual/nix/2.35/language/operators.html#pipe-operators) (experimental)         | *expr* `\|>` *func*                        | left          | 15         |
-| [Pipe operator](https://nix.dev/manual/nix/2.35/language/operators.html#pipe-operators) (experimental)         | *func* `<\|` *expr*                        | right         | 15         |
+| [Logical conjunction](https://nix.dev/manual/nix/2.36/language/operators.html#logical-conjunction) (`AND`)          | *bool* `&&` *bool*                         | left          | [12](https://nix.dev/manual/nix/2.36/language/operators.html#precedence-and-disjunctive-normal-form)         |
+| [Logical disjunction](https://nix.dev/manual/nix/2.36/language/operators.html#logical-disjunction) (`OR`)           | *bool* <code>\|\|</code> *bool*            | left          | [13](https://nix.dev/manual/nix/2.36/language/operators.html#precedence-and-disjunctive-normal-form)         |
+| [Logical implication](https://nix.dev/manual/nix/2.36/language/operators.html#logical-implication)                  | *bool* `->` *bool*                         | right         | 14         |
+| [Pipe operator](https://nix.dev/manual/nix/2.36/language/operators.html#pipe-operators) (experimental)         | *expr* `\|>` *func*                        | left          | 15         |
+| [Pipe operator](https://nix.dev/manual/nix/2.36/language/operators.html#pipe-operators) (experimental)         | *func* `<\|` *expr*                        | right         | 15         |
 
 
 <!-- TODO(@rhendric, #10970): ^ rationalize number -> int/float -->
 
 <a id="section-10"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/operators.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/operators.md)
 
 ## Update
 
@@ -603,34 +604,34 @@ Does evaluate to `"inner"`.
 >
 > *attrset1* // *attrset2*
 
-Update [attribute set](https://nix.dev/manual/nix/2.35/language/types.html#type-attrs) *attrset1* with names and values from *attrset2*.
+Update [attribute set](https://nix.dev/manual/nix/2.36/language/types.html#type-attrs) *attrset1* with names and values from *attrset2*.
 
 The returned attribute set will have all of the attributes in *attrset1* and *attrset2*.
 If an attribute name is present in both, the attribute value from the latter is taken.
 
-This operator is [strict](https://nix.dev/manual/nix/2.35/language/evaluation.html#strictness) in both *attrset1* and *attrset2*.
-That means that both arguments are evaluated to [weak head normal form](https://nix.dev/manual/nix/2.35/language/evaluation.html#values), so the attribute sets themselves are evaluated, but their attribute values are not evaluated.
+This operator is [strict](https://nix.dev/manual/nix/2.36/language/evaluation.html#strictness) in both *attrset1* and *attrset2*.
+That means that both arguments are evaluated to [weak head normal form](https://nix.dev/manual/nix/2.36/language/evaluation.html#values), so the attribute sets themselves are evaluated, but their attribute values are not evaluated.
 
 
 <a id="section-11"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/scope.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/scope.md)
 
 # Scoping rules
 
-A *scope* in the Nix language is a dictionary keyed by [name](https://nix.dev/manual/nix/2.35/language/identifiers.html#names), mapping each name to an expression and a *definition type*.
+A *scope* in the Nix language is a dictionary keyed by [name](https://nix.dev/manual/nix/2.36/language/identifiers.html#names), mapping each name to an expression and a *definition type*.
 The definition type is either *explicit* or *implicit*.
 Each entry in this dictionary is a *definition*.
 
 Explicit definitions are created by the following expressions:
-- [let-expressions](https://nix.dev/manual/nix/2.35/language/syntax.html#let-expressions)
-- [recursive attribute set literals](https://nix.dev/manual/nix/2.35/language/syntax.html#recursive-sets) (`rec`)
-- [function literals](https://nix.dev/manual/nix/2.35/language/syntax.html#functions)
+- [let-expressions](https://nix.dev/manual/nix/2.36/language/syntax.html#let-expressions)
+- [recursive attribute set literals](https://nix.dev/manual/nix/2.36/language/syntax.html#recursive-sets) (`rec`)
+- [function literals](https://nix.dev/manual/nix/2.36/language/syntax.html#functions)
 
-Implicit definitions are only created by [with-expressions](https://nix.dev/manual/nix/2.35/language/syntax.html#with-expressions).
+Implicit definitions are only created by [with-expressions](https://nix.dev/manual/nix/2.36/language/syntax.html#with-expressions).
 
 Every expression is *enclosed* by a scope.
-The outermost expression is enclosed by the [built-in, global scope](https://nix.dev/manual/nix/2.35/language/builtins.html), which contains only explicit definitions.
+The outermost expression is enclosed by the [built-in, global scope](https://nix.dev/manual/nix/2.36/language/builtins.html), which contains only explicit definitions.
 The expressions listed above *extend* their enclosing scope by adding new definitions, or replacing existing ones with the same name.
 An explicit definition can replace a definition of any type; an implicit definition can only replace another implicit definition.
 
@@ -642,12 +643,12 @@ the value of a variable is determined only by the variable's enclosing scope, an
 
 > **Note**
 >
-> Expressions entered into the [Nix REPL](https://nix.dev/manual/nix/2.35/command-ref/new-cli/nix3-repl.html) are enclosed by a scope that can be extended by command line arguments or previous REPL commands.
+> Expressions entered into the [Nix REPL](https://nix.dev/manual/nix/2.36/command-ref/new-cli/nix3-repl.html) are enclosed by a scope that can be extended by command line arguments or previous REPL commands.
 > These ways of extending scope are not, strictly speaking, part of the Nix language.
 
 <a id="section-12"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/evaluation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/evaluation.md)
 
 ## Laziness and thunks <a id="laziness"></a>
 
@@ -657,11 +658,11 @@ Furthermore, the result of evaluation is preserved, in values, in `let` bindings
 
 When discussing the process of evaluation in lower level terms, we may define values not as a subset of expressions, but separately, where each "value" is either a data constructor, a function or a _thunk_. A thunk is a delayed computation, represented by an expression reference and a "closure" &ndash; the values for the lexical scope around the delayed expression.
 
-As a user of the language, you generally don't have to think about thunks, as they are not part of the language semantics, but you may encounter them in the repl, in the [C API](https://nix.dev/manual/nix/2.35/c-api.html) or in discussions.
+As a user of the language, you generally don't have to think about thunks, as they are not part of the language semantics, but you may encounter them in the repl, in the [C API](https://nix.dev/manual/nix/2.36/c-api.html) or in discussions.
 
 <a id="section-13"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/evaluation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/evaluation.md)
 
 ## Strictness
 
@@ -704,19 +705,19 @@ in f { x = throw "error"; y = throw "error"; }
 
 <a id="section-14"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-literals.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/string-literals.md)
 
 # String literals
 
-A *string literal* represents a [string](https://nix.dev/manual/nix/2.35/language/types.html#type-string) value.
+A *string literal* represents a [string](https://nix.dev/manual/nix/2.36/language/types.html#type-string) value.
 
 > **Syntax**
 >
 > *expression* → *string*
 >
-> *string* → `"` ( *string_char*\* [*interpolation_element*](https://nix.dev/manual/nix/2.35/language/string-interpolation.html) )* *string_char*\* `"`
+> *string* → `"` ( *string_char*\* [*interpolation_element*](https://nix.dev/manual/nix/2.36/language/string-interpolation.html) )* *string_char*\* `"`
 >
-> *string* → `''` ( *indented_string_char*\* [*interpolation_element*](https://nix.dev/manual/nix/2.35/language/string-interpolation.html) )* *indented_string_char*\* `''`
+> *string* → `''` ( *indented_string_char*\* [*interpolation_element*](https://nix.dev/manual/nix/2.36/language/string-interpolation.html) )* *indented_string_char*\* `''`
 >
 > *string* → *uri*
 >
@@ -730,7 +731,7 @@ Strings can be written in three ways.
 
 The most common way is to enclose the string between double quotes, e.g., `"foo bar"`.
 Strings can span multiple lines.
-The results of other expressions can be included into a string by enclosing them in `${ }`, a feature known as [string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html).
+The results of other expressions can be included into a string by enclosing them in `${ }`, a feature known as [string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html).
 
 
 The following must be escaped to represent them within a string, by prefixing with a backslash (`\`):
@@ -822,7 +823,7 @@ each line, so the resulting string is
 > >
 > >     "\tall:\n\t\t@echo hello\n"
 
-Indented strings support [string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html).
+Indented strings support [string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html).
 
 The following must be escaped to represent them in an indented string:
 
@@ -913,24 +914,24 @@ is*, without quotes. For instance, the string
 
 <a id="section-15"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-interpolation.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/string-interpolation.md)
 
 # Interpolated expression
 
 An expression that is interpolated must evaluate to one of the following:
 
-- a [string](https://nix.dev/manual/nix/2.35/language/types.html#type-string)
-- a [path](https://nix.dev/manual/nix/2.35/language/types.html#type-path)
-- an [attribute set](https://nix.dev/manual/nix/2.35/language/types.html#type-attrs) that has a `__toString` attribute or an `outPath` attribute
+- a [string](https://nix.dev/manual/nix/2.36/language/types.html#type-string)
+- a [path](https://nix.dev/manual/nix/2.36/language/types.html#type-path)
+- an [attribute set](https://nix.dev/manual/nix/2.36/language/types.html#type-attrs) that has a `__toString` attribute or an `outPath` attribute
 
   - `__toString` must be a function that takes the attribute set itself and returns a string
   - `outPath` must be a string
 
-  This includes [derivation expressions](https://nix.dev/manual/nix/2.35/language/derivations.html) or [flake inputs](https://nix.dev/manual/nix/2.35/command-ref/new-cli/nix3-flake.html#flake-inputs) (experimental).
+  This includes [derivation expressions](https://nix.dev/manual/nix/2.36/language/derivations.html) or [flake inputs](https://nix.dev/manual/nix/2.36/command-ref/new-cli/nix3-flake.html#flake-inputs) (experimental).
 
 A string interpolates to itself.
 
-A path in an interpolated expression is first copied into the Nix store, and the resulting string is the [store path](https://nix.dev/manual/nix/2.35/store/store-path.html) of the newly created [store object](https://nix.dev/manual/nix/2.35/store/store-object.html).
+A path in an interpolated expression is first copied into the Nix store, and the resulting string is the [store path](https://nix.dev/manual/nix/2.36/store/store-path.html) of the newly created [store object](https://nix.dev/manual/nix/2.36/store/store-object.html).
 
 
 > **Example**
@@ -947,7 +948,7 @@ A path in an interpolated expression is first copied into the Nix store, and the
 >
 >     "/nix/store/2hhl2nz5v0khbn06ys82nrk99aa1xxdw-foo"
 
-A derivation interpolates to the [store path](https://nix.dev/manual/nix/2.35/store/store-path.html) of its first [output](https://nix.dev/manual/nix/2.35/language/derivations.html#attr-outputs).
+A derivation interpolates to the [store path](https://nix.dev/manual/nix/2.36/store/store-path.html) of its first [output](https://nix.dev/manual/nix/2.36/language/derivations.html#attr-outputs).
 
 > **Example**
 >
@@ -1023,7 +1024,7 @@ If neither is present, an error is thrown.
 
 <a id="section-16"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/string-context.md)
 
 # String context
 
@@ -1037,11 +1038,11 @@ It is actually a pair of a sequence of characters and a *string context*.
 The string context is an (unordered) set of *string context elements*.
 
 The purpose of string contexts is to collect non-string values attached to strings via
-[string concatenation](https://nix.dev/manual/nix/2.35/language/operators.html#string-concatenation),
-[string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html),
+[string concatenation](https://nix.dev/manual/nix/2.36/language/operators.html#string-concatenation),
+[string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html),
 and similar operations.
 The idea is that a user can reference other files when creating text files through Nix expressions, without manually keeping track of the exact paths.
-Nix will ensure that the all referenced files are accessible – that all [store paths](https://nix.dev/manual/nix/2.35/glossary.html#gloss-store-path) are [valid](https://nix.dev/manual/nix/2.35/glossary.html#gloss-validity).
+Nix will ensure that the all referenced files are accessible – that all [store paths](https://nix.dev/manual/nix/2.36/glossary.html#gloss-store-path) are [valid](https://nix.dev/manual/nix/2.36/glossary.html#gloss-validity).
 
 > **Note**
 >
@@ -1049,16 +1050,16 @@ Nix will ensure that the all referenced files are accessible – that all [store
 
 String context elements come in different forms:
 
-- [deriving path](https://nix.dev/manual/nix/2.35/glossary.html#gloss-deriving-path)<a id="string-context-element-derived-path"></a>
+- [deriving path](https://nix.dev/manual/nix/2.36/glossary.html#gloss-deriving-path)<a id="string-context-element-derived-path"></a>
 
-  A string context element of this type is a [deriving path](https://nix.dev/manual/nix/2.35/glossary.html#gloss-deriving-path).
-  They can be either of type [constant](https://nix.dev/manual/nix/2.35/language/string-context.html#string-context-constant) or [output](https://nix.dev/manual/nix/2.35/language/string-context.html#string-context-output), which correspond to the types of deriving paths.
+  A string context element of this type is a [deriving path](https://nix.dev/manual/nix/2.36/glossary.html#gloss-deriving-path).
+  They can be either of type [constant](https://nix.dev/manual/nix/2.36/language/string-context.html#string-context-constant) or [output](https://nix.dev/manual/nix/2.36/language/string-context.html#string-context-output), which correspond to the types of deriving paths.
 
   - [Constant string context elements]<a id="string-context-constant"></a>
 
     > **Example**
     >
-    > [`builtins.storePath`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-storePath) creates a string with a single constant string context element:
+    > [`builtins.storePath`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-storePath) creates a string with a single constant string context element:
     >
     > ```nix
     > builtins.getContext (builtins.storePath "/nix/store/ikwkxz4wwlp2g1428n7dy729cg1d9hin-hello-2.10")
@@ -1077,7 +1078,7 @@ String context elements come in different forms:
 
     > **Example**
     >
-    > The behavior of string contexts are best demonstrated with a built-in function that is still experimental: [`builtins.outputOf`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-outputOf).
+    > The behavior of string contexts are best demonstrated with a built-in function that is still experimental: [`builtins.outputOf`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-outputOf).
     > This example will *not* work with stable Nix!
     >
     > ```nix
@@ -1099,13 +1100,13 @@ String context elements come in different forms:
 - [*derivation deep*]<a id="string-context-element-derivation-deep"></a>
 
   *derivation deep* is an advanced feature intended to be used with the
-  [`exportReferencesGraph` derivation attribute](https://nix.dev/manual/nix/2.35/language/advanced-attributes.html#adv-attr-exportReferencesGraph).
+  [`exportReferencesGraph` derivation attribute](https://nix.dev/manual/nix/2.36/language/advanced-attributes.html#adv-attr-exportReferencesGraph).
   A *derivation deep* string context element is a derivation path, and refers to both its outputs and the entire build closure of that derivation:
   all its outputs, all the other derivations the given derivation depends on, and all the outputs of those.
 
   > **Example**
   >
-  > The best way to illustrate *derivation deep* string contexts is with [`builtins.addDrvOutputDependencies`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-addDrvOutputDependencies).
+  > The best way to illustrate *derivation deep* string contexts is with [`builtins.addDrvOutputDependencies`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-addDrvOutputDependencies).
   > Take a regular constant string context element pointing to a derivation, and transform it into a "Derivation deep" string context element.
   >
   > ```nix
@@ -1125,51 +1126,51 @@ String context elements come in different forms:
 
 <a id="section-17"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/string-context.md)
 
 ## Inspecting string contexts
 
-Most basically, [`builtins.hasContext`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-hasContext) will tell whether a string has a non-empty context.
+Most basically, [`builtins.hasContext`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-hasContext) will tell whether a string has a non-empty context.
 
-When more granular information is needed, [`builtins.getContext`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-getContext) can be used.
-It creates an [attribute set](https://nix.dev/manual/nix/2.35/language/types.html#type-attrs) representing the string context, which can be inspected as usual.
+When more granular information is needed, [`builtins.getContext`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-getContext) can be used.
+It creates an [attribute set](https://nix.dev/manual/nix/2.36/language/types.html#type-attrs) representing the string context, which can be inspected as usual.
 
 
 <a id="section-18"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/string-context.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/string-context.md)
 
 ## Clearing string contexts
 
-[`builtins.unsafeDiscardStringContext`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-unsafeDiscardStringContext) will make a copy of a string, but with an empty string context.
+[`builtins.unsafeDiscardStringContext`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-unsafeDiscardStringContext) will make a copy of a string, but with an empty string context.
 The returned string can be used in more ways, e.g. by operators that require the string context to be empty.
 The requirement to explicitly discard the string context in such use cases helps ensure that string context elements are not lost by mistake.
 The "unsafe" marker is only there to remind that Nix normally guarantees that dependencies are tracked, whereas the returned string has lost them.
 
 <a id="section-19"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/derivations.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/derivations.md)
 
 # Derivations
 
-The most important built-in function is `derivation`, which is used to describe a single store-layer [store derivation](https://nix.dev/manual/nix/2.35/glossary.html#gloss-store-derivation).
-Consult the [store chapter](https://nix.dev/manual/nix/2.35/store/derivation/index.html) for what a store derivation is;
+The most important built-in function is `derivation`, which is used to describe a single store-layer [store derivation](https://nix.dev/manual/nix/2.36/glossary.html#gloss-store-derivation).
+Consult the [store chapter](https://nix.dev/manual/nix/2.36/store/derivation/index.html) for what a store derivation is;
 this section just concerns how to create one from the Nix language.
 
 This builtin function takes as input an attribute set, the attributes of which specify the inputs to the process.
-It outputs an attribute set, and produces a [store derivation](https://nix.dev/manual/nix/2.35/glossary.html#gloss-store-derivation) as a side effect of evaluation.
+It outputs an attribute set, and produces a [store derivation](https://nix.dev/manual/nix/2.36/glossary.html#gloss-store-derivation) as a side effect of evaluation.
 
 
 <a id="section-20"></a>
 
-[Upstream source](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/source/language/derivations.md)
+[Upstream source](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/language/derivations.md)
 
 ### Required
 
-- [`name`]<a id="attr-name"></a> ([String](https://nix.dev/manual/nix/2.35/language/types.html#type-string))
+- [`name`]<a id="attr-name"></a> ([String](https://nix.dev/manual/nix/2.36/language/types.html#type-string))
 
   A symbolic name for the derivation.
-  See [derivation outputs](https://nix.dev/manual/nix/2.35/store/derivation/outputs/index.html#outputs) for what this is affects.
+  See [derivation outputs](https://nix.dev/manual/nix/2.36/store/derivation/outputs/index.html#outputs) for what this is affects.
 
 
   > **Example**
@@ -1182,11 +1183,11 @@ It outputs an attribute set, and produces a [store derivation](https://nix.dev/m
   > ```
   >
   > The derivation's path will be `/nix/store/<hash>-hello.drv`.
-  > The [output](https://nix.dev/manual/nix/2.35/language/derivations.html#attr-outputs) paths will be of the form `/nix/store/<hash>-hello[-<output>]`
+  > The [output](https://nix.dev/manual/nix/2.36/language/derivations.html#attr-outputs) paths will be of the form `/nix/store/<hash>-hello[-<output>]`
 
-- [`system`]<a id="attr-system"></a> ([String](https://nix.dev/manual/nix/2.35/language/types.html#type-string))
+- [`system`]<a id="attr-system"></a> ([String](https://nix.dev/manual/nix/2.36/language/types.html#type-string))
 
-  See [system](https://nix.dev/manual/nix/2.35/store/derivation/index.html#system).
+  See [system](https://nix.dev/manual/nix/2.36/store/derivation/index.html#system).
 
   > **Example**
   >
@@ -1212,11 +1213,11 @@ It outputs an attribute set, and produces a [store derivation](https://nix.dev/m
   > }
   > ```
   >
-  > [`builtins.currentSystem`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-currentSystem) has the value of the [`system` configuration option](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-system), and defaults to the system type of the current Nix installation.
+  > [`builtins.currentSystem`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-currentSystem) has the value of the [`system` configuration option](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-system), and defaults to the system type of the current Nix installation.
 
-- [`builder`]<a id="attr-builder"></a> ([Path](https://nix.dev/manual/nix/2.35/language/types.html#type-path) | [String](https://nix.dev/manual/nix/2.35/language/types.html#type-string))
+- [`builder`]<a id="attr-builder"></a> ([Path](https://nix.dev/manual/nix/2.36/language/types.html#type-path) | [String](https://nix.dev/manual/nix/2.36/language/types.html#type-string))
 
-  See [builder](https://nix.dev/manual/nix/2.35/store/derivation/index.html#builder).
+  See [builder](https://nix.dev/manual/nix/2.36/store/derivation/index.html#builder).
 
   > **Example**
   >

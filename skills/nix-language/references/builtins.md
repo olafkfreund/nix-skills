@@ -1,6 +1,6 @@
 # Built-in reference
 
-Nix 2.35.2; upstream revision `2c73b59da29606068c0c98db015dd3a66955525d`.
+Nix 2.36.0; upstream revision `88907193c54fcd5184cf59d14b693188e2875168`.
 
 Selected upstream excerpts, with links adapted for this package. Copyright the Nix contributors; see [COPYING](../COPYING).
 
@@ -25,11 +25,11 @@ Selected upstream excerpts, with links adapted for this package. Copyright the N
 - [tryEval](#builtins-tryEval)
 - [typeOf](#builtins-typeOf)
 
-[Upstream generator](https://github.com/NixOS/nix/blob/2c73b59da29606068c0c98db015dd3a66955525d/doc/manual/generate-builtins.nix)
+[Upstream generator](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/generate-builtins.nix)
 
 <dl>
 <dt id="builtins-attrNames">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-attrNames"><code>attrNames <var>set</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-attrNames"><code>attrNames <var>set</var></code></a>
 </dt>
 <dd>
 
@@ -42,17 +42,17 @@ Has `O(n log n)` time complexity, where `n` is number of attributes in the *set*
 </dd>
 
 <dt id="builtins-currentSystem">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-currentSystem"><code>currentSystem</code></a> (string)
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-currentSystem"><code>currentSystem</code></a> (string)
 </dt>
 <dd>
 
 The value of the
-[`eval-system`](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-eval-system)
+[`eval-system`](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-eval-system)
 or else
-[`system`](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-system)
+[`system`](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-system)
 configuration option.
 
-It can be used to set the `system` attribute for [`builtins.derivation`](https://nix.dev/manual/nix/2.35/language/derivations.html) such that the resulting derivation can be built on the same system that evaluates the Nix expression:
+It can be used to set the `system` attribute for [`builtins.derivation`](https://nix.dev/manual/nix/2.36/language/derivations.html) such that the resulting derivation can be built on the same system that evaluates the Nix expression:
 
 ```nix
  builtins.derivation {
@@ -70,12 +70,12 @@ $ nix-instantiate --system "mips64-linux" --eval --expr 'builtins.currentSystem'
 
 > **Note**
 >
-> Not available in [pure evaluation mode](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-pure-eval).
+> Not available in [pure evaluation mode](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-pure-eval).
 
 </dd>
 
 <dt id="builtins-deepSeq">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-deepSeq"><code>deepSeq <var>e1</var> <var>e2</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-deepSeq"><code>deepSeq <var>e1</var> <var>e2</var></code></a>
 </dt>
 <dd>
 
@@ -86,7 +86,7 @@ evaluated recursively.
 </dd>
 
 <dt id="builtins-filter">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-filter"><code>filter <var>f</var> <var>list</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-filter"><code>filter <var>f</var> <var>list</var></code></a>
 </dt>
 <dd>
 
@@ -97,7 +97,7 @@ Has linear time complexity in the size of the input *list*.
 </dd>
 
 <dt id="builtins-foldl'">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-foldl'"><code>foldl' <var>op</var> <var>nul</var> <var>list</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-foldl'"><code>foldl' <var>op</var> <var>nul</var> <var>list</var></code></a>
 </dt>
 <dd>
 
@@ -129,7 +129,7 @@ argument is the current element being processed.
 The return value of each application of `op` is evaluated immediately,
 even for intermediate values.
 This way, `foldl'` can operate in constant stack space, allowing it to operate on large lists,
-regardless of [max-call-depth](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-max-call-depth).
+regardless of [max-call-depth](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-max-call-depth).
 
 Conventionally, a fold function without the `'` ("prime") preserves laziness,
 but lacks these benefits.
@@ -140,16 +140,16 @@ Has linear time complexity in the size of the list.
 </dd>
 
 <dt id="builtins-getContext">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-getContext"><code>getContext <var>s</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-getContext"><code>getContext <var>s</var></code></a>
 </dt>
 <dd>
 
 Return the string context of *s*.
 
 The string context tracks references to derivations within a string.
-It is represented as an attribute set of [store derivation](https://nix.dev/manual/nix/2.35/glossary.html#gloss-store-derivation) paths mapping to output names.
+It is represented as an attribute set of [store derivation](https://nix.dev/manual/nix/2.36/glossary.html#gloss-store-derivation) paths mapping to output names.
 
-Using [string interpolation](https://nix.dev/manual/nix/2.35/language/string-interpolation.html) on a derivation adds that derivation to the string context.
+Using [string interpolation](https://nix.dev/manual/nix/2.36/language/string-interpolation.html) on a derivation adds that derivation to the string context.
 For example,
 
 ```nix
@@ -165,7 +165,7 @@ evaluates to
 </dd>
 
 <dt id="builtins-getEnv">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-getEnv"><code>getEnv <var>s</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-getEnv"><code>getEnv <var>s</var></code></a>
 </dt>
 <dd>
 
@@ -182,20 +182,22 @@ home directory.)
 </dd>
 
 <dt id="builtins-hasAttr">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-hasAttr"><code>hasAttr <var>s</var> <var>set</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-hasAttr"><code>hasAttr <var>s</var> <var>set</var></code></a>
 </dt>
 <dd>
 
-`hasAttr` returns `true` if *set* has an attribute named *s*, and
-`false` otherwise. This is a dynamic version of the `?` operator,
-since *s* is an expression rather than an identifier.
+`hasAttr` returns `true` if *set* has an attribute named *s*, and `false` if it does not.
+This is a dynamic version of the `?` operator, since *s* is an expression rather than an identifier.
+
+Unlike the `?` operator, however, *s* cannot refer to a nested attribute set.
+Also unlike the `?` operator, if *s* is not a string or *set* is not an attribute set, evaluation is aborted.
 
 Has `O(log n)` time complexity, where `n` is number of attributes in the *set*.
 
 </dd>
 
 <dt id="builtins-import">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-import"><code>import <var>path</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-import"><code>import <var>path</var></code></a>
 </dt>
 <dd>
 
@@ -205,7 +207,7 @@ Load, parse, and return the Nix expression in the file *path*.
 >
 > Unlike some languages, `import` is a regular function in Nix.
 
-The *path* argument must meet the same criteria as an [interpolated expression](https://nix.dev/manual/nix/2.35/language/string-interpolation.html#interpolated-expression).
+The *path* argument must meet the same criteria as an [interpolated expression](https://nix.dev/manual/nix/2.36/language/string-interpolation.html#interpolated-expression).
 
 If *path* is a directory, the file `default.nix` in that directory is used if it exists.
 
@@ -268,7 +270,7 @@ Therefore, it cannot refer to variables that are in scope at the call site.
 </dd>
 
 <dt id="builtins-isAttrs">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-isAttrs"><code>isAttrs <var>e</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-isAttrs"><code>isAttrs <var>e</var></code></a>
 </dt>
 <dd>
 
@@ -277,7 +279,7 @@ Return `true` if *e* evaluates to a set, and `false` otherwise.
 </dd>
 
 <dt id="builtins-listToAttrs">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-listToAttrs"><code>listToAttrs <var>e</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-listToAttrs"><code>listToAttrs <var>e</var></code></a>
 </dt>
 <dd>
 
@@ -310,7 +312,7 @@ Has `O(n log n)` time complexity, where `n` is size of the list.
 </dd>
 
 <dt id="builtins-map">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-map"><code>map <var>f</var> <var>list</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-map"><code>map <var>f</var> <var>list</var></code></a>
 </dt>
 <dd>
 
@@ -330,7 +332,7 @@ The function *f* is called on demand when a resulting list element is evaluated.
 </dd>
 
 <dt id="builtins-mapAttrs">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-mapAttrs"><code>mapAttrs <var>f</var> <var>attrset</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-mapAttrs"><code>mapAttrs <var>f</var> <var>attrset</var></code></a>
 </dt>
 <dd>
 
@@ -349,22 +351,22 @@ The function *f* is called on demand when a resulting attribute value is evaluat
 </dd>
 
 <dt id="builtins-outputOf">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-outputOf"><code>outputOf <var>derivation-reference</var> <var>output-name</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-outputOf"><code>outputOf <var>derivation-reference</var> <var>output-name</var></code></a>
 </dt>
 <dd>
 
 > **Note**
 >
-> This function is only available if the [`dynamic-derivations` experimental feature](https://nix.dev/manual/nix/2.35/development/experimental-features.html#xp-feature-dynamic-derivations) is enabled.
+> This function is only available if the [`dynamic-derivations` experimental feature](https://nix.dev/manual/nix/2.36/development/experimental-features.html#xp-feature-dynamic-derivations) is enabled.
 >
-> For example, include the following in [`nix.conf`](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html):
+> For example, include the following in [`nix.conf`](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html):
 >
 > ```
 > extra-experimental-features = dynamic-derivations
 > ```
 
 Return the output path of a derivation, literally or using an
-[input placeholder string](https://nix.dev/manual/nix/2.35/store/derivation/index.html#input-placeholder)
+[input placeholder string](https://nix.dev/manual/nix/2.36/store/derivation/index.html#input-placeholder)
 if needed.
 
 If the derivation has a statically-known output path (i.e. the derivation output is input-addressed, or fixed content-addressed), the output path is returned.
@@ -383,12 +385,12 @@ builtins.outputOf
 
 returns an input placeholder for the output of the output of `myDrv`.
 
-This primop corresponds to the `^` sigil for [deriving paths](https://nix.dev/manual/nix/2.35/glossary.html#gloss-deriving-path), e.g. as part of installable syntax on the command line.
+This primop corresponds to the `^` sigil for [deriving paths](https://nix.dev/manual/nix/2.36/glossary.html#gloss-deriving-path), e.g. as part of installable syntax on the command line.
 
 </dd>
 
 <dt id="builtins-readFile">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-readFile"><code>readFile <var>path</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-readFile"><code>readFile <var>path</var></code></a>
 </dt>
 <dd>
 
@@ -397,7 +399,7 @@ Return the contents of the file *path* as a string.
 </dd>
 
 <dt id="builtins-seq">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-seq"><code>seq <var>e1</var> <var>e2</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-seq"><code>seq <var>e1</var> <var>e2</var></code></a>
 </dt>
 <dd>
 
@@ -407,7 +409,7 @@ computation is strict in the value of *e1*.
 </dd>
 
 <dt id="builtins-toString">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-toString"><code>toString <var>e</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-toString"><code>toString <var>e</var></code></a>
 </dt>
 <dd>
 
@@ -431,7 +433,7 @@ Convert the expression *e* to a string. *e* can be:
 </dd>
 
 <dt id="builtins-trace">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-trace"><code>trace <var>e1</var> <var>e2</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-trace"><code>trace <var>e1</var> <var>e2</var></code></a>
 </dt>
 <dd>
 
@@ -440,15 +442,15 @@ standard error. Then return *e2*. This function is useful for
 debugging.
 
 If the
-[`debugger-on-trace`](https://nix.dev/manual/nix/2.35/command-ref/conf-file.html#conf-debugger-on-trace)
+[`debugger-on-trace`](https://nix.dev/manual/nix/2.36/command-ref/conf-file.html#conf-debugger-on-trace)
 option is set to `true` and the `--debugger` flag is given, the
 interactive debugger is started when `trace` is called (like
-[`break`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-break)).
+[`break`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-break)).
 
 </dd>
 
 <dt id="builtins-tryEval">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-tryEval"><code>tryEval <var>e</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-tryEval"><code>tryEval <var>e</var></code></a>
 </dt>
 <dd>
 
@@ -467,12 +469,12 @@ in (builtins.tryEval e).success` is `true`. Using
 `false`.
 
 `tryEval` intentionally does not return the error message, because that risks bringing non-determinism into the evaluation result, and it would become very difficult to improve error reporting without breaking existing expressions.
-Instead, use [`builtins.addErrorContext`](https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-addErrorContext) to add context to the error message, and use a Nix unit testing tool for testing.
+Instead, use [`builtins.addErrorContext`](https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-addErrorContext) to add context to the error message, and use a Nix unit testing tool for testing.
 
 </dd>
 
 <dt id="builtins-typeOf">
-  <a href="https://nix.dev/manual/nix/2.35/language/builtins.html#builtins-typeOf"><code>typeOf <var>e</var></code></a>
+  <a href="https://nix.dev/manual/nix/2.36/language/builtins.html#builtins-typeOf"><code>typeOf <var>e</var></code></a>
 </dt>
 <dd>
 
