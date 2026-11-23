@@ -1,4 +1,4 @@
-Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/f5dd93cd4305a43ae4e9977549cd0e0c08d2ef82/doc/src/interfaces.md)
+Upstream source: [doc/src/interfaces.md](https://github.com/microvm-nix/microvm.nix/blob/430a46d03ef15f1b8b715fafa85f21847960b783/doc/src/interfaces.md)
 
 Modified excerpt from the upstream project; see [LICENSE](../LICENSE).
 
@@ -55,7 +55,7 @@ interfaces are created through a systemd service dependency.
 ### vhost-net acceleration
 
 For high-throughput workloads, enable vhost-net to offload packet
-processing to the kernel instead of QEMU userspace:
+processing to the kernel instead of hypervisor userspace:
 
 ```nix
 {
@@ -72,7 +72,27 @@ This requires the `vhost_net` kernel module on the host. The performance
 improvement is significant for workloads with many concurrent connections
 or high bandwidth requirements.
 
-**Note:** Currently only supported with the `qemu` hypervisor.
+**Note:** Supported with the `qemu` and `crosvm` hypervisors.
+The hypervisor must have access to `/dev/vhost-net`.
+
+### Network offloads (cloud-hypervisor)
+
+cloud-hypervisor v54 turns the virtio-net checksum and segmentation
+offloads off by default, because of CVE-2026-99999 in the host kernel.
+On a host kernel with the fix, enable them per interface:
+
+```nix
+{
+  microvm.interfaces = [ {
+    type = "tap";
+    id = "vm-a1";
+    mac = "02:00:00:00:00:01";
+    offload = true;
+  } ];
+}
+```
+
+**Note:** Currently only supported with the `cloud-hypervisor` hypervisor.
 
 Extend the generated script in the guest configuration like this:
 
